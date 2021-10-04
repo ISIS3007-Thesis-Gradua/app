@@ -235,50 +235,68 @@ class _HomeViewState extends State<HomeView> {
                 topRight: Radius.circular(30),
               ),
             ),
+            // Align(
+            //   alignment: Alignment.topCenter,
+            //   child: Padding(
+            //     padding:
+            //     EdgeInsets.fromLTRB(0, height * 0.03, 0, 0),
+            //     child: Icon(
+            //       CupertinoIcons.chevron_compact_down,
+            //       size: height * 0.04,
+            //     ),
+            //   ),
+            // ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.08),
-              child: Padding(
-                padding:
-                    EdgeInsets.fromLTRB(0, height * 0.08, 0, height * 0.025),
-                child: Column(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "Recently saved meditations",
-                            style: GoogleFonts.poppins(
-                                color: Color(0xFF8C2C8C),
-                                fontWeight: FontWeight.normal,
-                                fontSize: height * 0.018),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "Your meditations",
-                            style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: height * 0.025),
-                          ),
-                        ),
-                      ],
+              padding: EdgeInsets.fromLTRB(
+                  width * 0.08, height * 0.02, width * 0.08, height * 0.025),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Icon(
+                        CupertinoIcons.chevron_compact_down,
+                        size: height * 0.04,
+                      ),
                     ),
-                    Spacer(),
-                    SizedBox(
-                      height: height * 0.45,
-                      width: double.infinity,
-                      child: ListView.builder(
-                          itemCount: meditations.length,
-                          itemBuilder: (_, index) =>
-                              createMeditationArea(meditations[index])),
-                    ),
-                    Spacer(),
-                  ],
-                ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Recently saved meditations",
+                          style: GoogleFonts.poppins(
+                              color: Color(0xFF8C2C8C),
+                              fontWeight: FontWeight.normal,
+                              fontSize: height * 0.018),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Your meditations",
+                          style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: height * 0.025),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    height: height * 0.45,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        itemCount: meditations.length,
+                        itemBuilder: (_, index) =>
+                            createMeditationArea(meditations[index])),
+                  ),
+                  Spacer(),
+                ],
               ),
             ),
           ),
@@ -297,7 +315,7 @@ class _HomeViewState extends State<HomeView> {
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(width * 0.07, 0, 0, 0),
                         child: Icon(
                           CupertinoIcons.tag_solid,
                           size: height * 0.028,
