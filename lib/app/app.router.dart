@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../src/models/meditation.dart';
 import '../src/views/home_view.dart';
 import '../src/views/player_view.dart';
 
@@ -39,10 +40,27 @@ class StackedRouter extends RouterBase {
       );
     },
     Player: (data) {
+      var args = data.getArgs<PlayerArguments>(
+        orElse: () => PlayerArguments(),
+      );
       return CupertinoPageRoute<CupertinoRoute<dynamic>>(
-        builder: (context) => const Player(),
+        builder: (context) => Player(
+          key: args.key,
+          meditation: args.meditation,
+        ),
         settings: data,
       );
     },
   };
+}
+
+/// ************************************************************************
+/// Arguments holder classes
+/// *************************************************************************
+
+/// Player arguments holder class
+class PlayerArguments {
+  final Key? key;
+  final SimpleMeditation? meditation;
+  PlayerArguments({this.key, this.meditation});
 }

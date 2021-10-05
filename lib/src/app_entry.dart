@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:serenity/app/app.locator.dart';
 import 'package:serenity/app/app.router.dart';
-import 'package:serenity/src/services/navigation_service.dart';
 import 'package:serenity/src/views/home_view.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -24,12 +23,12 @@ class Serenity extends StatelessWidget {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
+        return GetMaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
           // background.
-          restorationScopeId: 'app',
+          // restorationScopeId: 'app',
 
           // Provide the generated AppLocalizations to the MaterialApp. This
           // allows descendant Widgets to display the correct translations
@@ -60,7 +59,7 @@ class Serenity extends StatelessWidget {
           themeMode: settingsController.themeMode,
           home: const HomeView(),
           onGenerateRoute: StackedRouter().onGenerateRoute,
-          navigatorKey: locator<NavigationService>().navigationKey,
+          // navigatorKey: locator<NavigationService>(),
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           // onGenerateRoute:

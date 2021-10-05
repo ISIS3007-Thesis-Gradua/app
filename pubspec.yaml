@@ -19,6 +19,7 @@ dependencies:
   just_audio: ^0.9.12
   sliding_up_panel: ^2.0.0+1
   stacked: ^2.2.5
+  stacked_services: ^0.8.13
 
 dev_dependencies:
   flutter_test:

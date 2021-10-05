@@ -1,7 +1,7 @@
-import 'package:serenity/src/services/navigation_service.dart';
 import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/player_view.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 @StackedApp(routes: [
   CupertinoRoute(page: HomeView, initial: true),

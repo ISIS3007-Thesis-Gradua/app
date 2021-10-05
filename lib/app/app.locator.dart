@@ -8,8 +8,7 @@
 
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-
-import '../src/services/navigation_service.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 final locator = StackedLocator.instance;
 
