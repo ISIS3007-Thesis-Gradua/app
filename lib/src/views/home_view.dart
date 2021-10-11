@@ -8,6 +8,7 @@ import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -20,6 +21,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   GetIt locator = GetIt.instance;
+  final _controller = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,16 @@ class _HomeViewState extends State<HomeView> {
     final navigationService = locator<NavigationService>();
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
+
+    void handlePanelChevronTap() {
+      if (_controller.isPanelClosed) {
+        _controller.animatePanelToPosition(1,
+            curve: Cubic(0.17, 0.67, 0.83, 0.67),
+            duration: Duration(milliseconds: 400));
+      } else {
+        _controller.close();
+      }
+    }
 
     Widget createMeditationArea(SimpleMeditation meditation) {
       return InkWell(
@@ -110,6 +122,8 @@ class _HomeViewState extends State<HomeView> {
             child: Scaffold(
               backgroundColor: Color(0xFFEDCCEE),
               body: ScrollSheet(
+                controllerType: ControllerType.fromFields,
+                controller: _controller,
                 body: Container(
                   child: Padding(
                     padding:
@@ -224,9 +238,12 @@ class _HomeViewState extends State<HomeView> {
                           alignment: Alignment.topCenter,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Icon(
-                              CupertinoIcons.chevron_compact_down,
-                              size: height * 0.04,
+                            child: IconButton(
+                              onPressed: handlePanelChevronTap,
+                              icon: Icon(
+                                CupertinoIcons.chevron_compact_down,
+                                size: height * 0.04,
+                              ),
                             ),
                           ),
                         ),
@@ -292,9 +309,12 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             )),
                         Center(
-                            child: Icon(
-                          CupertinoIcons.chevron_compact_up,
-                          size: height * 0.04,
+                            child: IconButton(
+                          onPressed: handlePanelChevronTap,
+                          icon: Icon(
+                            CupertinoIcons.chevron_compact_up,
+                            size: height * 0.04,
+                          ),
                         )),
                       ],
                     ),
