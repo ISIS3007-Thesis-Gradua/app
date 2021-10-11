@@ -12,14 +12,17 @@ import 'package:stacked/stacked_annotations.dart';
 
 import '../src/models/meditation.dart';
 import '../src/views/home_view.dart';
+import '../src/views/other_player.dart';
 import '../src/views/player_view.dart';
 
 class Routes {
   static const String homeView = '/';
   static const String player = 'player';
+  static const String other_player = 'other_player';
   static const all = <String>{
     homeView,
     player,
+    other_player,
   };
 }
 
@@ -29,6 +32,7 @@ class StackedRouter extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.homeView, page: HomeView),
     RouteDef(Routes.player, page: Player),
+    RouteDef(Routes.other_player, page: OtherPlayer),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -48,6 +52,12 @@ class StackedRouter extends RouterBase {
           key: args.key,
           meditation: args.meditation,
         ),
+        settings: data,
+      );
+    },
+    OtherPlayer: (data) {
+      return CupertinoPageRoute<CupertinoRoute<dynamic>>(
+        builder: (context) => const OtherPlayer(),
         settings: data,
       );
     },

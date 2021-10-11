@@ -190,8 +190,9 @@ class _HomeViewState extends State<HomeView> {
                           icon: Icon(
                             CupertinoIcons.play_circle,
                           ),
-                          onPressed: () =>
-                              {navigationService.navigateTo("player")},
+                          onPressed: () => {
+                            navigationService.navigateTo(Routes.other_player)
+                          },
                         ),
                         Text(
                           'Start session',
