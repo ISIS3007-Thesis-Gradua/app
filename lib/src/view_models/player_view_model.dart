@@ -14,11 +14,14 @@ class PlayerViewModel extends MultipleStreamViewModel {
 
   final AudioPlayer player = AudioPlayer();
   String url =
-      "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3";
+      "http://192.168.1.106:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu";
+  // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3";
 
   PlayerViewModel(
       {this.url =
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"});
+          'http://192.168.1.106:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu'
+      // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
+      });
 
   @override
   // TODO: implement stream
@@ -42,6 +45,7 @@ class PlayerViewModel extends MultipleStreamViewModel {
     });
     // Try to load audio from a source and catch any errors.
     try {
+      // AudioSource.uri(uri)
       await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
       print("Audio source first");
       print(player.audioSource!.sequence.first.toString());

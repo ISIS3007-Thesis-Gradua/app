@@ -111,40 +111,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            CupertinoIcons.heart,
-                            size: height * 0.03,
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
-                            child: Visibility(
-                              visible: vm.hasPlayerState
-                                  ? vm.playerState.playing
-                                  : false,
-                              child: IconButton(
-                                icon: Icon(
-                                  CupertinoIcons.pause_circle,
-                                  size: height * 0.055,
-                                ),
-                                onPressed: () => {vm.player.pause()},
-                              ),
-                              replacement: IconButton(
-                                icon: Icon(
-                                  CupertinoIcons.play_circle,
-                                  size: height * 0.055,
-                                ),
-                                onPressed: () => {vm.player.play()},
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.settings_voice_outlined,
-                              size: height * 0.03)
-                        ],
-                      ),
+                      playPauseControls(context, vm, height, width),
                       Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: width * 0.066),
@@ -178,6 +145,40 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
               }),
         ),
       ),
+    );
+  }
+
+  Widget playPauseControls(
+      BuildContext context, PlayerViewModel vm, double height, double width) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Icon(
+          CupertinoIcons.heart,
+          size: height * 0.03,
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
+          child: Visibility(
+            visible: vm.hasPlayerState ? vm.playerState.playing : false,
+            child: IconButton(
+              icon: Icon(
+                CupertinoIcons.pause_circle,
+                size: height * 0.055,
+              ),
+              onPressed: () => {vm.player.pause()},
+            ),
+            replacement: IconButton(
+              icon: Icon(
+                CupertinoIcons.play_circle,
+                size: height * 0.055,
+              ),
+              onPressed: () => {vm.player.play()},
+            ),
+          ),
+        ),
+        Icon(Icons.settings_voice_outlined, size: height * 0.03)
+      ],
     );
   }
 }
