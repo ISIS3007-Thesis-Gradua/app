@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-serenity-dev-194102-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838438968296:role/amplify-serenity-dev-194102-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838438968296:role/amplify-serenity-dev-194102-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-serenity-dev-194102-deployment",
+      "UnauthRoleName": "amplify-serenity-dev-194102-unauthRole",
+      "StackName": "amplify-serenity-dev-194102",
+      "StackId": "arn:aws:cloudformation:us-east-1:838438968296:stack/amplify-serenity-dev-194102/400d3230-2bbe-11ec-a980-129b0ebd9c57",
+      "AmplifyAppId": "d3ryhofadydsy0"
+    }
+  }
+}
