@@ -1,16 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:serenity/src/models/meditation.dart';
-//
-// class SimpleMeditation {
-//   String name = "Generic Meditation";
-//   Duration duration = Duration(seconds: 0);
-//
-//   SimpleMeditation({required this.name, required this.duration});
-//
-//   String formattedDuration() {
-//     return "${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60))} mins";
-//   }
-// }
+import 'package:serenity/src/models/meditation_config.dart';
 
 /// This class contains all the state and business logic for the
 /// Home Screen. The Home screen will be bound to this class forming a sort
@@ -20,8 +10,11 @@ class HomeViewModel extends ChangeNotifier {
   /// home screen. TODO retrieve it from hive
   List<SimpleMeditation> savedMeditations = [];
 
+  /// Configuration Values for the generated meditation
+  MeditationConfig meditationConfig = MeditationConfig();
+
   /// Basic contructor
-  HomeViewModel(this.savedMeditations);
+  HomeViewModel({required this.savedMeditations});
 
   /// This creates a list of meditations with some default example data
   HomeViewModel.exampleData() {
