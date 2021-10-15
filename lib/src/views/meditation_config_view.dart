@@ -23,6 +23,9 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> goals = MeditationGoals.values
+        .map<String>((name) => name.toString().split('.').last)
+        .toList();
     return Expanded(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -76,13 +79,28 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                   diameterRatio: 0.8,
                   itemExtent: height * 0.13,
                   onSelectedItemChanged: (int value) {
+                    String goalName = goals[value];
+                    setState(() {
+                      switch (goalName) {
+                        case "Stress":
+                          widget.vm.meditationConfig.goals =
+                              MeditationGoals.Stress;
+                          break;
+                        case "Anxiety":
+                          widget.vm.meditationConfig.goals =
+                              MeditationGoals.Anxiety;
+                          break;
+                        case "Nothing":
+                          widget.vm.meditationConfig.goals =
+                              MeditationGoals.Nothing;
+                          break;
+                      }
+                    });
+
                     print("Selected item: $value");
+                    print(goalName);
                   },
-                  children: MeditationGoals.values
-                      .map<Widget>((name) => Text(
-                            name.toString().split('.').last,
-                          ))
-                      .toList(),
+                  children: goals.map<Widget>((name) => Text(name)).toList(),
                 ),
               ],
             ),

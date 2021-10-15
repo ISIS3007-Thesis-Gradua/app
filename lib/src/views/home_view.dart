@@ -142,8 +142,14 @@ class _HomeViewState extends State<HomeView> {
                         icon: const Icon(
                           CupertinoIcons.play_circle,
                         ),
-                        onPressed: () =>
-                            {navigationService.navigateTo(Routes.other_player)},
+                        onPressed: () => {
+                          navigationService.navigateTo(
+                            Routes.loading_meditation,
+                            arguments: LoadingMeditationViewArguments(
+                              config: vm.meditationConfig,
+                            ),
+                          ),
+                        },
                       ),
                       Text(
                         'Start session',
