@@ -10,6 +10,14 @@
       "StackName": "amplify-serenity-dev-194102",
       "StackId": "arn:aws:cloudformation:us-east-1:838438968296:stack/amplify-serenity-dev-194102/400d3230-2bbe-11ec-a980-129b0ebd9c57",
       "AmplifyAppId": "d3ryhofadydsy0"
+    },
+    "categories": {
+      "function": {
+        "Randomizer": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Randomizer-456249464648564d3056-build.zip"
+        }
+      }
     }
   }
 }

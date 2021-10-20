@@ -1,0 +1,36 @@
+{
+    "paths": [
+        {
+            "name": "/randomize",
+            "lambdaFunction": "Randomizer",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/randomize"
+        }
+    ],
+    "resourceName": "gradua",
+    "apiName": "gradua",
+    "functionArns": [
+        {
+            "lambdaFunction": "Randomizer"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-serenity-dev-194102-authRole",
+        "unAuthRoleName": "amplify-serenity-dev-194102-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "Randomizer",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "9d60424d"
+}
