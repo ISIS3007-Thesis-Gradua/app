@@ -15,7 +15,11 @@
       "function": {
         "Randomizer": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Randomizer-456249464648564d3056-build.zip"
+          "s3Key": "amplify-builds/Randomizer-3952506e65756748714a-build.zip"
+        },
+        "Feedback": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Feedback-73376351737346465544-build.zip"
         }
       }
     }

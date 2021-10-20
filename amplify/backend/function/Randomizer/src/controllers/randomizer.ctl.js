@@ -15,18 +15,24 @@ const randomize = async (req, res) =>{
     connectToDatabase()
     .then(async () => {
         try {
-            const result = [
-                await Step00.aggregate([{ $sample: { size: 1 } }]),
-                await Step01.aggregate([{ $sample: { size: 1 } }]),
-                await Step1.aggregate([{ $sample: { size: 1 } }]),
-                await Step2.aggregate([{ $sample: { size: 1 } }]),
-                await Step3.aggregate([{ $sample: { size: 1 } }]),
-                await Step4.aggregate([{ $sample: { size: 1 } }]),
-                await Step5.aggregate([{ $sample: { size: 1 } }]),
-                await Step6.aggregate([{ $sample: { size: 1 } }]),
-                await Step7.aggregate([{ $sample: { size: 1 } }]),
-            ]
-            res.status(200).send(JSON.stringify(result));
+            const {time} = req.query;
+            if(!time)
+            {
+                const result = [
+                    await Step00.aggregate([{ $sample: { size: 1 } }]),
+                    await Step01.aggregate([{ $sample: { size: 1 } }]),
+                    await Step1.aggregate([{ $sample: { size: 1 } }]),
+                    await Step2.aggregate([{ $sample: { size: 1 } }]),
+                    await Step3.aggregate([{ $sample: { size: 1 } }]),
+                    await Step4.aggregate([{ $sample: { size: 1 } }]),
+                    await Step5.aggregate([{ $sample: { size: 1 } }]),
+                    await Step6.aggregate([{ $sample: { size: 1 } }]),
+                    await Step7.aggregate([{ $sample: { size: 1 } }]),
+                ]
+                res.status(200).send(JSON.stringify(result));
+            } else {
+                //TODO: logic with time
+            }
         } catch(err){
             console.log(err)
             res.status(404).send({message:err.message});

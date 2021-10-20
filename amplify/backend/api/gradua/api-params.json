@@ -7,6 +7,14 @@
                 "open": true
             },
             "policyResourceName": "/randomize"
+        },
+        {
+            "name": "/user-feedback",
+            "lambdaFunction": "Feedback",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/user-feedback"
         }
     ],
     "resourceName": "gradua",
@@ -14,6 +22,9 @@
     "functionArns": [
         {
             "lambdaFunction": "Randomizer"
+        },
+        {
+            "lambdaFunction": "Feedback"
         }
     ],
     "privacy": {
@@ -30,7 +41,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "Feedback",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "9d60424d"
+    "uuid": "306c62ad"
 }
