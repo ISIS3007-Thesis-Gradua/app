@@ -3,12 +3,35 @@
     "Randomizer": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "serenityDataGeneratorManager",
+          "attributes": [
+            "Arn"
+          ]
+        }
+      ]
     },
     "Feedback": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "serenityDataGeneratorManager",
+          "attributes": [
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "serenityDataGeneratorManager": {
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer",
+      "build": true
     }
   },
   "api": {

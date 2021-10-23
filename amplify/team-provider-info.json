@@ -15,11 +15,15 @@
       "function": {
         "Randomizer": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Randomizer-3952506e65756748714a-build.zip"
+          "s3Key": "amplify-builds/Randomizer-47656b354a4437746268-build.zip"
         },
         "Feedback": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Feedback-73376351737346465544-build.zip"
+          "s3Key": "amplify-builds/Feedback-6a79504f2b33484b3076-build.zip"
+        },
+        "serenityDataGeneratorManager": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion89e2268c-build.zip"
         }
       }
     }
