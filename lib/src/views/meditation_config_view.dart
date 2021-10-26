@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:serenity/src/components/sliders.dart';
 import 'package:serenity/src/models/meditation_config.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 
@@ -38,70 +39,107 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Time of the meditation"),
-                Slider(
-                  value: vm.meditationConfig.time,
-                  min: 2,
-                  max: 30,
-                  divisions: 28,
-                  label: vm.meditationConfig.time.round().toString() + " mins",
-                  onChanged: (double value) {
-                    setState(() {
-                      vm.meditationConfig.time = value;
-                    });
-                  },
+                Text("Minutos"),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
+                  child: GradientSlider(
+                    value: vm.meditationConfig.time,
+                    min: 3,
+                    max: 30,
+                    divisions: 9,
+                    // label: vm.meditationConfig.time.round().toString() + " mins",
+                    onChanged: (double value) {
+                      setState(() {
+                        vm.meditationConfig.time = value;
+                      });
+                    },
+                  ),
                 ),
-                Text("How do you feel?"),
+                Text("Animo"),
                 Row(
                   children: [
                     Expanded(
-                      child: Slider(
-                        value: vm.meditationConfig.emotion,
-                        min: 0,
-                        max: 1,
-                        onChanged: (double value) {
-                          setState(() {
-                            vm.meditationConfig.emotion = value;
-                          });
-                        },
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 8, 20, 17),
+                        child: GradientSlider(
+                          value: vm.meditationConfig.emotion,
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              vm.meditationConfig.emotion = value;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const Icon(CupertinoIcons.smiley),
                   ],
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Text("What is your Goal with this meditation?"),
+                // ),
+                // CupertinoPicker(
+                //   // useMagnifier: true,
+                //   // magnification: 1.2,
+                //   diameterRatio: 0.8,
+                //   itemExtent: height * 0.13,
+                //   onSelectedItemChanged: (int value) {
+                //     String goalName = goals[value];
+                //     setState(() {
+                //       switch (goalName) {
+                //         case "Stress":
+                //           widget.vm.meditationConfig.goals =
+                //               MeditationGoals.Stress;
+                //           break;
+                //         case "Anxiety":
+                //           widget.vm.meditationConfig.goals =
+                //               MeditationGoals.Anxiety;
+                //           break;
+                //         case "Nothing":
+                //           widget.vm.meditationConfig.goals =
+                //               MeditationGoals.Nothing;
+                //           break;
+                //       }
+                //     });
+                //
+                //     print("Selected item: $value");
+                //     print(goalName);
+                //   },
+                //   children: goals.map<Widget>((name) => Text(name)).toList(),
+                // ),
+                Text("Estrés:"),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("What is your Goal with this meditation?"),
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
+                  child: GradientSlider(
+                    value: vm.meditationConfig.emotion,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
+                    onChanged: (value) {
+                      setState(() {
+                        vm.meditationConfig.emotion = value;
+                      });
+                    },
+                  ),
                 ),
-                CupertinoPicker(
-                  // useMagnifier: true,
-                  // magnification: 1.2,
-                  diameterRatio: 0.8,
-                  itemExtent: height * 0.13,
-                  onSelectedItemChanged: (int value) {
-                    String goalName = goals[value];
-                    setState(() {
-                      switch (goalName) {
-                        case "Stress":
-                          widget.vm.meditationConfig.goals =
-                              MeditationGoals.Stress;
-                          break;
-                        case "Anxiety":
-                          widget.vm.meditationConfig.goals =
-                              MeditationGoals.Anxiety;
-                          break;
-                        case "Nothing":
-                          widget.vm.meditationConfig.goals =
-                              MeditationGoals.Nothing;
-                          break;
-                      }
-                    });
-
-                    print("Selected item: $value");
-                    print(goalName);
-                  },
-                  children: goals.map<Widget>((name) => Text(name)).toList(),
-                ),
+                Text("Ansiedad:"),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
+                  child: GradientSlider(
+                    value: vm.meditationConfig.emotion,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
+                    onChanged: (value) {
+                      setState(() {
+                        vm.meditationConfig.emotion = value;
+                      });
+                    },
+                  ),
+                )
               ],
             ),
           );

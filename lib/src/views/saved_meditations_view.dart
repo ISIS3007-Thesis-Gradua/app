@@ -139,8 +139,9 @@ class _SavedMeditationsViewState extends State<SavedMeditationsView> {
               child: IconButton(
                 onPressed: handlePanelChevronTap,
                 icon: Icon(
-                  CupertinoIcons.chevron_compact_down,
-                  size: height * 0.04,
+                  CupertinoIcons.chevron_down,
+                  size: height * 0.025,
+                  color: Colors.white,
                 ),
               ),
             ),

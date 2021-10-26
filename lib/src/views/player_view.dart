@@ -18,18 +18,19 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> with WidgetsBindingObserver {
+  bool isSimple = true;
   GetIt locator = GetIt.instance;
-  String name = "";
-  Duration duration = Duration(seconds: 0);
   final PlayerViewModel vm = PlayerViewModel();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.meditation != null) {
-      name = widget.meditation!.name;
-      duration = widget.meditation!.duration;
+    if (widget.meditation is Meditation) {
+      setState(() {
+        isSimple = false;
+        vm.constructSource((widget.meditation as Meditation).meditationText);
+      });
     }
     WidgetsBinding.instance?.addObserver(this);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -91,7 +92,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                     )),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Text(name),
+                  child: Text(widget.meditation?.name ?? ""),
                 )
               ],
             ),
@@ -122,22 +123,6 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                               Duration.zero,
                           onChanged: vm.player.seek,
                         ),
-
-                        // Slider(
-                        //   activeColor: Color(0xEE8C2C8C),
-                        //   inactiveColor: Color.fromRGBO(0, 0, 0, 0.33),
-                        //   onChanged: (v) {
-                        //     final num position = v *
-                        //         (vm.hasPositionData
-                        //             ? vm.positionData.position.inMilliseconds
-                        //             : 0);
-                        //     vm.player
-                        //         .seek(Duration(milliseconds: position.round()));
-                        //   },
-                        //   value: vm.hasPositionData
-                        //       ? vm.positionData.sliderValue
-                        //       : 0,
-                        // ),
                       ),
                     ],
                   ),
@@ -160,20 +145,33 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
         Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
           child: Visibility(
-            visible: vm.hasPlayerState ? vm.playerState.playing : false,
-            child: IconButton(
+            visible: vm.hasPlayerState
+                ? !vm.playerState.playing || vm.isCompleted
+                : true,
+            child: Visibility(
+              visible: vm.hasPlayerState ? vm.isLoading : true,
+              child: CircularProgressIndicator(),
+              replacement: IconButton(
+                icon: Icon(
+                  CupertinoIcons.play_circle,
+                  size: height * 0.055,
+                ),
+                onPressed: () {
+                  if (vm.isCompleted) {
+                    vm.player.seek(Duration.zero);
+                  }
+                  vm.player.play();
+                },
+              ),
+            ),
+            replacement: IconButton(
               icon: Icon(
                 CupertinoIcons.pause_circle,
                 size: height * 0.055,
               ),
-              onPressed: () => {vm.player.pause()},
-            ),
-            replacement: IconButton(
-              icon: Icon(
-                CupertinoIcons.play_circle,
-                size: height * 0.055,
-              ),
-              onPressed: () => {vm.player.play()},
+              onPressed: () {
+                vm.player.pause();
+              },
             ),
           ),
         ),

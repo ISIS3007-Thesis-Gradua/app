@@ -58,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, vm, child) {
           return SafeArea(
             child: Scaffold(
-              backgroundColor: const Color(0xFFEDCCEE),
+              backgroundColor: const Color(0xFFF6F9FF),
               body: ScrollSheet(
                 controllerType: ControllerType.fromFields,
                 controller: _controller,
@@ -73,8 +73,38 @@ class _HomeViewState extends State<HomeView> {
                         height: height * 0.22,
                         width: width * 0.84,
                         decoration: BoxDecoration(
-                          color: const Color(0x547400B8),
-                          borderRadius: BorderRadius.circular(40),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xFFC5D2FA),
+                              spreadRadius: 0,
+                              blurRadius: 30,
+                              offset:
+                                  Offset(5, 10), // changes position of shadow
+                            ),
+                            // BoxShadow(
+                            //   color: Color(0xFFEDF2FF),
+                            //   spreadRadius: 1,
+                            //   blurRadius: 2,
+                            //   offset:
+                            //       Offset(10, 10), // changes position of shadow
+                            // ),
+                          ],
+                          gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                // Color(0xFFC5DDF1),
+                                // Color(0x88FFFFFF),
+                                Color(0xA3A6D5FF),
+                                Color(0xFFC9E0FF),
+                                Color(0xFFE2EFFD),
+                              ],
+                              stops: [
+                                0,
+                                0.5,
+                                0.9
+                              ]),
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(width * 0.05),
@@ -171,27 +201,36 @@ class _HomeViewState extends State<HomeView> {
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0x8C8C2C8C), Color(0x8C0071BC)],
+                    ),
                   ),
                   child: SizedBox(
                     width: double.infinity,
                     child: Stack(
                       children: [
                         Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(width * 0.07, 0, 0, 0),
-                              child: Icon(
-                                CupertinoIcons.tag_solid,
-                                size: height * 0.028,
-                              ),
-                            )),
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(width * 0.07, 0, 0, 0),
+                            child: Text(
+                              "Instrucciones",
+                              style: GoogleFonts.raleway(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                        ),
                         Center(
                             child: IconButton(
                           onPressed: handlePanelChevronTap,
                           icon: Icon(
-                            CupertinoIcons.chevron_compact_up,
-                            size: height * 0.04,
+                            CupertinoIcons.chevron_up,
+                            size: height * 0.025,
+                            color: Colors.white,
                           ),
                         )),
                       ],
