@@ -99,13 +99,13 @@ class _HomeViewState extends State<HomeView> {
                               ]),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(width * 0.05),
+                          padding: EdgeInsets.all(height * 0.02),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "¡Hola! Bienvenido a Gradúa.\nDeseas iniciar con una\n meditación sugerida?",
+                                "¡Hola! Bienvenido a Gradúa. \nDeseas iniciar con una \nmeditación sugerida?",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.raleway(
                                   color: Color(0xFF768596),
