@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/components/sliders.dart';
-import 'package:serenity/src/models/meditation_config.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 
 class MeditationConfigView extends StatefulWidget {
@@ -24,22 +25,26 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> goals = MeditationGoals.values
-        .map<String>((name) => name.toString().split('.').last)
-        .toList();
+    // List<String> goals = MeditationGoals.values
+    //     .map<String>((name) => name.toString().split('.').last)
+    //     .toList();
     return Expanded(
       child: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;
           double height = constraints.maxHeight;
-          print(constraints);
+
+          TextStyle sliderTextStyle = GoogleFonts.raleway(
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF8B9EB0),
+              fontSize: height * 0.027);
           return Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: width * 0.05, vertical: height * 0.07),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Minutos"),
+                Text("Minutos:", style: sliderTextStyle),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(
@@ -55,7 +60,7 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     },
                   ),
                 ),
-                Text("Animo"),
+                Text("Animo:", style: sliderTextStyle),
                 Row(
                   children: [
                     Expanded(
@@ -74,68 +79,35 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                         ),
                       ),
                     ),
-                    const Icon(CupertinoIcons.smiley),
+                    const Icon(CupertinoIcons.smiley, color: Colors.black),
                   ],
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Text("What is your Goal with this meditation?"),
-                // ),
-                // CupertinoPicker(
-                //   // useMagnifier: true,
-                //   // magnification: 1.2,
-                //   diameterRatio: 0.8,
-                //   itemExtent: height * 0.13,
-                //   onSelectedItemChanged: (int value) {
-                //     String goalName = goals[value];
-                //     setState(() {
-                //       switch (goalName) {
-                //         case "Stress":
-                //           widget.vm.meditationConfig.goals =
-                //               MeditationGoals.Stress;
-                //           break;
-                //         case "Anxiety":
-                //           widget.vm.meditationConfig.goals =
-                //               MeditationGoals.Anxiety;
-                //           break;
-                //         case "Nothing":
-                //           widget.vm.meditationConfig.goals =
-                //               MeditationGoals.Nothing;
-                //           break;
-                //       }
-                //     });
-                //
-                //     print("Selected item: $value");
-                //     print(goalName);
-                //   },
-                //   children: goals.map<Widget>((name) => Text(name)).toList(),
-                // ),
-                Text("Estrés:"),
+                Text("Estrés:", style: sliderTextStyle),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(
-                    value: vm.meditationConfig.emotion,
+                    value: vm.meditationConfig.stress,
                     min: 0,
                     max: 10,
                     divisions: 10,
                     onChanged: (value) {
                       setState(() {
-                        vm.meditationConfig.emotion = value;
+                        vm.meditationConfig.stress = value;
                       });
                     },
                   ),
                 ),
-                Text("Ansiedad:"),
+                Text("Ansiedad:", style: sliderTextStyle),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(
-                    value: vm.meditationConfig.emotion,
+                    value: vm.meditationConfig.anxiety,
                     min: 0,
                     max: 10,
                     divisions: 10,
                     onChanged: (value) {
                       setState(() {
-                        vm.meditationConfig.emotion = value;
+                        vm.meditationConfig.anxiety = value;
                       });
                     },
                   ),

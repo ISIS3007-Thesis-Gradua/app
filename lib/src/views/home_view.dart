@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/components/buttons.dart';
+import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/saved_meditations_view.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -25,16 +27,6 @@ class _HomeViewState extends State<HomeView> {
   GetIt locator = GetIt.instance;
   final _controller = PanelController();
   late final NavigationService navigationService;
-
-  void handlePanelChevronTap() {
-    if (_controller.isPanelClosed) {
-      _controller.animatePanelToPosition(1,
-          curve: const Cubic(0.17, 0.67, 0.83, 0.67),
-          duration: const Duration(milliseconds: 400));
-    } else {
-      _controller.close();
-    }
-  }
 
   @override
   void initState() {
@@ -82,13 +74,13 @@ class _HomeViewState extends State<HomeView> {
                               offset:
                                   Offset(5, 10), // changes position of shadow
                             ),
-                            // BoxShadow(
-                            //   color: Color(0xFFEDF2FF),
-                            //   spreadRadius: 1,
-                            //   blurRadius: 2,
-                            //   offset:
-                            //       Offset(10, 10), // changes position of shadow
-                            // ),
+                            BoxShadow(
+                              color: Color(0xFFEBEFF3),
+                              spreadRadius: 1,
+                              blurRadius: 30,
+                              offset:
+                                  Offset(-5, -10), // changes position of shadow
+                            ),
                           ],
                           gradient: const LinearGradient(
                               begin: Alignment.topLeft,
@@ -110,56 +102,24 @@ class _HomeViewState extends State<HomeView> {
                           padding: EdgeInsets.all(width * 0.05),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Recommended\n Meditation",
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.poppins(
+                                "¡Hola! Bienvenido a Gradúa.\nDeseas iniciar con una\n meditación sugerida?",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.raleway(
+                                  color: Color(0xFF768596),
                                   fontWeight: FontWeight.w700,
-                                  fontSize: height * 0.03,
+                                  fontSize: height * 0.022,
                                   height: 1,
                                 ),
                               ),
-                              Text(
-                                "Recommendation of the day",
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: height * 0.019,
-                                  height: 1,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    print('Received click');
-                                  },
-                                  child: Text(
-                                    'Listen meditation',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.023,
-                                      height: 1,
-                                    ),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                        vertical: height * 0.02),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(height * 0.02),
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    side: const BorderSide(
-                                        color: Colors.black,
-                                        width: 3,
-                                        style: BorderStyle.solid),
-                                  ),
-                                ),
+                              RoundedGradientButton.text(
+                                buttonText: "Meditar Ahora",
+                                width: width * 0.6,
+                                height: height * 0.065,
+                                fontSize: height * 0.02,
+                                onPressed: () {},
                               ),
                             ],
                           ),
@@ -167,11 +127,9 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       MeditationConfigView(vm: vm),
                       // const Spacer(),
-                      IconButton(
-                        iconSize: height * 0.045,
-                        icon: const Icon(
-                          CupertinoIcons.play_circle,
-                        ),
+                      RoundedGradientButton(
+                        width: width * 0.6,
+                        height: height * 0.065,
                         onPressed: () => {
                           navigationService.navigateTo(
                             Routes.loading_meditation,
@@ -180,63 +138,33 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                         },
-                      ),
-                      Text(
-                        'Start session',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: height * 0.023,
-                          height: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Meditar Ahora",
+                              style: GoogleFonts.raleway(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: height * 0.02,
+                                height: 1,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(
+                                CupertinoIcons.play_circle,
+                                size: height * 0.035,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
                 panel: SavedMeditationsView(vm: vm, controller: _controller),
-                collapse: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xEEF6F5F5),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [Color(0x8C8C2C8C), Color(0x8C0071BC)],
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(width * 0.07, 0, 0, 0),
-                            child: Text(
-                              "Instrucciones",
-                              style: GoogleFonts.raleway(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                          ),
-                        ),
-                        Center(
-                            child: IconButton(
-                          onPressed: handlePanelChevronTap,
-                          icon: Icon(
-                            CupertinoIcons.chevron_up,
-                            size: height * 0.025,
-                            color: Colors.white,
-                          ),
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
+                collapse: CollapsedContainer(_controller, height, width),
                 isDraggable: true,
                 maxHeight: height * 0.67,
                 minHeight: height * 0.06,

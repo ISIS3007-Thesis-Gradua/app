@@ -17,6 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   google_fonts: ^2.1.0
+  gradient_widgets: ^0.6.0
   just_audio: ^0.9.12
   rxdart: ^0.27.2
   sliding_up_panel: ^2.0.0+1

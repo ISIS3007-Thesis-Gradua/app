@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/seek_bar.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -21,6 +24,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
   bool isSimple = true;
   GetIt locator = GetIt.instance;
   final PlayerViewModel vm = PlayerViewModel();
+  final _controller = PanelController();
 
   @override
   void initState() {
@@ -72,62 +76,98 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFEDCCEE),
+        backgroundColor: const Color(0xFFF6F9FF),
         body: ScrollSheet(
-          isDraggable: false,
-          maxHeight: height * 0.35,
-          minHeight: height * 0.35,
+          isDraggable: true,
+          maxHeight: height * 0.67,
+          minHeight: height * 0.06,
+          controller: _controller,
+          controllerType: ControllerType.fromFields,
           body: Padding(
-            padding: EdgeInsets.fromLTRB(width * 0.05, height * 0.03, 0, 0),
+            padding: EdgeInsets.fromLTRB(
+                width * 0.03, height * 0.03, width * 0.03, 0),
             child: Stack(
               children: [
                 Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      icon: Icon(
-                        CupertinoIcons.back,
-                        size: height * 0.03,
-                      ),
-                      onPressed: () => {navigationService.back()},
-                    )),
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: Icon(
+                      CupertinoIcons.back,
+                      size: height * 0.03,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => {navigationService.back()},
+                  ),
+                ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Text(widget.meditation?.name ?? ""),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, height * .1, 0, height * .15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ViewModelBuilder<PlayerViewModel>.reactive(
+                        // stream: null,
+                        viewModelBuilder: () => vm,
+                        builder: (context, vm, child) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFDCE7EF),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: width * 0.066),
+                                  child: SeekBar(
+                                    duration: vm.positionData?.duration ??
+                                        Duration.zero,
+                                    position: vm.positionData?.position ??
+                                        Duration.zero,
+                                    bufferedPosition:
+                                        vm.positionData?.bufferedPosition ??
+                                            Duration.zero,
+                                    onChanged: vm.player.seek,
+                                  ),
+                                ),
+                                Text(
+                                  "Meditación #34",
+                                  style: GoogleFonts.raleway(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: height * .03,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "Atención Plena",
+                                  style: GoogleFonts.raleway(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: height * .02,
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                                playPauseControls(context, vm, height, width),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
           ),
-          panel: ViewModelBuilder<PlayerViewModel>.reactive(
-              // stream: null,
-              viewModelBuilder: () => vm,
-              builder: (context, vm, child) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xEEF6F5F5),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      playPauseControls(context, vm, height, width),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: width * 0.066),
-                        child: SeekBar(
-                          duration: vm.positionData?.duration ?? Duration.zero,
-                          position: vm.positionData?.position ?? Duration.zero,
-                          bufferedPosition: vm.positionData?.bufferedPosition ??
-                              Duration.zero,
-                          onChanged: vm.player.seek,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+          panel: Container(
+            child: Text("Hello World"),
+          ),
+          collapse: CollapsedContainer(_controller, height, width),
         ),
       ),
     );
@@ -141,6 +181,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
         Icon(
           CupertinoIcons.heart,
           size: height * 0.03,
+          color: Colors.black,
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
@@ -155,6 +196,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                 icon: Icon(
                   CupertinoIcons.play_circle,
                   size: height * 0.055,
+                  color: Colors.black,
                 ),
                 onPressed: () {
                   if (vm.isCompleted) {
@@ -168,6 +210,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
               icon: Icon(
                 CupertinoIcons.pause_circle,
                 size: height * 0.055,
+                color: Colors.black,
               ),
               onPressed: () {
                 vm.player.pause();
@@ -175,7 +218,11 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
             ),
           ),
         ),
-        Icon(Icons.settings_voice_outlined, size: height * 0.03)
+        Icon(
+          Icons.settings_voice_outlined,
+          size: height * 0.03,
+          color: Colors.black,
+        )
       ],
     );
   }

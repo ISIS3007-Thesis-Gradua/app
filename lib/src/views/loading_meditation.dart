@@ -14,8 +14,8 @@ class LoadingMeditationView extends StatelessWidget {
   LoadingMeditationView({Key? key, required this.config}) : super(key: key);
 
   Future<String> generateMeditation() {
-    return Future.delayed(
-        Duration(seconds: 2), () => "Ay mi madre le bichoooo. Que golazoooooo");
+    return Future.delayed(Duration(milliseconds: 500),
+        () => "Ay mi madre le bichoooo. Que golazoooooo");
 
     //TODO Text to speech
   }
@@ -32,6 +32,7 @@ class LoadingMeditationView extends StatelessWidget {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SizedBox(
         width: double.infinity,
         height: height,

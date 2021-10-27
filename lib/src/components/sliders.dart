@@ -72,11 +72,11 @@ class _GradientSliderState extends State<GradientSlider> {
                   tickMarkShape: RoundSliderTickMarkShape(),
                   activeTickMarkColor: Colors.white,
                   inactiveTickMarkColor: Colors.white,
-                  // valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                  // valueIndicatorColor: Colors.green[400],
-                  // valueIndicatorTextStyle: const TextStyle(
-                  //   color: Colors.white,
-                  // ),
+                  valueIndicatorShape: RectangularSliderValueIndicatorShape(),
+                  valueIndicatorColor: Colors.blueAccent[100],
+                  valueIndicatorTextStyle: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 child: Slider(
                   min: widget.min,
@@ -144,8 +144,8 @@ class CustomSliderThumbRect extends SliderComponentShape {
         Offset(center.dx - (thumbWidth / 2), center.dy),
         Offset(center.dx + (thumbWidth / 2), center.dy),
         [
-          const Color(0xFF8C2C8C),
           const Color(0xFF0071BC),
+          const Color(0xFF8C2C8C),
         ],
       ); // Thumb Background Color
 
@@ -158,8 +158,8 @@ class CustomSliderThumbRect extends SliderComponentShape {
         Offset(center.dx - (thumbWidth / 2), center.dy),
         Offset(center.dx + (thumbWidth / 2), center.dy),
         [
-          const Color(0x758C2C8C),
           const Color(0x750071BC),
+          const Color(0x758C2C8C),
         ],
       ); // Thumb Border Color
 
