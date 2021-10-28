@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/meditation_rating_view.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -58,8 +59,7 @@ class Serenity extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          home: MeditationRatingView(
-              prevEmotionsMeasure: EmotionsMeasure.blank()),
+          home: const HomeView(),
           onGenerateRoute: StackedRouter().onGenerateRoute,
           // navigatorKey: locator<NavigationService>(),
           // Define a function to handle named routes in order to support

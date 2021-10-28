@@ -58,7 +58,7 @@ class LoadingMeditationView extends StatelessWidget {
                     child: SizedBox(
                       width: width * 0.2,
                       height: width * 0.2,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         strokeWidth: 10,
                       ),
                     ),
@@ -67,12 +67,18 @@ class LoadingMeditationView extends StatelessWidget {
               );
             } else {
               Future.delayed(
-                  Duration(milliseconds: 700),
-                  () => navigationService.replaceWith(Routes.player,
-                      arguments: PlayerArguments(
-                          meditation: Meditation(
-                              meditationText:
-                                  "Prueba de texto de meditación. Probando probando probando. Uno, dos y tres."))));
+                const Duration(milliseconds: 700),
+                () => navigationService.replaceWith(
+                  Routes.player,
+                  arguments: PlayerArguments(
+                    meditation: Meditation(
+                      meditationText:
+                          "Prueba de texto de meditación. Probando probando probando. Uno, dos y tres.",
+                      config: config,
+                    ),
+                  ),
+                ),
+              );
               // navigationService.navigateTo(Routes.player);
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,

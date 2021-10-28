@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/seek_bar.dart';
+import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -97,6 +99,29 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       color: Colors.black,
                     ),
                     onPressed: () => {navigationService.back()},
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(
+                      CupertinoIcons.xmark,
+                      size: height * 0.03,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      EmotionsMeasure prevEmotion =
+                          widget.meditation is Meditation
+                              ? (widget.meditation as Meditation)
+                                  .getEmotionMeasure()
+                              : EmotionsMeasure.blank();
+
+                      navigationService.replaceWith(
+                        Routes.meditation_rating,
+                        arguments: MeditationRatingViewArguments(
+                            prevEmotionsMeasure: prevEmotion),
+                      );
+                    },
                   ),
                 ),
                 Align(
