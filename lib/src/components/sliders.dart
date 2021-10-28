@@ -28,6 +28,7 @@ class _GradientSliderState extends State<GradientSlider> {
 
   @override
   Widget build(BuildContext context) {
+    // print("Building shit slider");
     return Container(
       height: 20,
       width: double.infinity,
@@ -85,7 +86,10 @@ class _GradientSliderState extends State<GradientSlider> {
                   label: '${widget.value}',
                   divisions: widget.divisions,
                   onChanged: (value) {
-                    widget.onChanged(value);
+                    setState(() {
+                      widget.onChanged(value);
+                    });
+                    // widget.onChanged(value);
                   },
                 ),
               ),

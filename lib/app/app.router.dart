@@ -10,10 +10,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../src/models/emotions_measure.dart';
 import '../src/models/meditation.dart';
 import '../src/models/meditation_config.dart';
 import '../src/views/home_view.dart';
 import '../src/views/loading_meditation.dart';
+import '../src/views/meditation_rating_view.dart';
 import '../src/views/other_player.dart';
 import '../src/views/player_view.dart';
 
@@ -21,11 +23,13 @@ class Routes {
   static const String homeView = '/';
   static const String player = 'player';
   static const String other_player = 'other_player';
+  static const String meditation_rating = 'meditation_rating';
   static const String loading_meditation = 'loading_meditation';
   static const all = <String>{
     homeView,
     player,
     other_player,
+    meditation_rating,
     loading_meditation,
   };
 }
@@ -37,6 +41,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.homeView, page: HomeView),
     RouteDef(Routes.player, page: Player),
     RouteDef(Routes.other_player, page: OtherPlayer),
+    RouteDef(Routes.meditation_rating, page: MeditationRatingView),
     RouteDef(Routes.loading_meditation, page: LoadingMeditationView),
   ];
   @override
@@ -66,6 +71,16 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
+    MeditationRatingView: (data) {
+      var args = data.getArgs<MeditationRatingViewArguments>(nullOk: false);
+      return CupertinoPageRoute<CupertinoRoute<dynamic>>(
+        builder: (context) => MeditationRatingView(
+          key: args.key,
+          prevEmotionsMeasure: args.prevEmotionsMeasure,
+        ),
+        settings: data,
+      );
+    },
     LoadingMeditationView: (data) {
       var args = data.getArgs<LoadingMeditationViewArguments>(nullOk: false);
       return CupertinoPageRoute<CupertinoRoute<dynamic>>(
@@ -88,6 +103,13 @@ class PlayerArguments {
   final Key? key;
   final SimpleMeditation? meditation;
   PlayerArguments({this.key, this.meditation});
+}
+
+/// MeditationRatingView arguments holder class
+class MeditationRatingViewArguments {
+  final Key? key;
+  final EmotionsMeasure prevEmotionsMeasure;
+  MeditationRatingViewArguments({this.key, required this.prevEmotionsMeasure});
 }
 
 /// LoadingMeditationView arguments holder class
