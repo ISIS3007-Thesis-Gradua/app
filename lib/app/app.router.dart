@@ -13,6 +13,7 @@ import 'package:stacked/stacked_annotations.dart';
 import '../src/models/emotions_measure.dart';
 import '../src/models/meditation.dart';
 import '../src/models/meditation_config.dart';
+import '../src/views/graph_view.dart';
 import '../src/views/home_view.dart';
 import '../src/views/loading_meditation.dart';
 import '../src/views/meditation_rating_view.dart';
@@ -25,12 +26,14 @@ class Routes {
   static const String other_player = 'other_player';
   static const String meditation_rating = 'meditation_rating';
   static const String loading_meditation = 'loading_meditation';
+  static const String graph_view = 'graph_view';
   static const all = <String>{
     homeView,
     player,
     other_player,
     meditation_rating,
     loading_meditation,
+    graph_view,
   };
 }
 
@@ -43,6 +46,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.other_player, page: OtherPlayer),
     RouteDef(Routes.meditation_rating, page: MeditationRatingView),
     RouteDef(Routes.loading_meditation, page: LoadingMeditationView),
+    RouteDef(Routes.graph_view, page: GraphView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -88,6 +92,12 @@ class StackedRouter extends RouterBase {
           key: args.key,
           config: args.config,
         ),
+        settings: data,
+      );
+    },
+    GraphView: (data) {
+      return CupertinoPageRoute<CupertinoRoute<dynamic>>(
+        builder: (context) => const GraphView(),
         settings: data,
       );
     },

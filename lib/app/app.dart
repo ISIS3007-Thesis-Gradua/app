@@ -1,3 +1,4 @@
+import 'package:serenity/src/views/graph_view.dart';
 import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/loading_meditation.dart';
 import 'package:serenity/src/views/meditation_rating_view.dart';
@@ -17,7 +18,8 @@ import 'package:stacked_services/stacked_services.dart';
   CupertinoRoute(
       page: LoadingMeditationView,
       name: "loading_meditation",
-      path: "loading_meditation")
+      path: "loading_meditation"),
+  CupertinoRoute(page: GraphView, name: "graph_view", path: "graph_view"),
 ], dependencies: [
   Singleton(classType: NavigationService),
   Singleton(classType: DialogService)
