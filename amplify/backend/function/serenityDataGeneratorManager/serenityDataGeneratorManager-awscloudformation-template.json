@@ -20,7 +20,7 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersion89e2268c": {
+    "LambdaLayerVersion641b6016": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": {
@@ -51,19 +51,19 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivate89e2268c": {
+    "LambdaLayerPermissionPrivate641b6016": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
         "LayerVersionArn": {
-          "Ref": "LambdaLayerVersion89e2268c"
+          "Ref": "LambdaLayerVersion641b6016"
         },
         "Principal": {
           "Ref": "AWS::AccountId"
         }
       }
     },
-    "LambdaLayerVersionfd85de01": {
+    "LambdaLayerVersion92c49b60": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": [
@@ -73,9 +73,9 @@
           "S3Bucket": {
             "Ref": "deploymentBucketName"
           },
-          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersionfd85de01-build.zip"
+          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion92c49b60-build.zip"
         },
-        "Description": "Updated layer version 2021-10-22T22:48:35.345Z",
+        "Description": "Updated layer version 2021-10-29T18:08:37.605Z",
         "LayerName": {
           "Fn::Sub": [
             "serenityDataGeneratorManager-${env}",
@@ -90,17 +90,17 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivatefd85de01": {
+    "LambdaLayerPermissionPrivate92c49b60": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:3",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:6",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
       }
     },
-    "LambdaLayerVersionf1139ceb": {
+    "LambdaLayerVersiona0fe2470": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": [
@@ -110,9 +110,9 @@
           "S3Bucket": {
             "Ref": "deploymentBucketName"
           },
-          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersionf1139ceb-build.zip"
+          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersiona0fe2470-build.zip"
         },
-        "Description": "Updated layer version 2021-10-22T22:41:22.764Z",
+        "Description": "Updated layer version 2021-10-23T06:55:43.592Z",
         "LayerName": {
           "Fn::Sub": [
             "serenityDataGeneratorManager-${env}",
@@ -127,48 +127,11 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivatef1139ceb": {
+    "LambdaLayerPermissionPrivatea0fe2470": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:2",
-        "Principal": {
-          "Ref": "AWS::AccountId"
-        }
-      }
-    },
-    "LambdaLayerVersion231e613d": {
-      "Type": "AWS::Lambda::LayerVersion",
-      "Properties": {
-        "CompatibleRuntimes": [
-          "nodejs14.x"
-        ],
-        "Content": {
-          "S3Bucket": {
-            "Ref": "deploymentBucketName"
-          },
-          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion231e613d-build.zip"
-        },
-        "Description": "Updated layer version 2021-10-22T22:33:53.622Z",
-        "LayerName": {
-          "Fn::Sub": [
-            "serenityDataGeneratorManager-${env}",
-            {
-              "env": {
-                "Ref": "env"
-              }
-            }
-          ]
-        }
-      },
-      "DeletionPolicy": "Delete",
-      "UpdateReplacePolicy": "Retain"
-    },
-    "LambdaLayerPermissionPrivate231e613d": {
-      "Type": "AWS::Lambda::LayerVersionPermission",
-      "Properties": {
-        "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:1",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:5",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -178,7 +141,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersion89e2268c"
+        "Ref": "LambdaLayerVersion641b6016"
       }
     }
   }

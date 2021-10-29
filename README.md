@@ -25,7 +25,7 @@
     }
     ```
 
-* **/user-feedback**
+* **/feedback**
     * POST: saves the user feedback form
         * Body: 
     ```Json

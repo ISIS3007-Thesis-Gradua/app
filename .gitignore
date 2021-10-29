@@ -65,4 +65,5 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
+serenity/
 #amplify-do-not-edit-end

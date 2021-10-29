@@ -9,12 +9,12 @@
             "policyResourceName": "/randomize"
         },
         {
-            "name": "/user-feedback",
+            "name": "/feedback",
             "lambdaFunction": "Feedback",
             "privacy": {
                 "open": true
             },
-            "policyResourceName": "/user-feedback"
+            "policyResourceName": "/feedback"
         }
     ],
     "resourceName": "gradua",
@@ -51,5 +51,5 @@
             ]
         }
     ],
-    "uuid": "306c62ad"
+    "uuid": "6d1747ac"
 }

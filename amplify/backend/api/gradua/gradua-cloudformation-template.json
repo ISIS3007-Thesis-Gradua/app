@@ -297,7 +297,7 @@
                 }
               },
               
-              "/user-feedback": {
+              "/feedback": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -396,7 +396,7 @@
                   }
                 }
               },
-              "/user-feedback/{proxy+}": {
+              "/feedback/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -608,7 +608,7 @@
         
         
 
-      "DeploymentAPIGWgradua306c62ad": {
+      "DeploymentAPIGWgradua6d1747ac": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
