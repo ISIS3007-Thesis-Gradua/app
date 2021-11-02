@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/components/sliders.dart';
+import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 
 class MeditationConfigView extends StatefulWidget {
@@ -37,14 +38,40 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
           TextStyle sliderTextStyle = GoogleFonts.raleway(
               fontWeight: FontWeight.w800,
               color: Color(0xFF8B9EB0),
-              fontSize: height * 0.027);
+              fontSize: width * 0.04);
           return Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: width * 0.05, vertical: height * 0.07),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Minutos:", style: sliderTextStyle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text("Minutos:", style: sliderTextStyle),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Icon(
+                          CupertinoIcons.clock_fill,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          CupertinoIcons.question_circle,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(
@@ -60,29 +87,70 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     },
                   ),
                 ),
-                Text("Animo:", style: sliderTextStyle),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Expanded(child: Text("Animo:", style: sliderTextStyle)),
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 20, 17),
-                        child: GradientSlider(
-                          value: vm.meditationConfig.emotion,
-                          min: 0,
-                          max: 10,
-                          divisions: 10,
-                          onChanged: (value) {
-                            setState(() {
-                              vm.meditationConfig.emotion = value;
-                            });
-                          },
+                      child: Center(
+                        child: Icon(
+                          GraduaIcons.theater_masks,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
                         ),
                       ),
                     ),
-                    const Icon(CupertinoIcons.smiley, color: Colors.black),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          CupertinoIcons.question_circle,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                Text("Estrés:", style: sliderTextStyle),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
+                  child: GradientSlider(
+                    value: vm.meditationConfig.emotion,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
+                    onChanged: (value) {
+                      setState(() {
+                        vm.meditationConfig.emotion = value;
+                      });
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text("Estrés:", style: sliderTextStyle)),
+                    Expanded(
+                      child: Center(
+                        child: Icon(
+                          GraduaIcons.brain,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          CupertinoIcons.question_circle,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(
@@ -97,7 +165,31 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     },
                   ),
                 ),
-                Text("Ansiedad:", style: sliderTextStyle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text("Ansiedad:", style: sliderTextStyle)),
+                    Expanded(
+                      child: Center(
+                        child: Icon(
+                          GraduaIcons.rain,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          CupertinoIcons.question_circle,
+                          color: const Color(0xFF8B9EB0),
+                          size: width * .04,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                   child: GradientSlider(

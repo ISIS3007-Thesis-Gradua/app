@@ -96,8 +96,13 @@ class StackedRouter extends RouterBase {
       );
     },
     GraphView: (data) {
+      var args = data.getArgs<GraphViewArguments>(nullOk: false);
       return CupertinoPageRoute<CupertinoRoute<dynamic>>(
-        builder: (context) => const GraphView(),
+        builder: (context) => GraphView(
+          args.prevEmotionsMeasure,
+          args.posEmotionsMeasure,
+          key: args.key,
+        ),
         settings: data,
       );
     },
@@ -127,4 +132,15 @@ class LoadingMeditationViewArguments {
   final Key? key;
   final MeditationConfig config;
   LoadingMeditationViewArguments({this.key, required this.config});
+}
+
+/// GraphView arguments holder class
+class GraphViewArguments {
+  final EmotionsMeasure prevEmotionsMeasure;
+  final EmotionsMeasure posEmotionsMeasure;
+  final Key? key;
+  GraphViewArguments(
+      {required this.prevEmotionsMeasure,
+      required this.posEmotionsMeasure,
+      this.key});
 }

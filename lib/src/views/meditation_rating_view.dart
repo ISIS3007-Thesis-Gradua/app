@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/buttons.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
@@ -156,7 +157,14 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                                 width: width * 0.6,
                                 height: height * 0.065,
                                 fontSize: height * 0.02,
-                                onPressed: () {},
+                                onPressed: () {
+                                  navigationService.replaceWith(
+                                      Routes.graph_view,
+                                      arguments: GraphViewArguments(
+                                          prevEmotionsMeasure:
+                                              widget.prevEmotionsMeasure,
+                                          posEmotionsMeasure: vm.posEmotions));
+                                },
                               ),
                             ],
                           ),

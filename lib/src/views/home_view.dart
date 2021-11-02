@@ -8,6 +8,7 @@ import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/buttons.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
+import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/saved_meditations_view.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -120,7 +121,7 @@ class _HomeViewState extends State<HomeView> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Icon(
-                                CupertinoIcons.play_circle,
+                                GraduaIcons.peace,
                                 size: height * 0.035,
                               ),
                             )

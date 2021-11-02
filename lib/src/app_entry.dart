@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/app/app.router.dart';
-import 'package:serenity/src/views/graph_view.dart';
+import 'package:serenity/src/views/home_view.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'settings/settings_controller.dart';
@@ -57,7 +57,11 @@ class Serenity extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          home: const GraphView(),
+          home: HomeView(),
+
+          // GraphView(
+          //     EmotionsMeasure(emotion: 6.0, stress: 2.0, anxiety: 9.0),
+          //     EmotionsMeasure(emotion: 3.0, stress: 8.0, anxiety: 0.0)),
           onGenerateRoute: StackedRouter().onGenerateRoute,
           // navigatorKey: locator<NavigationService>(),
           // Define a function to handle named routes in order to support

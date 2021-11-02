@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 ///This class defines the basic card style for our design language
 class BasicCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class BasicCard extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
+        border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(15),
         boxShadow: const [
           BoxShadow(

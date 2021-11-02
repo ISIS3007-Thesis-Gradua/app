@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
+import 'package:serenity/src/components/graphs.dart';
+import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class GraphView extends StatefulWidget {
-  const GraphView({Key? key}) : super(key: key);
+  final EmotionsMeasure prevEmotionsMeasure;
+  final EmotionsMeasure posEmotionsMeasure;
+  const GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure, {Key? key})
+      : super(key: key);
 
   @override
   _GraphViewState createState() => _GraphViewState();
@@ -17,10 +23,15 @@ class _GraphViewState extends State<GraphView> {
   GetIt locator = GetIt.instance;
   final _controller = PanelController();
   late final NavigationService navigationService;
+  late final Map<String, EmotionsMeasure> measures;
 
   @override
   void initState() {
     navigationService = locator<NavigationService>();
+    measures = {
+      "prev": widget.prevEmotionsMeasure,
+      "pos": widget.posEmotionsMeasure,
+    };
     super.initState();
   }
 
@@ -58,8 +69,99 @@ class _GraphViewState extends State<GraphView> {
                 BasicCard(
                   height: height * .25,
                   width: width * .9,
-                  child: Graph(),
-                )
+                  child: MeasuresGraph(measures),
+                ),
+                SizedBox(
+                  height: height * .2,
+                  width: width * .9,
+                  child: Column(
+                    children: [
+                      ResultsTitle(width),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: width * .9 * (3 / 5),
+                  width: width * .9,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: InkWell(
+                            onTap: () {
+                              navigationService.back();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withAlpha(150),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(
+                                child: Icon(CupertinoIcons.back,
+                                    size: width * .12, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Flexible(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.blueAccent,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.share,
+                                          size: width * .07,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.purple,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.save,
+                                          size: width * .05,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -69,96 +171,15 @@ class _GraphViewState extends State<GraphView> {
   }
 }
 
-class Graph extends StatelessWidget {
-  const Graph({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: GraphPainter(),
-    );
-  }
-}
-
-class GraphPainter extends CustomPainter {
-  final double emotion = 2;
-  final double stress = 7;
-  final double anxiety = 5;
-
-  ///Given bounds for x and Y (where minY < maxY i.e., minY is the top part
-  ///of the boundary). Whe generate a Path that, using cubic and quadratic
-  ///bezier curves, interpolates the points:
-  /// ((xMax - xMin)*(0.2), y1), ((xMax - xMin)/2, y2), ((xMax - xMin)*(0.8), y3)
-  /// This is assuming that maxY >= y1, y2, y3 >= minY
-  Path bezierInterpolationOf3Points(minX, minY, maxX, maxY, y1, y2, y3) {
-    double x1 = (maxX - minX) * (0.2);
-    double x2 = (maxX - minX) * (0.5);
-    double x3 = (maxX - minX) * (0.8);
-
-    Path interpolation = Path()
-          ..moveTo(minX, minY)
-          ..lineTo(maxX, minY)
-          ..moveTo(minX, maxY)
-          ..lineTo(maxX, maxY)
-          ..addOval(Rect.fromCenter(
-              center: Offset(x1, y1), width: 15, height: 15)) //punto y1
-          ..addOval(Rect.fromCenter(
-              center: Offset(x2, y2), width: 15, height: 15)) // punto y2
-          ..addOval(
-              Rect.fromCenter(center: Offset(x3, y3), width: 15, height: 15))
-          ..moveTo(minX, y1)
-          ..quadraticBezierTo((x1 - minX) * .6, y1, x1, y1)
-          ..cubicTo((x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2,
-              y2) //Bezier cúbica de y1 a y2
-          ..cubicTo((x2 + x3) / 2, y2, (x2 + x3) / 2, y3, x3, y3)
-          ..cubicTo(x3 + (maxX - x3) * .7, y3, x3 + (maxX - x3) * .4, maxY,
-              maxX, maxY)
-        // ..quadraticBezierTo(x3 + (maxX - x3) * .4, y3, maxX, maxY)
-        ;
-    return interpolation;
-  }
-
-  double scaleValue(double value, double minY, double maxY) {
-    double maxPossibleValue = 10;
-    double scaleUnit = (maxY - minY) / maxPossibleValue;
-    return maxY - (scaleUnit * value);
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double x = size.width;
-    final double y = size.height;
-
-    double minY = y * (2 / 5);
-    double maxY = y * (4 / 5);
-    double yEmotion = scaleValue(emotion, minY, maxY);
-    double yStress = scaleValue(stress, minY, maxY);
-    double yAnxiety = scaleValue(anxiety, minY, maxY);
-
-    Paint graphLineStroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.white
-      ..strokeWidth = y * .01;
-
-    Path graphLine = bezierInterpolationOf3Points(
-        0.0, minY, x, maxY, yEmotion, yStress, yAnxiety);
-
-    // Path()
-    //   ..moveTo(0, y * (2 / 5))
-    //   ..lineTo(x, y * (2 / 5))
-    //   ..moveTo(0, y * (4 / 5))
-    //   ..lineTo(x, y * (4 / 5))
-    //   ..moveTo(0, y * (4 / 5))
-    //   ..cubicTo(x / 4, y * (4 / 5), x / 4, y * (2 / 5), x / 2, y * (2 / 5))
-    //   ..moveTo(x / 2, y * (2 / 5))
-    //   ..cubicTo(
-    //       x * (3 / 4), y * (2 / 5), x * (3 / 4), y * (4 / 5), x, y * (4 / 5));
-
-    canvas.drawPath(graphLine, graphLineStroke);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+Widget ResultsTitle(double width) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text("Resultados"),
+      Icon(
+        CupertinoIcons.question_circle,
+      )
+    ],
+  );
 }
