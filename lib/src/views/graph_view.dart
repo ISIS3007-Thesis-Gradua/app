@@ -183,3 +183,23 @@ Widget ResultsTitle(double width) {
     ],
   );
 }
+
+Widget summaryResults(EmotionsMeasure prevEmotionsMeasure,
+    EmotionsMeasure posEmotionsMeasure, double width) {
+  List<String> measures = EmotionsMeasure.measureNames;
+  Map<String, IconData> iconsMap = EmotionsMeasure.iconsMap;
+
+  return Column(
+    children: measures
+        .map((i) => singleResult(
+            prevEmotionsMeasure.valuesMap[i] ?? 0,
+            posEmotionsMeasure.valuesMap[i] ?? 0,
+            iconsMap[i] ?? Icons.close,
+            i))
+        .toList(),
+  );
+}
+
+Widget singleResult(double prev, double pos, IconData icon, String name) {
+  return Row();
+}

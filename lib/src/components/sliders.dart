@@ -22,7 +22,7 @@ class GradientSlider extends StatefulWidget {
 }
 
 class _GradientSliderState extends State<GradientSlider> {
-  final double trackHeight = 8;
+  final double trackHeight = 12;
   final double trackRadius = 8;
   final double thumbWidth = 100;
 
@@ -106,7 +106,7 @@ class CustomSliderThumbRect extends SliderComponentShape {
   final double thumbWidth;
   final int min;
   final int max;
-  final double height = 15;
+  final double height = 12;
 
   const CustomSliderThumbRect({
     required this.thumbRadius,

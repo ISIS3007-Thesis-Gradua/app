@@ -8,6 +8,7 @@ import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/sliders.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
+import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/meditation_rating_view_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -102,7 +103,33 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Animo:", style: sliderTextStyle),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child:
+                                      Text("Animo:", style: sliderTextStyle)),
+                              Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    GraduaIcons.theater_masks,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    CupertinoIcons.question_circle,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 8, 0, 17),
                             child: GradientSlider(
@@ -119,7 +146,33 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                               },
                             ),
                           ),
-                          Text("Estrés:", style: sliderTextStyle),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child:
+                                      Text("Estrés:", style: sliderTextStyle)),
+                              Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    GraduaIcons.brain,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    CupertinoIcons.question_circle,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 8, 0, 17),
                             child: GradientSlider(
@@ -134,7 +187,33 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                               },
                             ),
                           ),
-                          Text("Ansiedad:", style: sliderTextStyle),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: Text("Ansiedad:",
+                                      style: sliderTextStyle)),
+                              Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    GraduaIcons.rain,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    CupertinoIcons.question_circle,
+                                    color: const Color(0xFF8B9EB0),
+                                    size: width * .04,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 8, 0, 17),
                             child: GradientSlider(
