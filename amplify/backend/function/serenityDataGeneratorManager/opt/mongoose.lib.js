@@ -14,7 +14,9 @@ let isConnected,
   Step4,
   Step5,
   Step6,
-  Step7;
+  Step7,
+  Routine,
+  User;
 
 module.exports = connectToDatabase = async () => {
   if (isConnected) {
@@ -34,7 +36,8 @@ module.exports = connectToDatabase = async () => {
         Step5,
         Step6,
         Step7,
-        Feedback,
+        Routine,
+        User,
       },
     };
   }
