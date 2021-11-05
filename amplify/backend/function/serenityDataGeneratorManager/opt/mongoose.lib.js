@@ -73,7 +73,8 @@ module.exports = connectToDatabase = async () => {
       Step5,
       Step6,
       Step7,
-      Feedback,
+      Routine,
+      User,
     },
   };
 };
