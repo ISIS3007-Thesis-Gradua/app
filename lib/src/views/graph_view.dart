@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/graphs.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
+import 'package:serenity/src/utils/extentions.dart';
+import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -45,6 +48,12 @@ class _GraphViewState extends State<GraphView> {
 
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
+
+    List<Widget> summaryPanel = <Widget>[ResultsTitle(width)];
+    summaryPanel.addAll(
+      summaryResults(
+          widget.prevEmotionsMeasure, widget.posEmotionsMeasure, width),
+    );
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFFF6F9FF),
@@ -75,9 +84,7 @@ class _GraphViewState extends State<GraphView> {
                   height: height * .2,
                   width: width * .9,
                   child: Column(
-                    children: [
-                      ResultsTitle(width),
-                    ],
+                    children: summaryPanel,
                   ),
                 ),
                 SizedBox(
@@ -146,7 +153,7 @@ class _GraphViewState extends State<GraphView> {
                                       ),
                                       child: Center(
                                         child: Icon(
-                                          Icons.save,
+                                          GraduaIcons.saved,
                                           size: width * .05,
                                           color: Colors.white,
                                         ),
@@ -172,34 +179,78 @@ class _GraphViewState extends State<GraphView> {
 }
 
 Widget ResultsTitle(double width) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text("Resultados"),
-      Icon(
-        CupertinoIcons.question_circle,
-      )
-    ],
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: width * .04),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          capitalize("Resultados"),
+          style: GoogleFonts.raleway(
+            fontWeight: FontWeight.w700,
+            fontSize: width * .045,
+            color: const Color(0xFF8B9EB0),
+          ),
+        ),
+        Icon(
+          CupertinoIcons.question_circle_fill,
+          color: const Color(0xFF8B9EB0),
+        )
+      ],
+    ),
   );
 }
 
-Widget summaryResults(EmotionsMeasure prevEmotionsMeasure,
+List<Widget> summaryResults(EmotionsMeasure prevEmotionsMeasure,
     EmotionsMeasure posEmotionsMeasure, double width) {
   List<String> measures = EmotionsMeasure.measureNames;
   Map<String, IconData> iconsMap = EmotionsMeasure.iconsMap;
 
-  return Column(
-    children: measures
-        .map((i) => singleResult(
-            prevEmotionsMeasure.valuesMap[i] ?? 0,
-            posEmotionsMeasure.valuesMap[i] ?? 0,
-            iconsMap[i] ?? Icons.close,
-            i))
-        .toList(),
-  );
+  return measures
+      .map((i) => singleResult(
+          prevEmotionsMeasure.valuesMap[i] ?? 0,
+          posEmotionsMeasure.valuesMap[i] ?? 0,
+          iconsMap[i] ?? Icons.close,
+          i,
+          width))
+      .toList();
 }
 
-Widget singleResult(double prev, double pos, IconData icon, String name) {
-  return Row();
+Widget singleResult(
+    double prev, double pos, IconData icon, String name, double width) {
+  String summaryText = "";
+  if (pos > prev) {
+    summaryText = "+${(pos - prev).round()} Subió";
+  } else if (prev > pos) {
+    summaryText = "-${(prev - pos).round()} Bajó";
+  } else {
+    summaryText = "0 Igual";
+  }
+  TextStyle summaryTextStyle = GoogleFonts.raleway(
+      fontWeight: FontWeight.w700,
+      fontSize: width * .035,
+      color: const Color(0xFF8B9EB0));
+
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: width * .01),
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          capitalize(name),
+          style: summaryTextStyle,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: width * .01),
+          child: Icon(icon, size: width * .03, color: const Color(0xFF8B9EB0)),
+        ),
+        Spacer(),
+        Text(
+          summaryText,
+          style: summaryTextStyle,
+        ),
+      ],
+    ),
+  );
 }

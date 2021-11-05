@@ -135,7 +135,7 @@ class GraphPainter extends CustomPainter {
         0.0, minY, x, maxY, yEmotionPos, yStressPos, yAnxietyPos, y);
 
     Path secondaryGraphLine = bezierInterpolationOf3Points(
-        0.0, minY, x, maxY, yEmotionPrev, yStressPrev, yAnxietyPrev, y);
+        0.0, minY, x, maxY, yEmotionPrev, yStressPrev, yAnxietyPrev, y);`
 
     canvas.drawPath(secondaryGraphLine, secondaryLineStroke);
     canvas.drawPath(secondaryGraphLine, secondaryGraphFillPaint);
