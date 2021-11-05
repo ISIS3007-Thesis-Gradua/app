@@ -50,13 +50,6 @@ class GraphPainter extends CustomPainter {
           // ..lineTo(maxX, minY)
           ..moveTo(minX, Y)
           ..lineTo(minX, y1)
-          // ..addOval(Rect.fromCenter(
-          //     center: Offset(x1, y1), width: 15, height: 15)) //punto y1
-          // ..addOval(Rect.fromCenter(
-          //     center: Offset(x2, y2), width: 15, height: 15)) // punto y2
-          // ..addOval(
-          //     Rect.fromCenter(center: Offset(x3, y3), width: 15, height: 15))
-          // ..moveTo(minX, y1)
           ..quadraticBezierTo((x1 - minX) * .6, y1, x1, y1)
           ..cubicTo((x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2,
               y2) //Bezier cúbica de y1 a y2
@@ -135,7 +128,7 @@ class GraphPainter extends CustomPainter {
         0.0, minY, x, maxY, yEmotionPos, yStressPos, yAnxietyPos, y);
 
     Path secondaryGraphLine = bezierInterpolationOf3Points(
-        0.0, minY, x, maxY, yEmotionPrev, yStressPrev, yAnxietyPrev, y);`
+        0.0, minY, x, maxY, yEmotionPrev, yStressPrev, yAnxietyPrev, y);
 
     canvas.drawPath(secondaryGraphLine, secondaryLineStroke);
     canvas.drawPath(secondaryGraphLine, secondaryGraphFillPaint);
