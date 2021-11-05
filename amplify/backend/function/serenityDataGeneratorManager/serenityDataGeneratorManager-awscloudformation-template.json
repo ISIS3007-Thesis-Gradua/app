@@ -20,7 +20,7 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersionab916c32": {
+    "LambdaLayerVersion59ec1c3f": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": {
@@ -51,13 +51,50 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivateab916c32": {
+    "LambdaLayerPermissionPrivate59ec1c3f": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
         "LayerVersionArn": {
-          "Ref": "LambdaLayerVersionab916c32"
+          "Ref": "LambdaLayerVersion59ec1c3f"
         },
+        "Principal": {
+          "Ref": "AWS::AccountId"
+        }
+      }
+    },
+    "LambdaLayerVersionab916c32": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "CompatibleRuntimes": [
+          "nodejs14.x"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersionab916c32-build.zip"
+        },
+        "Description": "Updated layer version 2021-10-29T18:48:55.259Z",
+        "LayerName": {
+          "Fn::Sub": [
+            "serenityDataGeneratorManager-${env}",
+            {
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        }
+      },
+      "DeletionPolicy": "Delete",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "LambdaLayerPermissionPrivateab916c32": {
+      "Type": "AWS::Lambda::LayerVersionPermission",
+      "Properties": {
+        "Action": "lambda:GetLayerVersion",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:8",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -178,7 +215,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersionab916c32"
+        "Ref": "LambdaLayerVersion59ec1c3f"
       }
     }
   }
