@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
@@ -85,6 +86,10 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          Image.asset(
+                            "assets/images/logo_gradua_horizontal.png",
+                            height: height * .08,
+                          ),
                           Text(
                             "¡Hey!\nAhora ¿Cómo te sientes?",
                             textAlign: TextAlign.center,
@@ -95,6 +100,16 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/images/black_woman_meditating.svg',
+                          semanticsLabel: 'Acme Logo',
+                          height: height * .15,
+                        ),
                       ),
                     ),
                     Padding(
