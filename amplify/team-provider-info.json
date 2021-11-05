@@ -23,7 +23,7 @@
         },
         "serenityDataGeneratorManager": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion9f27e784-build.zip"
+          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersiond616722f-build.zip"
         },
         "Generator": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",

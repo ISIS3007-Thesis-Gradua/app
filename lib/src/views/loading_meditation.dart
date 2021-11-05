@@ -71,10 +71,10 @@ class LoadingMeditationView extends StatelessWidget {
               );
             } else {
               // print("DATA");
-              // print(snap.data);
+              print(snap.data);
               Map<String, dynamic> body =
                   jsonDecode((snap.data as http.Response).body);
-              // print(body.toString());
+              print(body.toString());
 
               Future.delayed(
                 const Duration(milliseconds: 5000),
