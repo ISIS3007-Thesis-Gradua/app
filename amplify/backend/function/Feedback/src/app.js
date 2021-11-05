@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
  * Example get method *
  **********************/
 app.use('/feedback', require('./routes/feedback.route'))
-
+app.use('/user', require('./routes/user.route'))
 app.listen(3000, function() {
     console.log("user data service has started")
 });

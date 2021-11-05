@@ -20,23 +20,56 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersion59ec1c3f": {
+    "LambdaLayerVersion9f27e784": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
-        "CompatibleRuntimes": {
-          "Ref": "runtimes"
-        },
+        "CompatibleRuntimes": [
+          "nodejs14.x"
+        ],
         "Content": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"
           },
-          "S3Key": {
-            "Ref": "s3Key"
-          }
+          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion9f27e784-build.zip"
         },
-        "Description": {
-          "Ref": "description"
+        "Description": "Updated layer version 2021-11-05T18:57:04.885Z",
+        "LayerName": {
+          "Fn::Sub": [
+            "serenityDataGeneratorManager-${env}",
+            {
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        }
+      },
+      "DeletionPolicy": "Delete",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "LambdaLayerPermissionPrivate9f27e784": {
+      "Type": "AWS::Lambda::LayerVersionPermission",
+      "Properties": {
+        "Action": "lambda:GetLayerVersion",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:10",
+        "Principal": {
+          "Ref": "AWS::AccountId"
+        }
+      }
+    },
+    "LambdaLayerVersion59ec1c3f": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "CompatibleRuntimes": [
+          "nodejs14.x"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion59ec1c3f-build.zip"
         },
+        "Description": "Updated layer version 2021-11-05T18:24:47.077Z",
         "LayerName": {
           "Fn::Sub": [
             "serenityDataGeneratorManager-${env}",
@@ -55,9 +88,7 @@
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": {
-          "Ref": "LambdaLayerVersion59ec1c3f"
-        },
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:838438968296:layer:serenityDataGeneratorManager-dev:9",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -215,7 +246,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersion59ec1c3f"
+        "Ref": "LambdaLayerVersion9f27e784"
       }
     }
   }
