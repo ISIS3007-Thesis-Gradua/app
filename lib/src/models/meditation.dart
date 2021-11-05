@@ -1,10 +1,12 @@
+import 'package:serenity/src/models/emotions_measure.dart';
+import 'package:serenity/src/models/meditation_config.dart';
+
 class SimpleMeditation {
-  String name = "Generic Meditation";
-  Duration duration = Duration(seconds: 0);
+  String name;
+  Duration duration;
 
-  SimpleMeditation.blank();
-
-  SimpleMeditation({required this.name, required this.duration});
+  SimpleMeditation(
+      {this.name = "Generated Meditation", this.duration = Duration.zero});
 
   String formattedDuration() {
     return "${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60))} mins";
@@ -14,13 +16,22 @@ class SimpleMeditation {
 class Meditation extends SimpleMeditation {
   String id = '';
   String? url;
+  String meditationText = '';
+  MeditationConfig config = MeditationConfig();
 
-  Meditation.blank() : super.blank();
+  Meditation.blank() : super();
 
   Meditation(
-      {required this.id,
+      {this.id = '',
       this.url,
-      required String name,
-      required Duration duration})
-      : super(name: name, duration: duration);
+      required this.meditationText,
+      required this.config})
+      : super();
+
+  EmotionsMeasure getEmotionMeasure() {
+    return EmotionsMeasure(
+        emotion: config.emotion,
+        stress: config.stress,
+        anxiety: config.anxiety);
+  }
 }

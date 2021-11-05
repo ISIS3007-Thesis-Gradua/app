@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -97,11 +98,15 @@ class _SeekBarState extends State<SeekBar> {
           right: 16.0,
           bottom: 0.0,
           child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.caption),
+            RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                    .firstMatch("$_remaining")
+                    ?.group(1) ??
+                '$_remaining',
+            style: GoogleFonts.raleway(
+              color: Colors.black26,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ),
       ],
     );

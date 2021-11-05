@@ -100,7 +100,7 @@ class _ScrollSheetState extends State<ScrollSheet> {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       double height = min(constraints.constrainHeight(), maxHeight);
-      print('Change constraints: ${constraints.constrainHeight()}');
+      // print('Change constraints: ${constraints.constrainHeight()}');
       return SlidingUpPanel(
         controller: controller,
         backdropOpacity: 0.17,

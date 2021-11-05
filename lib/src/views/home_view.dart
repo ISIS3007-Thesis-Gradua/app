@@ -5,6 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/components/buttons.dart';
+import 'package:serenity/src/components/cards.dart';
+import 'package:serenity/src/components/collapsed_container.dart';
+import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/saved_meditations_view.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -25,16 +29,6 @@ class _HomeViewState extends State<HomeView> {
   GetIt locator = GetIt.instance;
   final _controller = PanelController();
   late final NavigationService navigationService;
-
-  void handlePanelChevronTap() {
-    if (_controller.isPanelClosed) {
-      _controller.animatePanelToPosition(1,
-          curve: const Cubic(0.17, 0.67, 0.83, 0.67),
-          duration: const Duration(milliseconds: 400));
-    } else {
-      _controller.close();
-    }
-  }
 
   @override
   void initState() {
@@ -58,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, vm, child) {
           return SafeArea(
             child: Scaffold(
-              backgroundColor: const Color(0xFFEDCCEE),
+              backgroundColor: const Color(0xFFF6F9FF),
               body: ScrollSheet(
                 controllerType: ControllerType.fromFields,
                 controller: _controller,
@@ -69,67 +63,31 @@ class _HomeViewState extends State<HomeView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
+                      BasicCard(
                         height: height * 0.22,
                         width: width * 0.84,
-                        decoration: BoxDecoration(
-                          color: const Color(0x547400B8),
-                          borderRadius: BorderRadius.circular(40),
-                        ),
                         child: Padding(
-                          padding: EdgeInsets.all(width * 0.05),
+                          padding: EdgeInsets.all(height * 0.02),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Recommended\n Meditation",
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.poppins(
+                                "¡Hola! Bienvenido a Gradúa. \nDeseas iniciar con una \nmeditación sugerida?",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.raleway(
+                                  color: Color(0xFF768596),
                                   fontWeight: FontWeight.w700,
-                                  fontSize: height * 0.03,
+                                  fontSize: height * 0.022,
                                   height: 1,
                                 ),
                               ),
-                              Text(
-                                "Recommendation of the day",
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: height * 0.019,
-                                  height: 1,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    print('Received click');
-                                  },
-                                  child: Text(
-                                    'Listen meditation',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.023,
-                                      height: 1,
-                                    ),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                        vertical: height * 0.02),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(height * 0.02),
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    side: const BorderSide(
-                                        color: Colors.black,
-                                        width: 3,
-                                        style: BorderStyle.solid),
-                                  ),
-                                ),
+                              RoundedGradientButton.text(
+                                buttonText: "Meditar Ahora",
+                                width: width * 0.6,
+                                height: height * 0.065,
+                                fontSize: height * 0.02,
+                                onPressed: () {},
                               ),
                             ],
                           ),
@@ -137,61 +95,44 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       MeditationConfigView(vm: vm),
                       // const Spacer(),
-                      IconButton(
-                        iconSize: height * 0.045,
-                        icon: const Icon(
-                          CupertinoIcons.play_circle,
-                        ),
-                        onPressed: () =>
-                            {navigationService.navigateTo(Routes.other_player)},
-                      ),
-                      Text(
-                        'Start session',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: height * 0.023,
-                          height: 1,
+                      RoundedGradientButton(
+                        width: width * 0.6,
+                        height: height * 0.065,
+                        onPressed: () => {
+                          navigationService.navigateTo(
+                            Routes.loading_meditation,
+                            arguments: LoadingMeditationViewArguments(
+                              config: vm.meditationConfig,
+                            ),
+                          ),
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Meditar Ahora",
+                              style: GoogleFonts.raleway(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: height * 0.02,
+                                height: 1,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(
+                                GraduaIcons.peace,
+                                size: height * 0.035,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
                 panel: SavedMeditationsView(vm: vm, controller: _controller),
-                collapse: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xEEF6F5F5),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(width * 0.07, 0, 0, 0),
-                              child: Icon(
-                                CupertinoIcons.tag_solid,
-                                size: height * 0.028,
-                              ),
-                            )),
-                        Center(
-                            child: IconButton(
-                          onPressed: handlePanelChevronTap,
-                          icon: Icon(
-                            CupertinoIcons.chevron_compact_up,
-                            size: height * 0.04,
-                          ),
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
+                collapse: CollapsedContainer(_controller, height, width),
                 isDraggable: true,
                 maxHeight: height * 0.67,
                 minHeight: height * 0.06,

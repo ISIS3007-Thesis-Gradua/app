@@ -1,3 +1,5 @@
+import 'package:serenity/src/models/emotions_measure.dart';
+
 enum MeditationGoals { Stress, Anxiety, Nothing }
 
 class MeditationConfig {
@@ -6,6 +8,14 @@ class MeditationConfig {
 
   /// Emotion levels between 0 and 1 where 0 is Sad and 1 is Happy.
   double emotion;
+
+  /// Stress levels between 0 and 10 where 0 is completely calmed and 10
+  /// is extremely stressed.
+  double stress;
+
+  /// Stress levels between 0 and 10 where 0 is relaxed calmed and 10
+  /// is extremely stressed.
+  double anxiety;
 
   /// The objective of the generated meditation.
   MeditationGoals goals;
@@ -18,6 +28,14 @@ class MeditationConfig {
   MeditationConfig(
       {this.time = 5.0,
       this.emotion = 0,
+      this.stress = 0,
+      this.anxiety = 0,
       this.goals = MeditationGoals.Nothing,
       this.goalLevels = 5});
+
+  ///This getter provides the information about the user's emotional state
+  ///at the time of the configuration of the meditation.
+  EmotionsMeasure get emotionsMeasure {
+    return EmotionsMeasure(emotion: emotion, stress: stress, anxiety: anxiety);
+  }
 }
