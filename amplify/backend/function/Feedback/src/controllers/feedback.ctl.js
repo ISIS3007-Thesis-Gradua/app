@@ -2,10 +2,10 @@ const connectToDatabase = require("/opt/mongoose.lib");
 
 const feedback = async (req, res) => {
   const {
-    models: { Feedback },
+    models: { Routine },
   } = await connectToDatabase();
 
-  Feedback.create(req.body, (err, feedback) => {
+  Routine.create(req.body, (err, feedback) => {
     if (err) {
       console.log(err);
       res.status(400).send({ message: err.message });

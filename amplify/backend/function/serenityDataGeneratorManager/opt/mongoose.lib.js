@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const stepSchema = require("./schemas/steps.schema");
-const feedbackSchema = require("./schemas/feedback.schema");
+const routineSchema = require("./schemas/routine.schema");
 const userSchema = require("./schemas/user.schema");
 mongoose.Promise = global.Promise;
 let isConnected,
@@ -56,7 +56,7 @@ module.exports = connectToDatabase = async () => {
   Step6 = corpusConn.model("step6", stepSchema);
   Step7 = corpusConn.model("step7", stepSchema);
   User = userFeedbackConn.model("user", userSchema);
-  Feedback = userFeedbackConn.model("feedback", feedbackSchema);
+  Routine = userFeedbackConn.model("feedback", routineSchema);
   isConnected = true;
   return {
     conns: {
