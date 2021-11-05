@@ -49,7 +49,7 @@ class LoadingMeditationView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Generating Meditation',
+                    'Generando Meditación',
                     style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -91,7 +91,7 @@ class LoadingMeditationView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Succes!',
+                    '¡Éxito!',
                     style: GoogleFonts.poppins(
                       color: Colors.green,
                       fontWeight: FontWeight.w600,

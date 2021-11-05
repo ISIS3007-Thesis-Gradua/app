@@ -103,18 +103,21 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(height * 0.03),
                       child: Center(
-                        child: SvgPicture.asset(
-                          'assets/images/black_woman_meditating.svg',
-                          semanticsLabel: 'Acme Logo',
-                          height: height * .15,
+                        child: Padding(
+                          padding: EdgeInsets.all(height * 0.03),
+                          child: SvgPicture.asset(
+                            'assets/images/black_woman_meditating.svg',
+                            semanticsLabel: 'Acme Logo',
+                            height: height * .15,
+                          ),
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.05, vertical: height * 0.07),
+                          horizontal: width * 0.05, vertical: height * 0.03),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
