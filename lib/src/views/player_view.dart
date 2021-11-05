@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
@@ -135,6 +136,19 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFDCE7EF),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/meditating_man.svg',
+                          semanticsLabel: 'Acme Logo',
+                          height: height * .4,
+                        ),
+                      ),
                       ViewModelBuilder<PlayerViewModel>.reactive(
                         // stream: null,
                         viewModelBuilder: () => vm,
