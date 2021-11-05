@@ -35,7 +35,8 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     if (widget.meditation is Meditation) {
       setState(() {
         isSimple = false;
-        vm.constructSource((widget.meditation as Meditation).meditationText);
+        vm.steps = (widget.meditation as Meditation).steps;
+        // vm.constructSource((widget.meditation as Meditation).meditationText);
       });
     }
     WidgetsBinding.instance?.addObserver(this);

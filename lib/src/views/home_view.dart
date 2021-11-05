@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
@@ -47,6 +48,12 @@ class _HomeViewState extends State<HomeView> {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
 
+    final String assetName = 'assets/images/meditating_man.svg';
+    final Widget svg = SvgPicture.asset(
+      assetName,
+      semanticsLabel: 'Acme Logo',
+    );
+
     return ViewModelBuilder<HomeViewModel>.reactive(
         viewModelBuilder: () => HomeViewModel.exampleData(),
         builder: (context, vm, child) {
@@ -91,6 +98,15 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ],
                           ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.all(height * .02),
+                        child: SvgPicture.asset(
+                          assetName,
+                          semanticsLabel: 'Acme Logo',
+                          height: height * .2,
                         ),
                       ),
                       MeditationConfigView(vm: vm),

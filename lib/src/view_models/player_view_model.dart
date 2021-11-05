@@ -1,10 +1,11 @@
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:serenity/src/models/meditation.dart';
 import 'package:stacked/stacked.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
-const String ttsEndPoint = "http://192.168.0.4:5002/api/tts?text=";
+const String ttsEndPoint = "http://192.168.1.106:5002/api/tts?text=";
 
 class PlayerViewModel extends MultipleStreamViewModel {
   PositionData? get positionData => dataMap?[_positionDataSreamKey];
@@ -22,15 +23,17 @@ class PlayerViewModel extends MultipleStreamViewModel {
   String url =
       "http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu";
   // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3";
+  List<Step> steps = [];
 
-  PlayerViewModel(
-      {this.url =
-          'http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu'
-      // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
-      });
+  PlayerViewModel({
+    this.url =
+        'http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu',
+    // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
+    this.steps = const [],
+  });
 
-  void constructSource(String meditation) {
-    url = ttsEndPoint + meditation;
+  String constructSource(String meditation) {
+    return ttsEndPoint + meditation;
   }
 
   @override
@@ -58,7 +61,17 @@ class PlayerViewModel extends MultipleStreamViewModel {
       // AudioSource.uri(uri)
       print("Audio source: $url");
       audioSource = AudioSource.uri(Uri.parse(url));
-      await player.setAudioSource(audioSource);
+      await player.setAudioSource(
+        ConcatenatingAudioSource(
+          useLazyPreparation: true,
+          children: steps.map(
+            (step) {
+              String source = constructSource(step.cleanText);
+              return AudioSource.uri(Uri.parse(source));
+            },
+          ).toList(),
+        ),
+      );
       print("Audio source first");
       print(player.audioSource!.sequence.first.toString());
     } catch (e) {

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/models/meditation_config.dart';
@@ -13,11 +16,12 @@ class LoadingMeditationView extends StatelessWidget {
 
   LoadingMeditationView({Key? key, required this.config}) : super(key: key);
 
-  Future<String> generateMeditation() {
-    return Future.delayed(Duration(milliseconds: 500),
-        () => "Ay mi madre le bichoooo. Que golazoooooo");
+  Future<http.Response> generateMeditation() {
+    Future<http.Response> request = http.get(Uri.parse(
+        'https://188s5h8465.execute-api.us-east-1.amazonaws.com/dev/randomize?time=${config.time * 60}&avg=5'));
 
     //TODO Text to speech
+    return request;
   }
 
   @override
@@ -66,16 +70,18 @@ class LoadingMeditationView extends StatelessWidget {
                 ],
               );
             } else {
+              // print("DATA");
+              // print(snap.data);
+              Map<String, dynamic> body =
+                  jsonDecode((snap.data as http.Response).body);
+              // print(body.toString());
+
               Future.delayed(
-                const Duration(milliseconds: 700),
+                const Duration(milliseconds: 5000),
                 () => navigationService.replaceWith(
                   Routes.player,
                   arguments: PlayerArguments(
-                    meditation: Meditation(
-                      meditationText:
-                          "Prueba de texto de meditación. Probando probando probando. Uno, dos y tres.",
-                      config: config,
-                    ),
+                    meditation: Meditation.fromRawJson(body, config),
                   ),
                 ),
               );

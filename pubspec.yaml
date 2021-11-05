@@ -16,8 +16,10 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_svg: ^0.23.0+1
   google_fonts: ^2.1.0
   gradient_widgets: ^0.6.0
+  http: ^0.13.4
   just_audio: ^0.9.12
   rxdart: ^0.27.2
   sliding_up_panel: ^2.0.0+1
