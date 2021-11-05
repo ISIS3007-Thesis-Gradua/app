@@ -1,0 +1,55 @@
+{
+    "paths": [
+        {
+            "name": "/randomize",
+            "lambdaFunction": "Randomizer",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/randomize"
+        },
+        {
+            "name": "/feedback",
+            "lambdaFunction": "Feedback",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/feedback"
+        }
+    ],
+    "resourceName": "gradua",
+    "apiName": "gradua",
+    "functionArns": [
+        {
+            "lambdaFunction": "Randomizer"
+        },
+        {
+            "lambdaFunction": "Feedback"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-serenity-dev-194102-authRole",
+        "unAuthRoleName": "amplify-serenity-dev-194102-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "Randomizer",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "Feedback",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "6d1747ac"
+}

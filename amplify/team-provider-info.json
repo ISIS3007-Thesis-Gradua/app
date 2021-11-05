@@ -1,0 +1,39 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-serenity-dev-194102-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838438968296:role/amplify-serenity-dev-194102-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838438968296:role/amplify-serenity-dev-194102-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-serenity-dev-194102-deployment",
+      "UnauthRoleName": "amplify-serenity-dev-194102-unauthRole",
+      "StackName": "amplify-serenity-dev-194102",
+      "StackId": "arn:aws:cloudformation:us-east-1:838438968296:stack/amplify-serenity-dev-194102/400d3230-2bbe-11ec-a980-129b0ebd9c57",
+      "AmplifyAppId": "d3ryhofadydsy0"
+    },
+    "categories": {
+      "function": {
+        "Randomizer": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Randomizer-47656b354a4437746268-build.zip"
+        },
+        "Feedback": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Feedback-5456347973666b505431-build.zip"
+        },
+        "serenityDataGeneratorManager": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion641b6016-build.zip"
+        },
+        "Generator": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Generator-7635377a395a634b524e-build.zip"
+        },
+        "Recomender": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Recomender-64646932706e76314c48-build.zip"
+        }
+      }
+    }
+  }
+}
