@@ -19,11 +19,11 @@
         },
         "Feedback": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Feedback-5456347973666b505431-build.zip"
+          "s3Key": "amplify-builds/Feedback-5457376d556475373973-build.zip"
         },
         "serenityDataGeneratorManager": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion641b6016-build.zip"
+          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion59ec1c3f-build.zip"
         },
         "Generator": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
@@ -31,7 +31,7 @@
         },
         "Recomender": {
           "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Recomender-64646932706e76314c48-build.zip"
+          "s3Key": "amplify-builds/Recomender-4c616e2b51684756454f-build.zip"
         }
       }
     }
