@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
+const String ttsEndPoint = "http://192.168.0.4:5002/api/tts?text=";
 
 class PlayerViewModel extends MultipleStreamViewModel {
   PositionData? get positionData => dataMap?[_positionDataSreamKey];
@@ -12,16 +13,25 @@ class PlayerViewModel extends MultipleStreamViewModel {
   PlayerState get playerState => dataMap![_playerStateStreamKey];
   bool get hasPlayerState => dataReady(_playerStateStreamKey);
 
+  bool get isLoading => playerState.processingState == ProcessingState.loading;
+  bool get isCompleted =>
+      playerState.processingState == ProcessingState.completed;
+
   final AudioPlayer player = AudioPlayer();
+  late AudioSource audioSource;
   String url =
-      "http://192.168.1.106:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu";
+      "http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu";
   // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3";
 
   PlayerViewModel(
       {this.url =
-          'http://192.168.1.106:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu'
+          'http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu'
       // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
       });
+
+  void constructSource(String meditation) {
+    url = ttsEndPoint + meditation;
+  }
 
   @override
   // TODO: implement stream
@@ -46,7 +56,9 @@ class PlayerViewModel extends MultipleStreamViewModel {
     // Try to load audio from a source and catch any errors.
     try {
       // AudioSource.uri(uri)
-      await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+      print("Audio source: $url");
+      audioSource = AudioSource.uri(Uri.parse(url));
+      await player.setAudioSource(audioSource);
       print("Audio source first");
       print(player.audioSource!.sequence.first.toString());
     } catch (e) {
@@ -71,6 +83,12 @@ class PlayerViewModel extends MultipleStreamViewModel {
         _playerStateStreamKey:
             StreamData<PlayerState>(player.playerStateStream),
       };
+
+  void dispose() {
+    if (audioSource is LockCachingAudioSource) {
+      (audioSource as LockCachingAudioSource).clearCache();
+    }
+  }
 }
 
 class PositionData {
