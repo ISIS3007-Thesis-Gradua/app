@@ -64,6 +64,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "Recomender",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
