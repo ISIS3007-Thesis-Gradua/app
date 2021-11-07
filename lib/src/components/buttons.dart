@@ -38,20 +38,11 @@ class RoundedGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
               color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
         ],
         gradient: gradient,
-        // LinearGradient(
-        //   begin: Alignment.topLeft,
-        //   end: Alignment.bottomRight,
-        //   stops: [0.0, 1.0],
-        //   colors: [
-        //     Colors.deepPurple.shade400,
-        //     Colors.deepPurple.shade200,
-        //   ],
-        // ),
         color: Colors.deepPurple.shade300,
         borderRadius: BorderRadius.circular(20),
       ),

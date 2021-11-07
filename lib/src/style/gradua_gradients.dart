@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
+///Enum of radients used across the app
 enum GraduaGradients {
   helperTitleGradient,
   defaultGradient,
@@ -46,6 +47,22 @@ extension GraduaGradientsValues on GraduaGradients {
   }
 }
 
+///This is for adding a Gradient Shader to the given child.
+///Can be used in text, icons, images, basically everything that needs a
+///Gradient on top.
+Widget maskGradient(
+    {required Widget child,
+    required Gradient gradient,
+    BlendMode blendMode = BlendMode.srcIn}) {
+  return ShaderMask(
+    blendMode: blendMode,
+    shaderCallback: (bounds) => gradient.createShader(
+      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+    ),
+    child: child,
+  );
+}
+
 Color _intToColor(int hexNumber) => Color.fromARGB(
     255,
     (hexNumber >> 16) & 0xFF,
@@ -64,14 +81,4 @@ String? _textSubString(String text) {
   if (text.length == 6) return text;
 
   return text.substring(1, text.length);
-}
-
-Widget maskGradient({required Widget child, required Gradient gradient}) {
-  return ShaderMask(
-    blendMode: BlendMode.srcIn,
-    shaderCallback: (bounds) => gradient.createShader(
-      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-    ),
-    child: child,
-  );
 }

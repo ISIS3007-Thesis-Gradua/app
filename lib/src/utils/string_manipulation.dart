@@ -1,11 +1,10 @@
-String sanitizeText(String text) {
+///Removes some SSML text from the input
+String sanitizeTtsText(String text) {
   String cleanText = text
       .replaceAll(RegExp('<speak>'), '')
       .replaceAll(RegExp('<\/speak>'), '')
       .replaceAll(RegExp('<break.*/>', dotAll: true), '');
 
-  // print("Data san");
-  // print(cleanText);
   return cleanText;
 }
 
@@ -13,6 +12,7 @@ String sanitizeText(String text) {
 ///where each Substring contains 0 or 1 ocurrences of the pattern (RegExp pattern).
 ///Ex: text = "Hello, how are you? I just said hello..." and pattern=RegExp("Hello", caseSensitive=false),
 ///returns ["Hello", ", how are you? I just said ", "hello", "..."]
+/// This is mainly used in the helper dialog method to separate the words with different styles from de json file annotations.
 List<String> separateStringByPattern(String text, Pattern pattern) {
   //Markes befora and after of the pattern with "<>"
   text = text.splitMapJoin(pattern,

@@ -7,6 +7,11 @@ import 'package:serenity/src/views/player_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+///This app handles the definition and initialization of Routes and Services
+///We use the "Stacked" plugin in here to generate all the related Boilerplate
+///For mor info go to: https://pub.dev/packages/stacked
+///To generate the Boilerplate (app.router and app.locator) run the following
+///command on terminal: flutter pub run build_runner build --delete-conflicting-outputs
 @StackedApp(routes: [
   CupertinoRoute(page: HomeView, initial: true),
   CupertinoRoute(page: Player, name: "player", path: "player"),

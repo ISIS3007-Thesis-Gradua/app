@@ -266,7 +266,6 @@ class _InstructionsState extends State<Instructions> {
               child: Container(
                 width: width * .17,
                 decoration: BoxDecoration(
-                    // color: Color(0xFFE3EDF7),
                     shape: BoxShape.circle,
                     gradient:
                         GraduaGradients.neomorphicButtonGradient.linearGradient,

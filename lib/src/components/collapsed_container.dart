@@ -23,7 +23,7 @@ Widget CollapsedContainer(
     Container(
       decoration: BoxDecoration(
         color: const Color(0xEEF6F5F5),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),

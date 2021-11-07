@@ -1,6 +1,7 @@
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation_config.dart';
 import 'package:serenity/src/utils/string_manipulation.dart';
+//TODO better model this thing
 
 class SimpleMeditation {
   String name;
@@ -59,7 +60,7 @@ class Meditation extends SimpleMeditation {
         String content = value[0]["content"] is String
             ? (value[0]["content"] as String)
             : "";
-        String cleanContent = sanitizeText(content);
+        String cleanContent = sanitizeTtsText(content);
         steps.add(Step(id, cleanContent, content));
         meditationText += " " + cleanContent;
       }

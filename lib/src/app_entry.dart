@@ -57,32 +57,12 @@ class Serenity extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          home: HomeView(),
+          home: const HomeView(),
 
           // GraphView(
           //     EmotionsMeasure(emotion: 6.0, stress: 2.0, anxiety: 9.0),
           //     EmotionsMeasure(emotion: 3.0, stress: 8.0, anxiety: 0.0)),
           onGenerateRoute: StackedRouter().onGenerateRoute,
-          // navigatorKey: locator<NavigationService>(),
-          // Define a function to handle named routes in order to support
-          // Flutter web url navigation and deep linking.
-          // onGenerateRoute:
-          //     (RouteSettings routeSettings) {
-          //   return MaterialPageRoute<void>(
-          //     settings: routeSettings,
-          //     builder: (BuildContext context) {
-          //       switch (routeSettings.name) {
-          //         case SettingsView.routeName:
-          //           return SettingsView(controller: settingsController);
-          //         case SampleItemDetailsView.routeName:
-          //           return const SampleItemDetailsView();
-          //         case SampleItemListView.routeName:
-          //         default:
-          //           return const SampleItemListView();
-          //       }
-          //     },
-          //   );
-          // },
         );
       },
     );
