@@ -4,7 +4,8 @@ import 'package:vector_math/vector_math_64.dart' show radians;
 enum GraduaGradients {
   helperTitleGradient,
   defaultGradient,
-  instructionsGradient
+  instructionsGradient,
+  neomorphicButtonGradient,
 }
 
 extension GraduaGradientsValues on GraduaGradients {
@@ -33,6 +34,14 @@ extension GraduaGradientsValues on GraduaGradients {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [Color(0x8C8C2C8C), Color(0x8C0071BC)]);
+      case GraduaGradients.neomorphicButtonGradient:
+        return LinearGradient(
+          transform: GradientRotation(radians(60)),
+          colors: const [
+            Color(0xFFF3FEFF),
+            Color(0xFFCCD5DE),
+          ],
+        );
     }
   }
 }
@@ -55,4 +64,14 @@ String? _textSubString(String text) {
   if (text.length == 6) return text;
 
   return text.substring(1, text.length);
+}
+
+Widget maskGradient({required Widget child, required Gradient gradient}) {
+  return ShaderMask(
+    blendMode: BlendMode.srcIn,
+    shaderCallback: (bounds) => gradient.createShader(
+      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+    ),
+    child: child,
+  );
 }
