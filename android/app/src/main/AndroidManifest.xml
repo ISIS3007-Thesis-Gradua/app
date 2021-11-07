@@ -1,5 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.edu.uniandes.serenity">
+    <queries>
+        <!-- If your app opens https URLs -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+<!--        </intent>-->
+<!--        &lt;!&ndash; If your app makes calls &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.DIAL" />-->
+<!--            <data android:scheme="tel" />-->
+<!--        </intent>-->
+<!--        &lt;!&ndash; If your app emails &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.SEND" />-->
+<!--            <data android:mimeType="*/*" />-->
+        </intent>
+    </queries>
    <application
         android:label="serenity"
         android:icon="@mipmap/ic_launcher"

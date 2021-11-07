@@ -5,7 +5,7 @@ import 'package:stacked/stacked.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
-const String ttsEndPoint = "http://192.168.1.106:5002/api/tts?text=";
+const String ttsEndPoint = "http://192.168.0.4:5002/api/tts?text=";
 
 class PlayerViewModel extends MultipleStreamViewModel {
   PositionData? get positionData => dataMap?[_positionDataSreamKey];
@@ -47,7 +47,7 @@ class PlayerViewModel extends MultipleStreamViewModel {
               position, bufferedPosition, duration ?? Duration.zero));
 
   Future<void> init() async {
-    print("Audio source: $url");
+    // print("Audio source: $url");
     // Informs the OS of the creation of this Audio session
     // final session = await AudioSession.instance;
     // await session.configure(const AudioSessionConfiguration.speech());

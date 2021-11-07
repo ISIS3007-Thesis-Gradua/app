@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/sliders.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
@@ -63,11 +64,8 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(
-                          CupertinoIcons.question_circle,
-                          color: const Color(0xFF8B9EB0),
-                          size: width * .04,
-                        ),
+                        child: getHelperButton(
+                            HelperDialog.aiGuidedMeditation, context),
                       ),
                     ),
                   ],
@@ -103,11 +101,8 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(
-                          CupertinoIcons.question_circle,
-                          color: const Color(0xFF8B9EB0),
-                          size: width * .04,
-                        ),
+                        child: getHelperButton(
+                            HelperDialog.aiGuidedMeditation, context),
                       ),
                     ),
                   ],
@@ -142,11 +137,8 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(
-                          CupertinoIcons.question_circle,
-                          color: const Color(0xFF8B9EB0),
-                          size: width * .04,
-                        ),
+                        child: getHelperButton(
+                            HelperDialog.aiGuidedMeditation, context),
                       ),
                     ),
                   ],
@@ -181,11 +173,8 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(
-                          CupertinoIcons.question_circle,
-                          color: const Color(0xFF8B9EB0),
-                          size: width * .04,
-                        ),
+                        child: getHelperButton(
+                            HelperDialog.aiGuidedMeditation, context),
                       ),
                     ),
                   ],

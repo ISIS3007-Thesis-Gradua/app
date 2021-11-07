@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/graphs.dart';
+import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/utils/extentions.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
@@ -49,7 +50,7 @@ class _GraphViewState extends State<GraphView> {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
 
-    List<Widget> summaryPanel = <Widget>[ResultsTitle(width)];
+    List<Widget> summaryPanel = <Widget>[ResultsTitle(width, context)];
     summaryPanel.addAll(
       summaryResults(
           widget.prevEmotionsMeasure, widget.posEmotionsMeasure, width),
@@ -178,7 +179,7 @@ class _GraphViewState extends State<GraphView> {
   }
 }
 
-Widget ResultsTitle(double width) {
+Widget ResultsTitle(double width, BuildContext context) {
   return Padding(
     padding: EdgeInsets.symmetric(vertical: width * .04),
     child: Row(
@@ -193,10 +194,7 @@ Widget ResultsTitle(double width) {
             color: const Color(0xFF8B9EB0),
           ),
         ),
-        Icon(
-          CupertinoIcons.question_circle_fill,
-          color: const Color(0xFF8B9EB0),
-        )
+        getHelperButton(HelperDialog.resultsInterpretation, context),
       ],
     ),
   );
