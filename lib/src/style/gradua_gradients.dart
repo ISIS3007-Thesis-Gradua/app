@@ -7,6 +7,7 @@ enum GraduaGradients {
   defaultGradient,
   instructionsGradient,
   neomorphicButtonGradient,
+  basicCardGradient
 }
 
 extension GraduaGradientsValues on GraduaGradients {
@@ -43,6 +44,20 @@ extension GraduaGradientsValues on GraduaGradients {
             Color(0xFFCCD5DE),
           ],
         );
+      case GraduaGradients.basicCardGradient:
+        return const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xA3A6D5FF),
+              Color(0xFFC9E0FF),
+              Color(0xFFE2EFFD),
+            ],
+            stops: [
+              0,
+              0.5,
+              0.9
+            ]);
     }
   }
 }

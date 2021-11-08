@@ -95,8 +95,8 @@ Future<void> getHelperDialog(HelperDialog dialog, BuildContext context) {
               String content = snap.data?[dialog.keyName]?["content"] ??
                   snap.data?["default"]?["content"] ??
                   "Contenido";
-              print(title);
-              print(content);
+              // print(title);
+              // print(content);
               //Docs of this specific regex: https://regex101.com/r/4Cr9cB/1
               RegExp pattern = RegExp("Gradua|Gradúa|##[^##]*##",
                   caseSensitive: false, dotAll: true);

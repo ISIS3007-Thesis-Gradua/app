@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 
 class MeasuresGraph extends StatelessWidget {
@@ -13,9 +15,127 @@ class MeasuresGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: GraphPainter(measures),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      double width = constraints.maxWidth;
+      double height = constraints.maxHeight;
+
+      double labelWidth = width * .26;
+      double labelHeight = labelWidth * .32;
+
+      return CustomPaint(
+        painter: GraphPainter(measures),
+        child: Stack(
+          children: [
+            Positioned(
+              top: height * .07,
+              left: width * .12,
+              child: Text(
+                "Gráfico de la meditación.",
+                style: GoogleFonts.raleway(
+                    color: Color(0xFF768596),
+                    fontWeight: FontWeight.w700,
+                    fontSize: height * .07),
+              ),
+            ),
+            Positioned(
+              bottom: height * .08,
+              left: width * .06,
+              child: Text(
+                "Duración de la práctica. 3 mins",
+                style: GoogleFonts.raleway(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: height * .06),
+              ),
+            ),
+            Positioned(
+              top: height * (2 / 5) - labelHeight,
+              left: width * .2 - labelWidth / 2,
+              child: GraphLabel(
+                child: Container(
+                  //Ancho y largo específicos para ajustarlos al tamaño del path
+                  width: labelWidth,
+                  height: labelHeight,
+                  color: Color(0xFF9574CD),
+                  //Padding específico para que el child quede dentro de la burbuja
+                  //Descrita por el Path
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(labelWidth * .05,
+                        labelWidth * .05, labelWidth * .05, labelWidth * .13),
+                    child: Center(
+                      child: Text(
+                        "Ánimo",
+                        style: GoogleFonts.raleway(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: width * .025),
+                      ),
+                    ),
+                  ),
+                ),
+                // width: ,
+              ),
+            ),
+            Positioned(
+              top: height * (2 / 5) - labelHeight,
+              left: width * .5 - labelWidth / 2,
+              child: GraphLabel(
+                child: Container(
+                  //Ancho y largo específicos para ajustarlos al tamaño del path
+                  width: labelWidth,
+                  height: labelHeight,
+                  color: Color(0xFF9574CD),
+                  //Padding específico para que el child quede dentro de la burbuja
+                  //Descrita por el Path
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(labelWidth * .05,
+                        labelWidth * .05, labelWidth * .05, labelWidth * .13),
+                    child: Center(
+                      child: Text(
+                        "Estrés",
+                        style: GoogleFonts.raleway(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: width * .025),
+                      ),
+                    ),
+                  ),
+                ),
+                // width: ,
+              ),
+            ),
+            Positioned(
+              top: height * (2 / 5) - labelHeight,
+              left: width * .8 - labelWidth / 2,
+              child: GraphLabel(
+                child: Container(
+                  //Ancho y largo específicos para ajustarlos al tamaño del path
+                  width: labelWidth,
+                  height: labelHeight,
+                  color: Color(0xFF9574CD),
+                  //Padding específico para que el child quede dentro de la burbuja
+                  //Descrita por el Path
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(labelWidth * .05,
+                        labelWidth * .05, labelWidth * .05, labelWidth * .13),
+                    child: Center(
+                      child: Text(
+                        "Ansiedad",
+                        style: GoogleFonts.raleway(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: width * .025),
+                      ),
+                    ),
+                  ),
+                ),
+                // width: ,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -124,6 +244,10 @@ class GraphPainter extends CustomPainter {
         ],
       );
 
+    Paint labelFillPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.lightBlue;
+
     Path mainGraphLine = bezierInterpolationOf3Points(
         0.0, minY, x, maxY, yEmotionPos, yStressPos, yAnxietyPos, y);
 
@@ -134,10 +258,74 @@ class GraphPainter extends CustomPainter {
     canvas.drawPath(secondaryGraphLine, secondaryGraphFillPaint);
     canvas.drawPath(mainGraphLine, graphLineStroke);
     canvas.drawPath(mainGraphLine, mainGraphFillPaint);
+
+    Path emotionLabel = graphLabelPath(x * 0.26, Offset(x * 0.2, minY));
+    Path anxietyLabel = graphLabelPath(x * 0.26, Offset(x * 0.5, minY));
+    Path stressLabel = graphLabelPath(x * 0.26, Offset(x * 0.8, minY));
+    // canvas.drawPath(emotionLabel, labelFillPaint);
+    // canvas.drawPath(anxietyLabel, labelFillPaint);
+    // canvas.drawPath(stressLabel, labelFillPaint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
+  }
+}
+
+Path graphLabelPath(double width, Offset arrowTip) {
+  double x = arrowTip.dx;
+  double y = arrowTip.dy;
+  double height = width * .2;
+  double arrowTipLength = width * .12;
+  double arrowTipSideOffset = arrowTipLength / sqrt(2);
+  double sideRadius = width * .07;
+
+  double rightBorderSideDx = x + (width / 2) - sideRadius;
+  double leftBorderSideDx = x - ((width / 2)) + sideRadius;
+
+  return Path()
+    ..moveTo(x, y)
+    ..lineTo(x + arrowTipSideOffset, y - arrowTipSideOffset)
+    ..lineTo(rightBorderSideDx, y - arrowTipSideOffset)
+    ..cubicTo(
+        rightBorderSideDx + sideRadius * 1.33,
+        y - arrowTipSideOffset,
+        rightBorderSideDx + sideRadius * 1.33,
+        y - height - arrowTipSideOffset,
+        rightBorderSideDx,
+        y - arrowTipSideOffset - height)
+    ..lineTo(leftBorderSideDx, y - arrowTipSideOffset - height)
+    ..cubicTo(
+        leftBorderSideDx - sideRadius * 1.33,
+        y - height - arrowTipSideOffset,
+        leftBorderSideDx - sideRadius * 1.33,
+        y - arrowTipSideOffset,
+        leftBorderSideDx,
+        y - arrowTipSideOffset)
+    ..lineTo(x - arrowTipSideOffset, y - arrowTipSideOffset)
+    ..close();
+}
+
+class GraphLabelClipper extends CustomClipper<Path> {
+  @override
+  ui.Path getClip(ui.Size size) {
+    return graphLabelPath(size.width, Offset(size.width / 2, size.height));
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<ui.Path> oldClipper) {
+    return true;
+  }
+}
+
+class GraphLabel extends StatelessWidget {
+  // double width;
+  Widget child;
+  GraphLabel({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(clipper: GraphLabelClipper(), child: child);
   }
 }

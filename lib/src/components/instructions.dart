@@ -288,7 +288,7 @@ class _InstructionsState extends State<Instructions> {
                   child: IconButton(
                     icon: Icon(
                       CupertinoIcons.up_arrow,
-                      color: Colors.black,
+                      color: Colors.black54,
                       size: width * .04,
                     ),
                     onPressed: () => scrollController.animateTo(0,
