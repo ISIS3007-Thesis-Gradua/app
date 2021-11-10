@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
-import 'package:serenity/src/components/seek_bar.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class Player extends StatefulWidget {
@@ -159,55 +156,55 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                           ),
                         ),
                       ),
-                      ViewModelBuilder<PlayerViewModel>.reactive(
-                        // stream: null,
-                        viewModelBuilder: () => vm,
-                        builder: (context, vm, child) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFDCE7EF),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.066),
-                                  child: SeekBar(
-                                    duration: vm.positionData?.duration ??
-                                        Duration.zero,
-                                    position: vm.positionData?.position ??
-                                        Duration.zero,
-                                    bufferedPosition:
-                                        vm.positionData?.bufferedPosition ??
-                                            Duration.zero,
-                                    onChanged: vm.player.seek,
-                                  ),
-                                ),
-                                Text(
-                                  "Meditación #34",
-                                  style: GoogleFonts.raleway(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: height * .03,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "Atención Plena",
-                                  style: GoogleFonts.raleway(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: height * .02,
-                                    color: Colors.black26,
-                                  ),
-                                ),
-                                playPauseControls(context, vm, height, width),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                      // ViewModelBuilder<PlayerViewModel>.reactive(
+                      //   // stream: null,
+                      //   viewModelBuilder: () => vm,
+                      //   builder: (context, vm, child) {
+                      //     return Container(
+                      //       decoration: const BoxDecoration(
+                      //         color: Color(0xFFDCE7EF),
+                      //         borderRadius: BorderRadius.all(
+                      //           Radius.circular(30),
+                      //         ),
+                      //       ),
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Padding(
+                      //             padding: EdgeInsets.symmetric(
+                      //                 horizontal: width * 0.066),
+                      //             child: SeekBar(
+                      //               duration: vm.positionData?.duration ??
+                      //                   Duration.zero,
+                      //               position: vm.positionData?.position ??
+                      //                   Duration.zero,
+                      //               bufferedPosition:
+                      //                   vm.positionData?.bufferedPosition ??
+                      //                       Duration.zero,
+                      //               onChanged: vm.player.seek,
+                      //             ),
+                      //           ),
+                      //           Text(
+                      //             "Meditación #34",
+                      //             style: GoogleFonts.raleway(
+                      //                 fontWeight: FontWeight.w700,
+                      //                 fontSize: height * .03,
+                      //                 color: Colors.black),
+                      //           ),
+                      //           Text(
+                      //             "Atención Plena",
+                      //             style: GoogleFonts.raleway(
+                      //               fontWeight: FontWeight.w400,
+                      //               fontSize: height * .02,
+                      //               color: Colors.black26,
+                      //             ),
+                      //           ),
+                      //           playPauseControls(context, vm, height, width),
+                      //         ],
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                     ],
                   ),
                 )
@@ -222,58 +219,58 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
       ),
     );
   }
-
-  Widget playPauseControls(
-      BuildContext context, PlayerViewModel vm, double height, double width) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Icon(
-          CupertinoIcons.heart,
-          size: height * 0.03,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
-          child: Visibility(
-            visible: vm.hasPlayerState
-                ? !vm.playerState.playing || vm.isCompleted
-                : true,
-            child: Visibility(
-              visible: vm.hasPlayerState ? vm.isLoading : true,
-              child: CircularProgressIndicator(),
-              replacement: IconButton(
-                icon: Icon(
-                  CupertinoIcons.play_circle,
-                  size: height * 0.055,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  if (vm.isCompleted) {
-                    vm.player.seek(Duration.zero);
-                  }
-                  vm.player.play();
-                },
-              ),
-            ),
-            replacement: IconButton(
-              icon: Icon(
-                CupertinoIcons.pause_circle,
-                size: height * 0.055,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                vm.player.pause();
-              },
-            ),
-          ),
-        ),
-        Icon(
-          Icons.settings_voice_outlined,
-          size: height * 0.03,
-          color: Colors.black,
-        )
-      ],
-    );
-  }
+//
+//   Widget playPauseControls(
+//       BuildContext context, PlayerViewModel vm, double height, double width) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         Icon(
+//           CupertinoIcons.heart,
+//           size: height * 0.03,
+//           color: Colors.black,
+//         ),
+//         Padding(
+//           padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
+//           child: Visibility(
+//             visible: vm.hasPlayerState
+//                 ? !vm.playerState.playing || vm.isCompleted
+//                 : true,
+//             child: Visibility(
+//               visible: vm.hasPlayerState ? vm.isLoading : true,
+//               child: CircularProgressIndicator(),
+//               replacement: IconButton(
+//                 icon: Icon(
+//                   CupertinoIcons.play_circle,
+//                   size: height * 0.055,
+//                   color: Colors.black,
+//                 ),
+//                 onPressed: () {
+//                   if (vm.isCompleted) {
+//                     vm.player.seek(Duration.zero);
+//                   }
+//                   vm.player.play();
+//                 },
+//               ),
+//             ),
+//             replacement: IconButton(
+//               icon: Icon(
+//                 CupertinoIcons.pause_circle,
+//                 size: height * 0.055,
+//                 color: Colors.black,
+//               ),
+//               onPressed: () {
+//                 vm.player.pause();
+//               },
+//             ),
+//           ),
+//         ),
+//         Icon(
+//           Icons.settings_voice_outlined,
+//           size: height * 0.03,
+//           color: Colors.black,
+//         )
+//       ],
+//     );
+//   }
 }
