@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/src/style/gradua_gradients.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 void Function() createHandler(PanelController controller) {
@@ -20,17 +21,13 @@ void Function() createHandler(PanelController controller) {
 Widget CollapsedContainer(
         PanelController controller, double screenHeight, double screenWidth) =>
     Container(
-      decoration: const BoxDecoration(
-        color: Color(0xEEF6F5F5),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: const Color(0xEEF6F5F5),
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [Color(0x8C8C2C8C), Color(0x8C0071BC)],
-        ),
+        gradient: GraduaGradients.instructionsGradient.linearGradient,
       ),
       child: SizedBox(
         width: double.infinity,

@@ -18,13 +18,14 @@ dependencies:
     sdk: flutter
   flutter_svg: ^0.23.0+1
   google_fonts: ^2.1.0
-  gradient_widgets: ^0.6.0
+  flutter_gradients: ^1.0.0+3
   http: ^0.13.4
   just_audio: ^0.9.12
   rxdart: ^0.27.2
   sliding_up_panel: ^2.0.0+1
   stacked: ^2.2.5
   stacked_services: ^0.8.13
+  url_launcher: ^6.0.12
 
 dev_dependencies:
   flutter_test:
@@ -47,5 +48,6 @@ flutter:
   generate: true
 
   assets:
-    # Add assets from the images directory to the application.
+    # Add assets
     - assets/images/
+    - assets/settings/

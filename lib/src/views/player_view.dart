@@ -131,22 +131,32 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                   child: Text(widget.meditation?.name ?? ""),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, height * .1, 0, height * .15),
+                  padding:
+                      EdgeInsets.fromLTRB(0, height * .05, 0, height * .15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFDCE7EF),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: height * .03),
+                        child: Container(
+                          width: width * .97,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFDCE7EF),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
                           ),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/images/meditating_man.svg',
-                          semanticsLabel: 'Acme Logo',
-                          height: height * .4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/images/meditating_man.svg',
+                                semanticsLabel: 'Acme Logo',
+                                height: height * .45,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       ViewModelBuilder<PlayerViewModel>.reactive(
@@ -205,7 +215,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
             ),
           ),
           panel: Container(
-            child: Text("Hello World"),
+            child: Text(""),
           ),
           collapse: CollapsedContainer(_controller, height, width),
         ),

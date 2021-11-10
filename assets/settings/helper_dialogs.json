@@ -1,0 +1,32 @@
+{
+  "recomendacion": {
+    "title": "Meditación sugerida",
+    "subtitle": "",
+    "content": "La meditación sugerída fue desarrollada utilizando  datos de miles de meditadores qué utilizan a diario Gradúa. Esta práctica de Mindfulness fue seleccionada  por el impacto positivo sobre el estado de animo, estrés y ansidad ¡Éxitos!"
+  },
+  "beneficios": {
+    "title": "¿Por qué meditar?",
+    "subtitle": "",
+    "content": "La practica regular de meditación Mindfulness  genera diversos beneficios para la salud. Gradúa implementa inteligencia artificial para desarrollar practicas acordes a la necesidad de meditador. ¿Eres nuevo? hemos seleccionado una de las meditaciones favoritas de nuestruestra comunidad para que te animes a probar  ¡Inicia la meditación sugerida! \n\n\n##Algunos Beneficios##:\n\n    1. Mejorár el estado de ánimo\n    2. Reducir estrés\n    3. Controlar la ansiedad\n    4. Mejorar la consentración\n    5. Desarrollar inteligencia emocional\n"
+  },
+  "meditacionGuiada": {
+    "title": "I.A.",
+    "subtitle": "Meditacion guíada generada por medio de inteligencia artificial Gradúa:\n\n",
+    "content": "Cuentanos cuanto tiempo tienes, tus  niveles de ánimo, estés y ansiedad. Luego, Grádua desarrollará una meditación a a la medida de tus necesidades.\n\nEl corpus para entrenar a Gradúa utiliza meditaciones guiadas basadas en Mindfulness. este tipo de meditacion ha evidenciado multiples beneficios para sus practicantes habituales. \n\n"
+  },
+  "politicaDatos": {
+    "title": "Tratamiento de datos",
+    "subtitle": "",
+    "content": "Gradúa garantiza la anonimidad en el tratamiento de datos. La información recolectada tiene como proposito optimizar el generador de meditaciones de Gradúa. Juntos contruimos al mejor maestro demeditacion basado en inteligencia artificial. "
+  },
+  "interpretacion": {
+    "title": "Lectura de resultados",
+    "subtitle": "",
+    "content": "Los resultados entregados por Gradúa son orientativos y no reemplazan el acompañamiento de un profesional de la salud. Si encuentra disminucion constante en las variables analizadas suspenda las meditaciones y consulte a un experto. \n "
+  },
+  "default": {
+    "title": "Gradúa",
+    "subtitle": "Tú asistente meditador",
+    "content": "En Gradúa estamos comprometidos con tu bienestar físico y emocional. "
+  }
+}

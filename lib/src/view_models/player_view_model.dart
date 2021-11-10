@@ -5,39 +5,44 @@ import 'package:stacked/stacked.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
-const String ttsEndPoint = "http://192.168.1.106:5002/api/tts?text=";
+const String ttsEndPoint = "http://192.168.0.4:5002/api/tts?text=";
+
+enum TtsSource { mozilla, aws, native }
+
+extension EndPoint on TtsSource {
+  String get url {
+    switch (this) {
+      case TtsSource.mozilla:
+        return "http://192.168.0.4:5002/api/tts?text=";
+      case TtsSource.native:
+        return "not-implemented";
+      case TtsSource.aws:
+        return "not-implemented";
+    }
+  }
+}
 
 class PlayerViewModel extends MultipleStreamViewModel {
-  PositionData? get positionData => dataMap?[_positionDataSreamKey];
-  bool get hasPositionData => dataReady(_positionDataSreamKey);
-
-  PlayerState get playerState => dataMap![_playerStateStreamKey];
-  bool get hasPlayerState => dataReady(_playerStateStreamKey);
-
-  bool get isLoading => playerState.processingState == ProcessingState.loading;
-  bool get isCompleted =>
-      playerState.processingState == ProcessingState.completed;
-
   final AudioPlayer player = AudioPlayer();
-  late AudioSource audioSource;
-  String url =
-      "http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu";
+
   // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3";
+
   List<Step> steps = [];
 
+  /// Backend seleccionado para el TTS
+  TtsSource ttsSource;
+
   PlayerViewModel({
-    this.url =
-        'http://192.168.0.4:5002/api/tts?text=Ay mi madre el bicho. Siuuuuuu',
-    // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"
     this.steps = const [],
+    this.ttsSource = TtsSource.mozilla,
   });
 
-  String constructSource(String meditation) {
-    return ttsEndPoint + meditation;
+  ///Dado un pedazo de texto devuelve el endpoint correspondiente al TTS provider Actual
+  String constructSingleSource(String ttsChunk) {
+    return ttsSource.url + ttsChunk;
   }
 
   @override
-  // TODO: implement stream
   Stream<PositionData> get stream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
           player.positionStream,
@@ -46,8 +51,14 @@ class PlayerViewModel extends MultipleStreamViewModel {
           (position, bufferedPosition, duration) => PositionData(
               position, bufferedPosition, duration ?? Duration.zero));
 
+  ///This method will handle general Changes
+  void onPlayBackStateChange(PlaybackEvent playbackEvent) {}
+
   Future<void> init() async {
-    print("Audio source: $url");
+    //Subscribe to the stream that holds basically all information about the player
+    player.playbackEventStream.listen(onPlayBackStateChange);
+
+    // print("Audio source: $url");
     // Informs the OS of the creation of this Audio session
     // final session = await AudioSession.instance;
     // await session.configure(const AudioSessionConfiguration.speech());
@@ -58,15 +69,12 @@ class PlayerViewModel extends MultipleStreamViewModel {
     });
     // Try to load audio from a source and catch any errors.
     try {
-      // AudioSource.uri(uri)
-      print("Audio source: $url");
-      audioSource = AudioSource.uri(Uri.parse(url));
       await player.setAudioSource(
         ConcatenatingAudioSource(
           useLazyPreparation: true,
           children: steps.map(
             (step) {
-              String source = constructSource(step.cleanText);
+              String source = constructSingleSource(step.cleanText);
               return AudioSource.uri(Uri.parse(source));
             },
           ).toList(),
@@ -97,11 +105,7 @@ class PlayerViewModel extends MultipleStreamViewModel {
             StreamData<PlayerState>(player.playerStateStream),
       };
 
-  void dispose() {
-    if (audioSource is LockCachingAudioSource) {
-      (audioSource as LockCachingAudioSource).clearCache();
-    }
-  }
+  void dispose() {}
 }
 
 class PositionData {

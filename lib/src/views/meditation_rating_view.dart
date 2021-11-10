@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/buttons.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
+import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/sliders.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
@@ -80,17 +82,21 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                   children: [
                     BasicCard(
                       width: width * .85,
-                      height: height * .25,
+                      height: height * .2,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          Image.asset(
+                            "assets/images/logo_gradua_horizontal.png",
+                            height: height * .06,
+                          ),
                           Text(
                             "¡Hey!\nAhora ¿Cómo te sientes?",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.raleway(
                               fontWeight: FontWeight.w700,
-                              fontSize: height * .02,
+                              fontSize: height * .018,
                               color: Color(0xFF727D8F),
                             ),
                           ),
@@ -98,8 +104,21 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                       ),
                     ),
                     Padding(
+                      padding: EdgeInsets.all(height * 0.03),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(height * 0.03),
+                          child: SvgPicture.asset(
+                            'assets/images/black_woman_meditating.svg',
+                            semanticsLabel: 'Acme Logo',
+                            height: height * .15,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.05, vertical: height * 0.07),
+                          horizontal: width * 0.05, vertical: height * 0.01),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -227,6 +246,20 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                                 });
                               },
                             ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Política de tratamiento de datos: ",
+                                style: sliderTextStyle,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: height * .02),
+                                child: getHelperButton(
+                                    HelperDialog.dataPolicy, context),
+                              ),
+                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

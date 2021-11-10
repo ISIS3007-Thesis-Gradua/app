@@ -1,3 +1,5 @@
+//Class not used so far
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -20,7 +22,7 @@ class DialogService {
             actions: [
               TextButton(
                 onPressed: () => navigationService.back(),
-                child: Text(
+                child: const Text(
                   "OK",
                   style: TextStyle(color: Colors.blue),
                 ),
