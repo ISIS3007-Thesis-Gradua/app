@@ -71,8 +71,8 @@ class _InstructionsState extends State<Instructions> {
                   gradient: GraduaGradients.instructionsGradient.linearGradient,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: height * .02, horizontal: width * .05),
+                  padding: EdgeInsets.fromLTRB(
+                      width * .05, height * .02, width * .05, height * .05),
                   child: Column(
                     children: [
                       Align(

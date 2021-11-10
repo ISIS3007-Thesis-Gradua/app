@@ -73,8 +73,8 @@ class _GradientSliderState extends State<GradientSlider> {
                   tickMarkShape: RoundSliderTickMarkShape(),
                   activeTickMarkColor: Colors.white,
                   inactiveTickMarkColor: Colors.white,
-                  valueIndicatorShape: RectangularSliderValueIndicatorShape(),
-                  valueIndicatorColor: Colors.blueAccent[100],
+                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                  valueIndicatorColor: Colors.blue,
                   valueIndicatorTextStyle: const TextStyle(
                     color: Colors.white,
                   ),

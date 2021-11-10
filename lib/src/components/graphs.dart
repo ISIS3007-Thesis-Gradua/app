@@ -166,19 +166,15 @@ class GraphPainter extends CustomPainter {
     double x3 = (maxX - minX) * (0.8);
 
     Path interpolation = Path()
-          // ..moveTo(minX, minY)
-          // ..lineTo(maxX, minY)
-          ..moveTo(minX, Y)
-          ..lineTo(minX, y1)
-          ..quadraticBezierTo((x1 - minX) * .6, y1, x1, y1)
-          ..cubicTo((x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2,
-              y2) //Bezier cúbica de y1 a y2
-          ..cubicTo((x2 + x3) / 2, y2, (x2 + x3) / 2, y3, x3, y3)
-          ..cubicTo(x3 + (maxX - x3) * .7, y3, x3 + (maxX - x3) * .4, maxY,
-              maxX, maxY)
-          ..lineTo(maxX, Y)
-        // ..quadraticBezierTo(x3 + (maxX - x3) * .4, y3, maxX, maxY)
-        ;
+      ..moveTo(minX, Y)
+      ..lineTo(minX, y1)
+      ..quadraticBezierTo((x1 - minX) * .6, y1, x1, y1)
+      ..cubicTo((x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2,
+          y2) //Bezier cúbica de y1 a y2
+      ..cubicTo((x2 + x3) / 2, y2, (x2 + x3) / 2, y3, x3, y3)
+      ..cubicTo(
+          x3 + (maxX - x3) * .7, y3, x3 + (maxX - x3) * .4, maxY, maxX, maxY)
+      ..lineTo(maxX, Y);
     return interpolation;
   }
 
@@ -258,13 +254,6 @@ class GraphPainter extends CustomPainter {
     canvas.drawPath(secondaryGraphLine, secondaryGraphFillPaint);
     canvas.drawPath(mainGraphLine, graphLineStroke);
     canvas.drawPath(mainGraphLine, mainGraphFillPaint);
-
-    Path emotionLabel = graphLabelPath(x * 0.26, Offset(x * 0.2, minY));
-    Path anxietyLabel = graphLabelPath(x * 0.26, Offset(x * 0.5, minY));
-    Path stressLabel = graphLabelPath(x * 0.26, Offset(x * 0.8, minY));
-    // canvas.drawPath(emotionLabel, labelFillPaint);
-    // canvas.drawPath(anxietyLabel, labelFillPaint);
-    // canvas.drawPath(stressLabel, labelFillPaint);
   }
 
   @override
@@ -273,6 +262,14 @@ class GraphPainter extends CustomPainter {
   }
 }
 
+///Dado un ancho y un punto inicial (Offset arrowTip)
+///dibuja un Path como el siguiente (pero más ancho y menos alto):
+///https://icon-icons.com/es/icono/descripci%C3%B3n-esquema/139124
+///El punto inicial correponde a la punta inferior de la siguiente figura:
+///       |-----width---|
+///       ______________   _
+///      |______  ______| |_ height = width * .2
+///             \/ <=== arrowTip (Punto inicial del Path)
 Path graphLabelPath(double width, Offset arrowTip) {
   double x = arrowTip.dx;
   double y = arrowTip.dy;
@@ -319,6 +316,9 @@ class GraphLabelClipper extends CustomClipper<Path> {
   }
 }
 
+/// Usa el Path generado por la función graphLabelPath()
+/// para construir un Widget que tenga la forma del Path definido.
+/// Esto se usa para las etiquetas de la gráfica.
 class GraphLabel extends StatelessWidget {
   // double width;
   Widget child;
