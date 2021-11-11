@@ -2,10 +2,39 @@
 String sanitizeTtsText(String text) {
   String cleanText = text
       .replaceAll(RegExp('<speak>'), '')
-      .replaceAll(RegExp('<\/speak>'), '')
-      .replaceAll(RegExp('<break.*/>', dotAll: true), '');
+      .replaceAll(RegExp('<\/speak>'), '');
 
   return cleanText;
+}
+
+List<String> splitTtsText(String text) {
+  //Docs for this Regex: https://regex101.com/r/6CreYZ/1
+  //Esta es una opción más "bervosa" y exacta
+  // RegExp splitBy = RegExp(r'<break\s+time="\d+ms"/>', dotAll: true);
+
+  //Esta es más genérica. Usar cualquiera a discreción.
+  // Docs for this Regex: https://regex101.com/r/bzmddu/1
+  RegExp splitBy = RegExp(r'<break[^/>]*/>', dotAll: true);
+  List<String> splittedList = separateStringByPattern(text, splitBy);
+  return splittedList;
+}
+
+Duration getDurationFromBreakSSML(String text) {
+  //This is just for getting the numbers in te String. Shouldn't be more than 1 chain of numbers
+  RegExp numbers = RegExp(r'\d+');
+  //This regex supports spaces between the number and the seconds key "s".
+  RegExp seconds = RegExp(r'\d+\s*s');
+
+  RegExp miliseconds = RegExp(r'\d+\s*ms');
+  int intNumbers = int.parse(numbers.firstMatch(text)?.group(0) ?? "100");
+
+  if (miliseconds.hasMatch(text)) {
+    return Duration(milliseconds: intNumbers);
+  } else if (seconds.hasMatch(text)) {
+    return Duration(seconds: intNumbers);
+  } else {
+    return Duration(milliseconds: intNumbers);
+  }
 }
 
 ///This method takes a String as input and splits it into a list of Strings

@@ -58,9 +58,7 @@ class StackedRouter extends RouterBase {
       );
     },
     Player: (data) {
-      var args = data.getArgs<PlayerArguments>(
-        orElse: () => PlayerArguments(),
-      );
+      var args = data.getArgs<PlayerArguments>(nullOk: false);
       return CupertinoPageRoute<CupertinoRoute<dynamic>>(
         builder: (context) => Player(
           key: args.key,
@@ -116,8 +114,8 @@ class StackedRouter extends RouterBase {
 /// Player arguments holder class
 class PlayerArguments {
   final Key? key;
-  final SimpleMeditation? meditation;
-  PlayerArguments({this.key, this.meditation});
+  final SimpleMeditation meditation;
+  PlayerArguments({this.key, required this.meditation});
 }
 
 /// MeditationRatingView arguments holder class

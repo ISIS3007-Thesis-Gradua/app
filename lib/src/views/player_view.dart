@@ -13,8 +13,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class Player extends StatefulWidget {
-  final SimpleMeditation? meditation;
-  const Player({Key? key, this.meditation}) : super(key: key);
+  final SimpleMeditation meditation;
+  const Player({Key? key, required this.meditation}) : super(key: key);
 
   @override
   _PlayerState createState() => _PlayerState();
@@ -23,18 +23,17 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> with WidgetsBindingObserver {
   bool isSimple = true;
   GetIt locator = GetIt.instance;
-  final PlayerViewModel vm = PlayerViewModel();
+  late PlayerViewModel vm;
   final _controller = PanelController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    vm = PlayerViewModel(meditation: widget.meditation);
+
     if (widget.meditation is Meditation) {
       setState(() {
         isSimple = false;
-        vm.steps = (widget.meditation as Meditation).steps;
-        // vm.constructSource((widget.meditation as Meditation).meditationText);
       });
     }
     WidgetsBinding.instance?.addObserver(this);
@@ -59,7 +58,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     WidgetsBinding.instance?.removeObserver(this);
     // Release decoders and buffers back to the operating system making them
     // available for other apps to use.
-    vm.player.dispose();
+    vm.dispose();
     super.dispose();
   }
 
@@ -125,7 +124,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                 ),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Text(widget.meditation?.name ?? ""),
+                  child: Text(widget.meditation.name ?? ""),
                 ),
                 Padding(
                   padding:

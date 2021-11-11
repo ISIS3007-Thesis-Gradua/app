@@ -26,6 +26,7 @@ dependencies:
   stacked: ^2.2.5
   stacked_services: ^0.8.13
   url_launcher: ^6.0.12
+  path_provider: ^2.0.6
 
 dev_dependencies:
   flutter_test:
