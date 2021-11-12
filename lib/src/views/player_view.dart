@@ -74,147 +74,143 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     final width = MediaQuery.of(context).size.width;
     final navigationService = locator<NavigationService>();
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF6F9FF),
-        body: ScrollSheet(
-          isDraggable: true,
-          maxHeight: height * 0.67,
-          minHeight: height * 0.06,
-          controller: _controller,
-          controllerType: ControllerType.fromFields,
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(
-                width * 0.03, height * 0.03, width * 0.03, 0),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.back,
-                      size: height * 0.03,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => {navigationService.back()},
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F9FF),
+      body: ScrollSheet(
+        isDraggable: true,
+        maxHeight: height * 0.67,
+        minHeight: height * 0.06,
+        controller: _controller,
+        controllerType: ControllerType.fromFields,
+        body: Padding(
+          padding:
+              EdgeInsets.fromLTRB(width * 0.03, height * 0.03, width * 0.03, 0),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: Icon(
+                    CupertinoIcons.back,
+                    size: height * 0.03,
+                    color: Colors.black,
                   ),
+                  onPressed: () => {navigationService.back()},
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.xmark,
-                      size: height * 0.03,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      EmotionsMeasure prevEmotion =
-                          widget.meditation is Meditation
-                              ? (widget.meditation as Meditation)
-                                  .getEmotionMeasure()
-                              : EmotionsMeasure.blank();
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    CupertinoIcons.xmark,
+                    size: height * 0.03,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    EmotionsMeasure prevEmotion = widget.meditation
+                            is Meditation
+                        ? (widget.meditation as Meditation).getEmotionMeasure()
+                        : EmotionsMeasure.blank();
 
-                      navigationService.replaceWith(
-                        Routes.meditation_rating,
-                        arguments: MeditationRatingViewArguments(
-                            prevEmotionsMeasure: prevEmotion),
-                      );
-                    },
-                  ),
+                    navigationService.replaceWith(
+                      Routes.meditation_rating,
+                      arguments: MeditationRatingViewArguments(
+                          prevEmotionsMeasure: prevEmotion),
+                    );
+                  },
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(widget.meditation.name ?? ""),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.fromLTRB(0, height * .05, 0, height * .15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .03),
-                        child: Container(
-                          width: width * .97,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFDCE7EF),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(widget.meditation.name ?? ""),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, height * .05, 0, height * .15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: height * .03),
+                      child: Container(
+                        width: width * .97,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFDCE7EF),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/images/meditating_man.svg',
-                                semanticsLabel: 'Acme Logo',
-                                height: height * .45,
-                              ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/images/meditating_man.svg',
+                              semanticsLabel: 'Acme Logo',
+                              height: height * .45,
                             ),
                           ),
                         ),
                       ),
-                      // ViewModelBuilder<PlayerViewModel>.reactive(
-                      //   // stream: null,
-                      //   viewModelBuilder: () => vm,
-                      //   builder: (context, vm, child) {
-                      //     return Container(
-                      //       decoration: const BoxDecoration(
-                      //         color: Color(0xFFDCE7EF),
-                      //         borderRadius: BorderRadius.all(
-                      //           Radius.circular(30),
-                      //         ),
-                      //       ),
-                      //       child: Column(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         children: [
-                      //           Padding(
-                      //             padding: EdgeInsets.symmetric(
-                      //                 horizontal: width * 0.066),
-                      //             child: SeekBar(
-                      //               duration: vm.positionData?.duration ??
-                      //                   Duration.zero,
-                      //               position: vm.positionData?.position ??
-                      //                   Duration.zero,
-                      //               bufferedPosition:
-                      //                   vm.positionData?.bufferedPosition ??
-                      //                       Duration.zero,
-                      //               onChanged: vm.player.seek,
-                      //             ),
-                      //           ),
-                      //           Text(
-                      //             "Meditación #34",
-                      //             style: GoogleFonts.raleway(
-                      //                 fontWeight: FontWeight.w700,
-                      //                 fontSize: height * .03,
-                      //                 color: Colors.black),
-                      //           ),
-                      //           Text(
-                      //             "Atención Plena",
-                      //             style: GoogleFonts.raleway(
-                      //               fontWeight: FontWeight.w400,
-                      //               fontSize: height * .02,
-                      //               color: Colors.black26,
-                      //             ),
-                      //           ),
-                      //           playPauseControls(context, vm, height, width),
-                      //         ],
-                      //       ),
-                      //     );
-                      //   },
-                      // ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    // ViewModelBuilder<PlayerViewModel>.reactive(
+                    //   // stream: null,
+                    //   viewModelBuilder: () => vm,
+                    //   builder: (context, vm, child) {
+                    //     return Container(
+                    //       decoration: const BoxDecoration(
+                    //         color: Color(0xFFDCE7EF),
+                    //         borderRadius: BorderRadius.all(
+                    //           Radius.circular(30),
+                    //         ),
+                    //       ),
+                    //       child: Column(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           Padding(
+                    //             padding: EdgeInsets.symmetric(
+                    //                 horizontal: width * 0.066),
+                    //             child: SeekBar(
+                    //               duration: vm.positionData?.duration ??
+                    //                   Duration.zero,
+                    //               position: vm.positionData?.position ??
+                    //                   Duration.zero,
+                    //               bufferedPosition:
+                    //                   vm.positionData?.bufferedPosition ??
+                    //                       Duration.zero,
+                    //               onChanged: vm.player.seek,
+                    //             ),
+                    //           ),
+                    //           Text(
+                    //             "Meditación #34",
+                    //             style: GoogleFonts.raleway(
+                    //                 fontWeight: FontWeight.w700,
+                    //                 fontSize: height * .03,
+                    //                 color: Colors.black),
+                    //           ),
+                    //           Text(
+                    //             "Atención Plena",
+                    //             style: GoogleFonts.raleway(
+                    //               fontWeight: FontWeight.w400,
+                    //               fontSize: height * .02,
+                    //               color: Colors.black26,
+                    //             ),
+                    //           ),
+                    //           playPauseControls(context, vm, height, width),
+                    //         ],
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ],
+                ),
+              )
+            ],
           ),
-          panel: Container(
-            child: Text(""),
-          ),
-          collapse: CollapsedContainer(_controller, height, width),
         ),
+        panel: Container(
+          child: Text(""),
+        ),
+        collapse: CollapsedContainer(_controller, height, width),
       ),
     );
   }
