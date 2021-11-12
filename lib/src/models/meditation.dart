@@ -10,7 +10,7 @@ import 'package:serenity/src/utils/wave_builder.dart';
 
 class SimpleMeditation {
   String? name;
-  Duration? duration;
+  Duration duration;
   String path;
 
   SimpleMeditation(
@@ -19,7 +19,7 @@ class SimpleMeditation {
       this.path = "default-path"});
 
   String formattedDuration() {
-    return "${duration?.inMinutes.remainder(60) ?? 0}:${(duration?.inSeconds.remainder(60) ?? 0)} mins";
+    return "${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60))} mins";
   }
 }
 
@@ -31,12 +31,13 @@ class Meditation extends SimpleMeditation {
 
   Meditation.blank() : super();
 
-  Meditation(
-      {this.id = '',
-      this.steps = const [],
-      required this.meditationText,
-      required this.config})
-      : super();
+  Meditation({
+    this.id = '',
+    this.steps = const [],
+    required this.meditationText,
+    required this.config,
+    Duration duration = Duration.zero,
+  }) : super(duration: duration);
 
   EmotionsMeasure getEmotionMeasure() {
     return EmotionsMeasure(
@@ -72,10 +73,10 @@ class Meditation extends SimpleMeditation {
     return Meditation(
       meditationText: meditationText,
       config: config,
-      steps: steps
+      steps: steps,
+      duration: Duration(minutes: config.time.round()),
 
       // [Step("generic_id", meditationText, rawContent)]
-      ,
     );
   }
 }

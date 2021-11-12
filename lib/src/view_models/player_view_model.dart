@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:serenity/src/models/meditation.dart';
+import 'package:serenity/src/models/range_map.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
@@ -35,11 +38,17 @@ class PlayerViewModel extends ChangeNotifier {
   /// Backend seleccionado para el TTS
   TtsSource ttsSource;
 
-  PlayerViewModel({
-    // this.steps = const [],
-    this.ttsSource = TtsSource.mozilla,
-    required this.meditation,
-  });
+  ///Maps a range of durations to an integer that represents the index of
+  ///the track that corresponds to that given duration.
+  ///Ex: [0s-10s)->index to Chunk 1,[10s-25s)-> index chunk 2....
+  ///This is used so the seekbar knows to which track to seek with a given duration.
+  SplayTreeMap<DurationRange, DurationRangeInt> rangesToChunks = SplayTreeMap();
+
+  PlayerViewModel(
+      {
+      // this.steps = const [],
+      this.ttsSource = TtsSource.mozilla,
+      required this.meditation});
 
   ///Dado un pedazo de texto devuelve el endpoint correspondiente al TTS provider Actual
   String constructSingleSource(String ttsChunk) {
@@ -59,6 +68,14 @@ class PlayerViewModel extends ChangeNotifier {
 
   Duration totalDuration = Duration.zero;
 
+  ///Get the maximum Duration to use for the "max" property in the seekBar.
+  Duration get effectiveTotalDuration {
+    if (totalDuration < meditation.duration)
+      return meditation.duration;
+    else
+      return totalDuration;
+  }
+
   ///This method will handle general Changes
   void onPlayBackStateChange(PlaybackEvent playbackEvent) {}
 
@@ -67,11 +84,14 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   void _onCurrentPlayerIndexChange(int? index) {
+    //TODO ojo que esto también se llama a hacer seek
     totalDuration += currentDuration ?? Duration.zero;
     print("Track Duration at index Change: $currentDuration");
     print("Total duration: $totalDuration");
     print("Player duratio: ${player.duration}");
     print("PlayerIndex: $index");
+
+    notifyListeners();
   }
 
   void _onCurrentPositionChange(Duration playerPosition) {
@@ -146,6 +166,19 @@ class PlayerViewModel extends ChangeNotifier {
     } catch (e) {
       print("Error loading audio source: $e");
     }
+  }
+
+  ///Given a duration since less than or equal to the current total playtime
+  ///of the playlist, it seeks to the start of the track that corresponds
+  ///to that moment in time in the playlist order.
+  ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
+  ///would seek to the start of step2.
+  Future<void> seekToWithDuration(Duration duration) async {
+    DurationRangeInt value =
+        rangesToChunks[duration] ?? DurationRangeInt.empty();
+    await player.seek(Duration.zero, index: value.index);
+    // totalDuration = value.range.start;
+    // notifyListeners();
   }
 
   // Stream<PositionData> _positionDataStreamCreation() {

@@ -98,7 +98,7 @@ Future<void> getHelperDialog(HelperDialog dialog, BuildContext context) {
               // print(title);
               // print(content);
               //Docs of this specific regex: https://regex101.com/r/4Cr9cB/1
-              RegExp pattern = RegExp("Gradua|Gradúa|##[^##]*##",
+              RegExp pattern = RegExp(r"Gradua|Gradúa|##[^##]*##",
                   caseSensitive: false, dotAll: true);
               return Wrap(
                 children: [
