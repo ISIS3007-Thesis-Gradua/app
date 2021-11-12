@@ -83,9 +83,43 @@ class PlayerViewModel extends ChangeNotifier {
     print("BufferedPosition: $bufferedPosition");
   }
 
+  ///When a new chunk Duration is resolved this function maps its duration range
+  ///to the corresponding track index in the player.
+  ///Also verifies it doesn't already exists this key. This may happen when the
+  ///user seeks to a previous track.
+  void _onDurationResolved(Future<Duration?>? future,
+      Duration totalDurationAtCall, int indexAtCall) {
+    print(
+        "Before calling Duration Future. Total duration: $totalDurationAtCall. CurrentIndex: $indexAtCall");
+    future?.then(
+      (resolvedDuration) {
+        print("Resolved duration: $resolvedDuration");
+        if (resolvedDuration != null && resolvedDuration > Duration.zero) {
+          print(
+              "After Duratioon Future Resolved. Total duration: $totalDurationAtCall. CurrentIndex: $indexAtCall. Resolved Duration: $resolvedDuration");
+          DurationRange thisChunkRange = DurationRange(
+              totalDurationAtCall, totalDurationAtCall + resolvedDuration);
+          if (!rangesToChunks.containsKey(thisChunkRange)) {
+            DurationRangeInt value =
+                DurationRangeInt(thisChunkRange, indexAtCall);
+            rangesToChunks[thisChunkRange] = value;
+            print(value);
+          }
+        }
+      },
+    ).onError((error, stackTrace) {
+      print("Erro resolving duration: $error");
+      print(stackTrace);
+    });
+  }
+
   void _onCurrentPlayerIndexChange(int? index) {
-    //TODO ojo que esto también se llama a hacer seek
     totalDuration += currentDuration ?? Duration.zero;
+    if (player.currentIndex != null) {
+      _onDurationResolved(
+          player.durationFuture, totalDuration, player.currentIndex!);
+    }
+
     print("Track Duration at index Change: $currentDuration");
     print("Total duration: $totalDuration");
     print("Player duratio: ${player.duration}");
@@ -100,7 +134,8 @@ class PlayerViewModel extends ChangeNotifier {
 
   void _onCurrentDurationChange(Duration? currentTrackDuration) {
     currentDuration = currentTrackDuration;
-    print("Duration: $currentTrackDuration");
+    print(
+        "## Current Index: ${player.currentIndex}. CurrentDuration: $currentTrackDuration");
   }
 
   Future<void> init() async {
@@ -155,7 +190,8 @@ class PlayerViewModel extends ChangeNotifier {
       }
       //Test 60 seconds of playback
       player.play();
-      Future.delayed(Duration(seconds: 60), () => player.pause());
+      Future.delayed(Duration(seconds: 30), () => player.pause())
+          .then((value) => print("Final map: $rangesToChunks"));
 
       print("First audio source");
       print(player.audioSource!.sequence.first.toString());
@@ -174,6 +210,7 @@ class PlayerViewModel extends ChangeNotifier {
   ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
   ///would seek to the start of step2.
   Future<void> seekToWithDuration(Duration duration) async {
+    //TODO update total duration
     DurationRangeInt value =
         rangesToChunks[duration] ?? DurationRangeInt.empty();
     await player.seek(Duration.zero, index: value.index);

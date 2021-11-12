@@ -56,12 +56,20 @@ class DurationRange extends Comparable<dynamic> {
         return 1; // other < this
       else if (this.end <= other.start)
         return -1; // this < other
-      else
-        throw UnimplementedError(); // Se intersectan los rangos
+      else {
+        print("This: ${this.toStringR()}. Other: ${other.toStringR()}");
+        throw UnimplementedError();
+      } // Se intersectan los rangos
     } else {
       // No se debería comparar esta clase con otro tipo de objetos que no sean número, rango o duración.
+      print("This: $this. Other: $other");
       throw UnimplementedError();
     }
+  }
+
+  // @override
+  String toStringR() {
+    return "Range: [$start, $end). Size: ${end - start}";
   }
 }
 
@@ -73,5 +81,10 @@ class DurationRangeInt {
 
   factory DurationRangeInt.empty() {
     return DurationRangeInt(DurationRange.zero(), 0);
+  }
+
+  @override
+  String toString() {
+    return "Index: $index . ${range.toStringR()}";
   }
 }
