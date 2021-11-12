@@ -76,6 +76,15 @@ class PlayerViewModel extends ChangeNotifier {
       return totalDuration;
   }
 
+  //TODO implement position
+  Duration get effectivePosition {
+    return totalDuration;
+  }
+
+  Duration get effectiveBufferedPosition {
+    return this.effectivePosition + player.bufferedPosition;
+  }
+
   ///This method will handle general Changes
   void onPlayBackStateChange(PlaybackEvent playbackEvent) {}
 
@@ -190,7 +199,7 @@ class PlayerViewModel extends ChangeNotifier {
       }
       //Test 60 seconds of playback
       player.play();
-      Future.delayed(Duration(seconds: 30), () => player.pause())
+      Future.delayed(Duration(seconds: 60), () => player.pause())
           .then((value) => print("Final map: $rangesToChunks"));
 
       print("First audio source");
@@ -210,12 +219,12 @@ class PlayerViewModel extends ChangeNotifier {
   ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
   ///would seek to the start of step2.
   Future<void> seekToWithDuration(Duration duration) async {
-    //TODO update total duration
     DurationRangeInt value =
         rangesToChunks[duration] ?? DurationRangeInt.empty();
+    totalDuration = value.range.start;
+    notifyListeners();
     await player.seek(Duration.zero, index: value.index);
     // totalDuration = value.range.start;
-    // notifyListeners();
   }
 
   // Stream<PositionData> _positionDataStreamCreation() {

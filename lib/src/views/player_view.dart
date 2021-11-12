@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
@@ -10,7 +11,10 @@ import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
+import 'other_player.dart';
 
 class Player extends StatefulWidget {
   final SimpleMeditation meditation;
@@ -155,55 +159,52 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                           ),
                         ),
                       ),
-                      // ViewModelBuilder<PlayerViewModel>.reactive(
-                      //   // stream: null,
-                      //   viewModelBuilder: () => vm,
-                      //   builder: (context, vm, child) {
-                      //     return Container(
-                      //       decoration: const BoxDecoration(
-                      //         color: Color(0xFFDCE7EF),
-                      //         borderRadius: BorderRadius.all(
-                      //           Radius.circular(30),
-                      //         ),
-                      //       ),
-                      //       child: Column(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         children: [
-                      //           Padding(
-                      //             padding: EdgeInsets.symmetric(
-                      //                 horizontal: width * 0.066),
-                      //             child: SeekBar(
-                      //               duration: vm.positionData?.duration ??
-                      //                   Duration.zero,
-                      //               position: vm.positionData?.position ??
-                      //                   Duration.zero,
-                      //               bufferedPosition:
-                      //                   vm.positionData?.bufferedPosition ??
-                      //                       Duration.zero,
-                      //               onChanged: vm.player.seek,
-                      //             ),
-                      //           ),
-                      //           Text(
-                      //             "Meditación #34",
-                      //             style: GoogleFonts.raleway(
-                      //                 fontWeight: FontWeight.w700,
-                      //                 fontSize: height * .03,
-                      //                 color: Colors.black),
-                      //           ),
-                      //           Text(
-                      //             "Atención Plena",
-                      //             style: GoogleFonts.raleway(
-                      //               fontWeight: FontWeight.w400,
-                      //               fontSize: height * .02,
-                      //               color: Colors.black26,
-                      //             ),
-                      //           ),
-                      //           playPauseControls(context, vm, height, width),
-                      //         ],
-                      //       ),
-                      //     );
-                      //   },
-                      // ),
+                      ViewModelBuilder<PlayerViewModel>.reactive(
+                        // stream: null,
+                        viewModelBuilder: () => vm,
+                        builder: (context, vm, child) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFDCE7EF),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: width * 0.066),
+                                  child: SeekBar(
+                                    position: vm.totalDuration,
+                                    duration: vm.effectiveTotalDuration,
+                                    bufferedPosition:
+                                        vm.effectiveBufferedPosition,
+                                    onChanged: vm.seekToWithDuration,
+                                  ),
+                                ),
+                                Text(
+                                  "Meditación #34",
+                                  style: GoogleFonts.raleway(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: height * .03,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "Atención Plena",
+                                  style: GoogleFonts.raleway(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: height * .02,
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                                // playPauseControls(context, vm, height, width),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 )
