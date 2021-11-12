@@ -155,59 +155,60 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                           ),
                         ),
                       ),
-                      ViewModelBuilder<PlayerViewModel>.reactive(
-                        // stream: null,
-                        viewModelBuilder: () => vm,
-                        builder: (context, vm, child) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFDCE7EF),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
+                    ),
+                    ViewModelBuilder<PlayerViewModel>.reactive(
+                      // stream: null,
+                      viewModelBuilder: () => vm,
+                      builder: (context, vm, child) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFDCE7EF),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.066),
+                                child: SeekBar(
+                                  position: vm.totalDuration,
+                                  duration: vm.effectiveTotalDuration,
+                                  bufferedPosition:
+                                      vm.effectiveBufferedPosition,
+                                  onChanged: vm.seekToWithDuration,
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.066),
-                                  child: SeekBar(
-                                    position: vm.totalDuration,
-                                    duration: vm.effectiveTotalDuration,
-                                    bufferedPosition:
-                                        vm.effectiveBufferedPosition,
-                                    onChanged: vm.seekToWithDuration,
-                                  ),
+                              Text(
+                                "Meditación #34",
+                                style: GoogleFonts.raleway(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: height * .03,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                "Atención Plena",
+                                style: GoogleFonts.raleway(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: height * .02,
+                                  color: Colors.black26,
                                 ),
-                                Text(
-                                  "Meditación #34",
-                                  style: GoogleFonts.raleway(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: height * .03,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "Atención Plena",
-                                  style: GoogleFonts.raleway(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: height * .02,
-                                    color: Colors.black26,
-                                  ),
-                                ),
-                                // playPauseControls(context, vm, height, width),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                              ),
+                              // playPauseControls(context, vm, height, width),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
+        // ),
         panel: Container(
           child: Text(""),
         ),
@@ -216,57 +217,55 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     );
   }
 //
-//   Widget playPauseControls(
-//       BuildContext context, PlayerViewModel vm, double height, double width) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: [
-//         Icon(
-//           CupertinoIcons.heart,
-//           size: height * 0.03,
-//           color: Colors.black,
-//         ),
-//         Padding(
-//           padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
-//           child: Visibility(
-//             visible: vm.hasPlayerState
-//                 ? !vm.playerState.playing || vm.isCompleted
-//                 : true,
-//             child: Visibility(
-//               visible: vm.hasPlayerState ? vm.isLoading : true,
-//               child: CircularProgressIndicator(),
-//               replacement: IconButton(
-//                 icon: Icon(
-//                   CupertinoIcons.play_circle,
-//                   size: height * 0.055,
-//                   color: Colors.black,
-//                 ),
-//                 onPressed: () {
-//                   if (vm.isCompleted) {
-//                     vm.player.seek(Duration.zero);
-//                   }
-//                   vm.player.play();
-//                 },
-//               ),
-//             ),
-//             replacement: IconButton(
-//               icon: Icon(
-//                 CupertinoIcons.pause_circle,
-//                 size: height * 0.055,
-//                 color: Colors.black,
-//               ),
-//               onPressed: () {
-//                 vm.player.pause();
-//               },
-//             ),
-//           ),
-//         ),
-//         Icon(
-//           Icons.settings_voice_outlined,
-//           size: height * 0.03,
-//           color: Colors.black,
-//         )
-//       ],
-//     );
-//   }
+  Widget playPauseControls(
+      BuildContext context, PlayerViewModel vm, double height, double width) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Icon(
+          CupertinoIcons.heart,
+          size: height * 0.03,
+          color: Colors.black,
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
+          child: Visibility(
+            visible:  !vm.player.playerState.playing || vm.player.,
+            child: Visibility(
+              visible: vm.player.playerState.processingState,
+              child: CircularProgressIndicator(),
+              replacement: IconButton(
+                icon: Icon(
+                  CupertinoIcons.play_circle,
+                  size: height * 0.055,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  if (vm.isCompleted) {
+                    vm.player.seek(Duration.zero);
+                  }
+                  vm.player.play();
+                },
+              ),
+            ),
+            replacement: IconButton(
+              icon: Icon(
+                CupertinoIcons.pause_circle,
+                size: height * 0.055,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                vm.player.pause();
+              },
+            ),
+          ),
+        ),
+        Icon(
+          Icons.settings_voice_outlined,
+          size: height * 0.03,
+          color: Colors.black,
+        )
+      ],
+    );
+  }
 }

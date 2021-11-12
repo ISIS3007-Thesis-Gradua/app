@@ -1,6 +1,6 @@
 ///This is used to map a range of durations into a Chunk when sliding through the seek bar
 ///Models a [start, end) duration range.
-class DurationRange extends Comparable<dynamic> {
+class DurationRange extends Comparable<DurationRange> {
   ///start of range. Inclusive.
   Duration start;
 
@@ -8,7 +8,7 @@ class DurationRange extends Comparable<dynamic> {
   Duration end;
 
   DurationRange(this.start, this.end) {
-    assert(start < end, "Error. You tried to create a range with end < start");
+    assert(start <= end, "Error. You tried to create a range with end < start");
   }
 
   DurationRange.fromDuration(Duration duration)
@@ -20,34 +20,34 @@ class DurationRange extends Comparable<dynamic> {
         end = Duration.zero;
 
   @override
-  int compareTo(other) {
-    //Comparador con números. Se asume que si le pasan números es en milisegundos.
-    if (other is num) {
-      if (start.inMilliseconds <= (other as num) &&
-          (other as num) < end.inMilliseconds) {
-        return 0;
-      } else if ((other as num) < start.inMilliseconds) {
-        return 1;
-      } else {
-        return -1;
-      }
-    }
-    //Comparador con objetos Duration
-    else if (other is Duration) {
-      if (start <= other && other < end) {
-        return 0;
-      } else if (other < start) {
-        return 1;
-      } else {
-        return -1;
-      }
-    }
+  int compareTo(DurationRange other) {
+    // //Comparador con números. Se asume que si le pasan números es en milisegundos.
+    // if (other is num) {
+    //   if (start.inMilliseconds <= (other as num) &&
+    //       (other as num) < end.inMilliseconds) {
+    //     return 0;
+    //   } else if ((other as num) < start.inMilliseconds) {
+    //     return 1;
+    //   } else {
+    //     return -1;
+    //   }
+    // }
+    // //Comparador con objetos Duration
+    // else if (other is Duration) {
+    //   if (start <= other && other < end) {
+    //     return 0;
+    //   } else if (other < start) {
+    //     return 1;
+    //   } else {
+    //     return -1;
+    //   }
+    // }
     //Comparador con un rango. Se asume que si se está contenido en un rango es "igual"
     // esto para que mapeen al mismo value. Y el comportamiento intuitivo de mayor y menor
     // ej: [0,1) < [1, 2). [0, 1) = [0.2, 0.3), [0, 1) = [0 1).
     // Note que no hay definición posible cuando se intersectan rango [0,1) ?? [0.5, 2)
     //De comparar algo de este estilo lanzara una excepción.
-    else if (other is DurationRange) {
+    if (other is DurationRange) {
       if (other.start <= this.start && this.end <= other.end)
         return 0; //this C other
       else if (this.start <= other.start && other.end <= this.end)

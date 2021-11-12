@@ -199,8 +199,8 @@ class PlayerViewModel extends ChangeNotifier {
       }
       //Test 60 seconds of playback
       player.play();
-      Future.delayed(Duration(seconds: 60), () => player.pause())
-          .then((value) => print("Final map: $rangesToChunks"));
+      // Future.delayed(Duration(seconds: 60), () => player.pause())
+      //     .then((value) => print("Final map: $rangesToChunks"));
 
       print("First audio source");
       print(player.audioSource!.sequence.first.toString());
@@ -219,8 +219,11 @@ class PlayerViewModel extends ChangeNotifier {
   ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
   ///would seek to the start of step2.
   Future<void> seekToWithDuration(Duration duration) async {
+    print("Seeking Duration: $duration");
+    print(rangesToChunks[DurationRange.fromDuration(duration)]);
     DurationRangeInt value =
-        rangesToChunks[duration] ?? DurationRangeInt.empty();
+        rangesToChunks[DurationRange.fromDuration(duration)] ??
+            DurationRangeInt.empty();
     totalDuration = value.range.start;
     notifyListeners();
     await player.seek(Duration.zero, index: value.index);
