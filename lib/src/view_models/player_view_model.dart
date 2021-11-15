@@ -7,9 +7,10 @@ import 'package:serenity/src/models/range_map.dart';
 
 const String _positionDataSreamKey = "positionData-stream";
 const String _playerStateStreamKey = "playerState-stream";
-const String ttsEndPoint = "http://192.168.0.4:5002/api/tts?text=";
+const String ttsEndPoint = "http://3.237.62.115:5002/api/tts?text=";
 
-// 192.168.0.4
+// 192.168.0.4 local
+// http://3.237.62.115:5002/ aws
 
 enum TtsSource { mozilla, aws, native }
 
@@ -78,7 +79,7 @@ class PlayerViewModel extends ChangeNotifier {
 
   //TODO implement position
   Duration get effectivePosition {
-    return totalDuration;
+    return totalDuration + player.position;
   }
 
   Duration get effectiveBufferedPosition {
@@ -90,6 +91,7 @@ class PlayerViewModel extends ChangeNotifier {
 
   void _onBufferedPositionChange(Duration bufferedPosition) {
     print("BufferedPosition: $bufferedPosition");
+    notifyListeners();
   }
 
   ///When a new chunk Duration is resolved this function maps its duration range
@@ -139,12 +141,14 @@ class PlayerViewModel extends ChangeNotifier {
 
   void _onCurrentPositionChange(Duration playerPosition) {
     // print("Position: $playerPosition");
+    notifyListeners();
   }
 
   void _onCurrentDurationChange(Duration? currentTrackDuration) {
     currentDuration = currentTrackDuration;
     print(
         "## Current Index: ${player.currentIndex}. CurrentDuration: $currentTrackDuration");
+    notifyListeners();
   }
 
   Future<void> init() async {
@@ -160,6 +164,10 @@ class PlayerViewModel extends ChangeNotifier {
     player.positionStream.listen(_onCurrentPositionChange);
 
     player.durationStream.listen(_onCurrentDurationChange);
+
+    player.playerStateStream.listen((event) {
+      notifyListeners();
+    });
 
     //Register audio sources
     configureAudioSources();

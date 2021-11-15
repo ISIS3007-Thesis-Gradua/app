@@ -4,8 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
+import 'package:serenity/src/components/instructions.dart';
+import 'package:serenity/src/components/seek_bar.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
@@ -14,7 +17,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import 'other_player.dart';
+// import 'other_player.dart';
 
 class Player extends StatefulWidget {
   final SimpleMeditation meditation;
@@ -150,7 +153,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                             child: SvgPicture.asset(
                               'assets/images/meditating_man.svg',
                               semanticsLabel: 'Acme Logo',
-                              height: height * .45,
+                              height: height * .4,
                             ),
                           ),
                         ),
@@ -196,7 +199,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                                   color: Colors.black26,
                                 ),
                               ),
-                              // playPauseControls(context, vm, height, width),
+                              playPauseControls(context, vm, height, width),
                             ],
                           ),
                         );
@@ -209,13 +212,14 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
           ),
         ),
         // ),
-        panel: Container(
-          child: Text(""),
+        panel: Instructions(
+          controller: _controller,
         ),
         collapse: CollapsedContainer(_controller, height, width),
       ),
     );
   }
+
 //
   Widget playPauseControls(
       BuildContext context, PlayerViewModel vm, double height, double width) {
@@ -230,9 +234,12 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
         Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.025),
           child: Visibility(
-            visible:  !vm.player.playerState.playing || vm.player.,
+            visible: !vm.player.playerState.playing
+            // || vm.player.processingState == ProcessingState.completed
+            ,
             child: Visibility(
-              visible: vm.player.playerState.processingState,
+              visible: vm.player.playerState.processingState ==
+                  ProcessingState.loading,
               child: CircularProgressIndicator(),
               replacement: IconButton(
                 icon: Icon(
@@ -241,7 +248,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  if (vm.isCompleted) {
+                  if (vm.player.processingState == ProcessingState.completed) {
                     vm.player.seek(Duration.zero);
                   }
                   vm.player.play();

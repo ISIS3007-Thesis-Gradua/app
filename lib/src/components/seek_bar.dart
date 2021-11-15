@@ -103,7 +103,7 @@ class _SeekBarState extends State<SeekBar> {
                     ?.group(1) ??
                 '$_remaining',
             style: GoogleFonts.raleway(
-              color: Colors.black26,
+              color: Colors.blueGrey,
               fontWeight: FontWeight.w400,
             ),
           ),
