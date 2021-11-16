@@ -1,3 +1,4 @@
+import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/views/graph_view.dart';
 import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/loading_meditation.dart';
@@ -27,7 +28,8 @@ import 'package:stacked_services/stacked_services.dart';
   CupertinoRoute(page: GraphView, name: "graph_view", path: "graph_view"),
 ], dependencies: [
   Singleton(classType: NavigationService),
-  Singleton(classType: DialogService)
+  Singleton(classType: DialogService),
+  Singleton(classType: LocalStorageService)
 ])
 class App {
   /** This class has no puporse besides housing the annotation that generates the required functionality **/

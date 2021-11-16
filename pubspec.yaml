@@ -27,8 +27,11 @@ dependencies:
   stacked_services: ^0.8.13
   url_launcher: ^6.0.12
   path_provider: ^2.0.6
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
+  hive_generator: ^1.1.1
   flutter_test:
     sdk: flutter
 
