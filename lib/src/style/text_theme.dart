@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ///TODO: Ideally this class would have all the text styles used across the app
 ///This es left as a todo task.
 
-///Aplies the given gradient to a text
+///Applies the given gradient to a text
 class GradientText extends StatelessWidget {
   final String text;
   final TextStyle? style;

@@ -1,9 +1,8 @@
-///Removes some SSML text from the input
+///Removes some SSML text from the input. Doesn't touch
+///the SSML corresponding to break times. Just the <speak> and <speak/> tags.
 String sanitizeTtsText(String text) {
-  String cleanText = text
-      .replaceAll(RegExp('<speak>'), '')
-      .replaceAll(RegExp('<\/speak>'), '');
-
+  //Docs for this regex: https://regex101.com/r/qy42lw/1
+  String cleanText = text.replaceAll(RegExp(r'<speak\/?>'), '');
   return cleanText;
 }
 
