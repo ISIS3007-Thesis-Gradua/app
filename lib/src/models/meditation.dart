@@ -99,6 +99,16 @@ class Meditation extends SimpleMeditation {
       duration: Duration(minutes: config.time.round()),
     );
   }
+
+  ///Concatenates all the chunks of each step in a single list.
+  List<ChunkSource> getChunks() {
+    List<ChunkSource> chunks = [];
+
+    for (Step step in steps) {
+      chunks.addAll(step.chunks);
+    }
+    return chunks;
+  }
 }
 
 ///This class will model a single step.
@@ -106,7 +116,7 @@ class Meditation extends SimpleMeditation {
 ///of the text inside each step such that the text is split by the SSML breaks.
 ///Ex: Step = "¡bienvenido! buen día. <break time=\"900ms\"/> que bien que te regales un momento para meditar"
 ///Will be separated into:
-///["¡bienvenido! buen día. ", "<break time=\"900ms\"/>",  que bien que te regales un momento para meditar]
+///["¡bienvenido! buen día. ", "<break time=\"900ms\"/>",  "que bien que te regales un momento para meditar"]
 ///The purpose of this is to generate the Voice in smaller chunks that the backend can process. Also,
 ///to programmatically generate "silence audio" corresponding to the break times for those TTS backends
 ///that does not support SSML breaks.
@@ -165,6 +175,8 @@ class Step {
 ///source.
 abstract class ChunkSource {
   AudioSource chunkSource(String ttsPath);
+
+  String sourcePath(String ttsPath);
 }
 
 ///Class that models a simple text chunk
@@ -175,7 +187,12 @@ class StepChunk implements ChunkSource {
 
   @override
   AudioSource chunkSource(String ttsPath) {
-    return AudioSource.uri(Uri.parse(ttsPath + chunkText));
+    return LockCachingAudioSource(Uri.parse(ttsPath + chunkText));
+  }
+
+  @override
+  String sourcePath(String ttsPath) {
+    return ttsPath + chunkText;
   }
 
   @override
@@ -213,12 +230,17 @@ class StepSilence implements ChunkSource {
   }
 
   @override
-  String toString() {
-    return "Step silence duration: " + silenceDuration.toString();
+  AudioSource chunkSource(String ttsPath) {
+    return LockCachingAudioSource(Uri.parse(filePath));
   }
 
   @override
-  AudioSource chunkSource(String ttsPath) {
-    return AudioSource.uri(Uri.parse(filePath));
+  String sourcePath(String ttsPath) {
+    return filePath;
+  }
+
+  @override
+  String toString() {
+    return "Step silence duration: " + silenceDuration.toString();
   }
 }

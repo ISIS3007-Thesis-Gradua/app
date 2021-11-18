@@ -77,7 +77,6 @@ class PlayerViewModel extends ChangeNotifier {
       return totalDuration;
   }
 
-  //TODO implement position
   Duration get effectivePosition {
     return totalDuration + player.position;
   }
@@ -107,7 +106,7 @@ class PlayerViewModel extends ChangeNotifier {
         print("Resolved duration: $resolvedDuration");
         if (resolvedDuration != null && resolvedDuration > Duration.zero) {
           print(
-              "After Duratioon Future Resolved. Total duration: $totalDurationAtCall. CurrentIndex: $indexAtCall. Resolved Duration: $resolvedDuration");
+              "After Duration Future Resolved. Total duration: $totalDurationAtCall. CurrentIndex: $indexAtCall. Resolved Duration: $resolvedDuration");
           DurationRange thisChunkRange = DurationRange(
               totalDurationAtCall, totalDurationAtCall + resolvedDuration);
           if (!rangesToChunks.containsKey(thisChunkRange)) {

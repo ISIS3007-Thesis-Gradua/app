@@ -2,9 +2,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:serenity/src/models/meditation.dart';
+import 'package:serenity/src/utils/sound_manipulation.dart';
+import 'package:serenity/src/utils/wave_builder.dart';
+import 'package:serenity/src/view_models/player_view_model.dart';
 
 const String meditationsFolder = "/meditations";
 
@@ -40,10 +44,34 @@ class LocalStorageService {
     }
   }
 
+  ///Does all corresponding steps to save the given meditation locally.
+  Future<void> saveMeditation(
+      Meditation meditation, TtsSource ttsSource) async {
+    final WaveBuilder builder = WaveBuilder();
+    for (ChunkSource chunk in meditation.getChunks()) {
+      if (chunk is StepChunk) {
+        Uint8List meditationAudioBytes =
+            await http.readBytes(Uri.parse(chunk.sourcePath(ttsSource.url)));
+        builder.appendFileContents(meditationAudioBytes);
+      } else if (chunk is StepSilence) {
+        builder.appendSilence(chunk.silenceDuration.inMilliseconds,
+            WaveBuilderSilenceType.BeginningOfLastSample);
+      }
+    }
+    File savedMeditationFile = await saveMeditationBytesToFile(
+        "${meditation.name}-${meditation.id}", builder.fileBytes);
+
+    meditation.path = savedMeditationFile.path;
+
+    WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
+    meditation.duration = wavInfo.duration;
+    putMeditation(meditation);
+  }
+
   ///Given a meditation audio File as a sequence of Bytes it will write this bytes
   ///to the meditations subfolder inside the Applications folder.
   Future<File> saveMeditationBytesToFile(
-      String fileName, Uint8List fileContents,
+      String fileName, List<int> fileContents,
       {String fileExtension = ".wav"}) {
     String filePath =
         p.join(applicationMeditationsFolderPath, fileName, fileExtension);
