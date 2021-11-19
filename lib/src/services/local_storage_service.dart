@@ -18,7 +18,9 @@ const String meditationsFolder = "/meditations";
 class LocalStorageService {
   late Box<SimpleMeditation> meditationsBox;
   late Directory applicationsDirectory;
+  late Directory cacheDirectory;
   late String applicationMeditationsFolderPath;
+  late String appMeditationsCacheFolderPath;
 
   LocalStorageService() {
     init();
@@ -30,11 +32,16 @@ class LocalStorageService {
     //TypeAdapters: https://docs.hivedb.dev/#/custom-objects/generate_adapter
     Hive.registerAdapter(SimpleMeditationAdapter());
     applicationsDirectory = await getApplicationDocumentsDirectory();
+    cacheDirectory = await getTemporaryDirectory();
     await Hive.initFlutter(applicationsDirectory.path);
     meditationsBox = await Hive.openBox<SimpleMeditation>('meditationBox');
 
+    ///Stores the paths to the folder where meditation audio files and cached files
+    ///will be stored.
     applicationMeditationsFolderPath =
         p.join(applicationsDirectory.path, meditationsFolder);
+    appMeditationsCacheFolderPath =
+        p.join(cacheDirectory.path, meditationsFolder);
 
     //Creates a folder inside the applications directory to save all the meditations files.
     final Directory applicationsMeditationsDirectory =
@@ -58,23 +65,40 @@ class LocalStorageService {
             WaveBuilderSilenceType.BeginningOfLastSample);
       }
     }
-    File savedMeditationFile = await saveMeditationBytesToFile(
-        "${meditation.name}-${meditation.id}", builder.fileBytes);
+    String savedMeditationName = "${meditation.name}-${meditation.id}";
+    File savedMeditationFile =
+        await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
 
-    meditation.path = savedMeditationFile.path;
+    savedMeditationFile = await convertWavToMp3(savedMeditationFile,
+        applicationMeditationsFolderPath, savedMeditationName);
 
-    WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
-    meditation.duration = wavInfo.duration;
+    // meditation.path = savedMeditationFile.path;
+    // WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
+
+    meditation.duration = await AudioFileInfo.fileDuration(savedMeditationFile);
     putMeditation(meditation);
+
+    // compute();
   }
 
   ///Given a meditation audio File as a sequence of Bytes it will write this bytes
-  ///to the meditations subfolder inside the Applications folder.
+  ///to the meditations subfolder inside the Applications Cache folder.
+  Future<File> saveMeditationFileToCache(
+      String fileName, List<int> fileContents,
+      {String fileExtension = ".wav"}) {
+    String filePath =
+        p.join(appMeditationsCacheFolderPath, fileName + fileExtension);
+    File savedMeditationFile = File(filePath);
+    return savedMeditationFile.writeAsBytes(fileContents);
+  }
+
+  ///Given a meditation audio File as a sequence of Bytes it will write this bytes
+  ///to the meditations subfolder inside the Applications Documents folder.
   Future<File> saveMeditationBytesToFile(
       String fileName, List<int> fileContents,
       {String fileExtension = ".wav"}) {
     String filePath =
-        p.join(applicationMeditationsFolderPath, fileName, fileExtension);
+        p.join(applicationMeditationsFolderPath, fileName + fileExtension);
 
     // Write source File content to the set location inside the app's document folder
     File savedMeditationFile = File(filePath);
@@ -87,7 +111,7 @@ class LocalStorageService {
   Future<File> saveMeditationToFile(String fileName, File source,
       {String fileExtension = ".wav"}) async {
     String filePath =
-        p.join(applicationMeditationsFolderPath, fileName, fileExtension);
+        p.join(applicationMeditationsFolderPath, fileName + fileExtension);
 
     // Read the source file
     final contents = await source.readAsBytes();
@@ -95,6 +119,11 @@ class LocalStorageService {
     // Write source File content to the set location inside the app's document folder
     File savedMeditationFile = File(filePath);
     return savedMeditationFile.writeAsBytes(contents);
+  }
+
+  ///Retrieves all the meditations saved locally.
+  List<SimpleMeditation> getAllSavedMeditations() {
+    return meditationsBox.values.toList();
   }
 
   ///Given a path, it will look for that path inside local File System to see

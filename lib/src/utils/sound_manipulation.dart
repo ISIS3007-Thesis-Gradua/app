@@ -1,6 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter_ffmpeg/media_information.dart';
+import 'package:path/path.dart' as p;
 import 'package:serenity/src/utils/bytes_manipulation.dart';
 
 ///This class gets some basic info (Including the header params) for a .wav file.
+///For more info see WAVE format specification:
+///http://soundfile.sapp.org/doc/WaveFormat/
+///http://www.topherlee.com/software/pcm-tut-wavformat.html
+///https://stackoverflow.com/questions/28137559/can-someone-explain-wavwave-file-headers
 class WavFileInfo {
   late int fileSizeBytes;
   late String subChunkId;
@@ -51,5 +60,61 @@ class WavFileInfo {
     num milliseconds = (numBytesInData / byteRate) * 1000;
 
     duration = Duration(milliseconds: milliseconds.round());
+  }
+
+  ///Checks if the header of the file says this is a Wav file.
+  static bool isWav(List<int> bytes) {
+    String wave = String.fromCharCodes(bytes.getRange(8, 12));
+    return wave == "WAVE";
+  }
+}
+
+///Converts the .wav file inside [sourceFile] to an .mp3 file inside
+///the specified [outputDirectory], with the given [fileName]. The fileName
+///should NOT provide the extension. That will be added here.
+///For a mor precise conversion the arguments [bitRateKb] and [numChannels]
+///will model the bit rate of the mp3 in KiloBits and the number of channels (1 or 2)
+///respectively.
+Future<File> convertWavToMp3(
+  File sourceFile,
+  String outputDirectory,
+  String fileName, {
+  int bitRateKb = 80,
+  int numChannels = 1,
+}) async {
+  //Verify correctness of the input args.
+  assert(1 <= numChannels && numChannels <= 2,
+      "The provided number of channels is not 1 or 2");
+  assert(WavFileInfo.isWav(await sourceFile.readAsBytes()),
+      "The source file is not a .wav file.");
+  assert(await Directory(outputDirectory).exists(),
+      "The target output directory does not exist.");
+
+  final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+  String outputPath = p.join(outputDirectory, fileName + ".mp3");
+
+  ///See what this command does:
+  ///https://stackoverflow.com/questions/3255674/convert-audio-files-to-mp3-using-ffmpeg
+  ///the "-y" flag at the start is just to overwrite the destination file if necessary.
+  int rc = await flutterFFmpeg.execute(
+      "-y -i ${sourceFile.path} -vn -ac $numChannels -b:a ${bitRateKb}k $outputPath");
+  if (rc == 0) {
+    print("Successfully converted ${sourceFile.path} to mp3");
+    return File(outputPath);
+  } else {
+    throw Exception("[ERROR] converting ${sourceFile.path} to mp3");
+  }
+}
+
+class AudioFileInfo {
+  ///Get the duration of an MP3 file.
+  ///Technically it should work for other file formats also but i haven't test it for more.
+  static Future<Duration> fileDuration(File file) async {
+    FlutterFFprobe fFprobe = FlutterFFprobe();
+    MediaInformation mediaInformation =
+        await fFprobe.getMediaInformation(file.path);
+    String durationInSeconds =
+        mediaInformation.getMediaProperties()?["duration"] ?? "0.0";
+    return Duration(seconds: num.parse(durationInSeconds).round());
   }
 }
