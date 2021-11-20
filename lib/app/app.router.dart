@@ -13,6 +13,7 @@ import 'package:stacked/stacked_annotations.dart';
 import '../src/models/emotions_measure.dart';
 import '../src/models/meditation.dart';
 import '../src/models/meditation_config.dart';
+import '../src/view_models/player_view_model.dart';
 import '../src/views/graph_view.dart';
 import '../src/views/home_view.dart';
 import '../src/views/loading_meditation.dart';
@@ -79,6 +80,8 @@ class StackedRouter extends RouterBase {
         builder: (context) => MeditationRatingView(
           key: args.key,
           prevEmotionsMeasure: args.prevEmotionsMeasure,
+          simpleMeditation: args.simpleMeditation,
+          ttsSource: args.ttsSource,
         ),
         settings: data,
       );
@@ -100,6 +103,8 @@ class StackedRouter extends RouterBase {
           args.prevEmotionsMeasure,
           args.posEmotionsMeasure,
           key: args.key,
+          simpleMeditation: args.simpleMeditation,
+          ttsSource: args.ttsSource,
         ),
         settings: data,
       );
@@ -122,7 +127,13 @@ class PlayerArguments {
 class MeditationRatingViewArguments {
   final Key? key;
   final EmotionsMeasure prevEmotionsMeasure;
-  MeditationRatingViewArguments({this.key, required this.prevEmotionsMeasure});
+  final SimpleMeditation simpleMeditation;
+  final TtsSource ttsSource;
+  MeditationRatingViewArguments(
+      {this.key,
+      required this.prevEmotionsMeasure,
+      required this.simpleMeditation,
+      required this.ttsSource});
 }
 
 /// LoadingMeditationView arguments holder class
@@ -137,8 +148,12 @@ class GraphViewArguments {
   final EmotionsMeasure prevEmotionsMeasure;
   final EmotionsMeasure posEmotionsMeasure;
   final Key? key;
+  final SimpleMeditation simpleMeditation;
+  final TtsSource ttsSource;
   GraphViewArguments(
       {required this.prevEmotionsMeasure,
       required this.posEmotionsMeasure,
-      this.key});
+      this.key,
+      required this.simpleMeditation,
+      required this.ttsSource});
 }

@@ -29,7 +29,7 @@ import 'package:stacked_services/stacked_services.dart';
 ], dependencies: [
   Singleton(classType: NavigationService),
   Singleton(classType: DialogService),
-  Singleton(classType: LocalStorageService)
+  LazySingleton(classType: LocalStorageService)
 ])
 class App {
   /** This class has no puporse besides housing the annotation that generates the required functionality **/

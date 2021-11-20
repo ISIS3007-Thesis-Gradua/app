@@ -10,7 +10,7 @@ import 'package:serenity/src/utils/sound_manipulation.dart';
 import 'package:serenity/src/utils/wave_builder.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
 
-const String meditationsFolder = "/meditations";
+const String meditationsFolder = "meditations";
 
 ///This class is the Singleton that will manage all operations related with
 ///Local Storage, such as Writing Files to the Applications Folder
@@ -36,6 +36,8 @@ class LocalStorageService {
     await Hive.initFlutter(applicationsDirectory.path);
     meditationsBox = await Hive.openBox<SimpleMeditation>('meditationBox');
 
+    print("start");
+
     ///Stores the paths to the folder where meditation audio files and cached files
     ///will be stored.
     applicationMeditationsFolderPath =
@@ -49,23 +51,44 @@ class LocalStorageService {
     if (!await applicationsMeditationsDirectory.exists()) {
       await applicationsMeditationsDirectory.create();
     }
+    if (!await Directory(appMeditationsCacheFolderPath).exists()) {
+      await Directory(appMeditationsCacheFolderPath).create();
+    }
+
+    print("end");
   }
 
   ///Does all corresponding steps to save the given meditation locally.
   Future<void> saveMeditation(
       Meditation meditation, TtsSource ttsSource) async {
+    print("Saving");
     final WaveBuilder builder = WaveBuilder();
-    for (ChunkSource chunk in meditation.getChunks()) {
-      if (chunk is StepChunk) {
-        Uint8List meditationAudioBytes =
-            await http.readBytes(Uri.parse(chunk.sourcePath(ttsSource.url)));
-        builder.appendFileContents(meditationAudioBytes);
-      } else if (chunk is StepSilence) {
-        builder.appendSilence(chunk.silenceDuration.inMilliseconds,
-            WaveBuilderSilenceType.BeginningOfLastSample);
-      }
-    }
-    String savedMeditationName = "${meditation.name}-${meditation.id}";
+
+    // for (ChunkSource chunk in meditation.getChunks()) {
+    //   if (chunk is StepChunk) {
+    //     print("PATH");
+    //     print(chunk.sourcePath(ttsSource.url));
+    //     http.Response meditationAudioBytes =
+    //         await http.get(Uri.parse(chunk.sourcePath(ttsSource.url)));
+    //
+    //     builder.appendFileContents(meditationAudioBytes.bodyBytes);
+    //     break;
+    //   } else if (chunk is StepSilence) {
+    //     builder.appendSilence(chunk.silenceDuration.inMilliseconds,
+    //         WaveBuilderSilenceType.BeginningOfLastSample);
+    //     break;
+    //   }
+    // }
+    print("in");
+    Uint8List bytes = await http.readBytes(
+        Uri.parse(
+            (meditation.getChunks()[0] as StepChunk).sourcePath(ttsSource.url)),
+        headers: {"Keep-Alive": "timeout=20, max=10"});
+    print("received");
+    builder.appendFileContents(bytes);
+
+    print("out");
+    String savedMeditationName = "exampleMeditation1";
     File savedMeditationFile =
         await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
 
@@ -75,7 +98,15 @@ class LocalStorageService {
     // meditation.path = savedMeditationFile.path;
     // WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
 
-    meditation.duration = await AudioFileInfo.fileDuration(savedMeditationFile);
+    meditation.durationInSec =
+        await AudioFileInfo.fileDuration(savedMeditationFile)
+            .onError((error, stackTrace) {
+      print("[ERROR] reading duration.");
+      print(error);
+      print(stackTrace);
+      return Duration.zero;
+    });
+    print("[INFO] Got Duration");
     putMeditation(meditation);
 
     // compute();
@@ -172,11 +203,13 @@ class LocalStorageService {
   ///Puts the meditation inside the meditation's Hive Box at the last available index.
   ///Throws an Exception if an error occurs in the process.
   void putMeditation(SimpleMeditation meditation) {
+    print("Putting meditation");
     meditationsBox.add(meditation).then((value) {
       print("Meditation saved successfully, index: $value");
-    },
-        onError: (e) =>
-            Exception("Error saving meditation.\nMessage: ${e.toString()}"));
+    }, onError: (e) {
+      print("Error saving meditation.\nMessage: ${e.toString()}");
+      return 0;
+    });
   }
 
   ///Deletes the meditation at the given index inside the Hive Box.

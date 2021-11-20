@@ -11,14 +11,22 @@ import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/instructions.dart';
 import 'package:serenity/src/components/sliders.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
+import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/meditation_rating_view_model.dart';
+import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class MeditationRatingView extends StatefulWidget {
   EmotionsMeasure prevEmotionsMeasure;
-  MeditationRatingView({Key? key, required this.prevEmotionsMeasure})
+  TtsSource ttsSource;
+  SimpleMeditation simpleMeditation;
+  MeditationRatingView(
+      {Key? key,
+      required this.prevEmotionsMeasure,
+      required this.simpleMeditation,
+      required this.ttsSource})
       : super(key: key);
 
   @override
@@ -270,11 +278,14 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                               height: height * 0.065,
                               fontSize: height * 0.02,
                               onPressed: () {
-                                navigationService.replaceWith(Routes.graph_view,
+                                navigationService.navigateTo(Routes.graph_view,
                                     arguments: GraphViewArguments(
-                                        prevEmotionsMeasure:
-                                            widget.prevEmotionsMeasure,
-                                        posEmotionsMeasure: vm.posEmotions));
+                                      prevEmotionsMeasure:
+                                          widget.prevEmotionsMeasure,
+                                      posEmotionsMeasure: vm.posEmotions,
+                                      simpleMeditation: widget.simpleMeditation,
+                                      ttsSource: widget.ttsSource,
+                                    ));
                               },
                             ),
                           ],

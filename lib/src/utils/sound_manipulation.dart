@@ -115,6 +115,8 @@ class AudioFileInfo {
         await fFprobe.getMediaInformation(file.path);
     String durationInSeconds =
         mediaInformation.getMediaProperties()?["duration"] ?? "0.0";
+    print("[Duration in seconds:] $durationInSeconds");
+    // print(durationInSeconds);
     return Duration(seconds: num.parse(durationInSeconds).round());
   }
 }

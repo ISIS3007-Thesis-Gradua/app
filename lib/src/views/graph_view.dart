@@ -8,15 +8,21 @@ import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/graphs.dart';
 import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
+import 'package:serenity/src/models/meditation.dart';
+import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/utils/extentions.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
+import 'package:serenity/src/view_models/player_view_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class GraphView extends StatefulWidget {
   final EmotionsMeasure prevEmotionsMeasure;
   final EmotionsMeasure posEmotionsMeasure;
-  const GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure, {Key? key})
+  TtsSource ttsSource;
+  SimpleMeditation simpleMeditation;
+  GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure,
+      {Key? key, required this.simpleMeditation, required this.ttsSource})
       : super(key: key);
 
   @override
@@ -55,6 +61,9 @@ class _GraphViewState extends State<GraphView> {
       summaryResults(
           widget.prevEmotionsMeasure, widget.posEmotionsMeasure, width),
     );
+
+    LocalStorageService localStorage = locator<LocalStorageService>();
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFFF6F9FF),
@@ -146,7 +155,12 @@ class _GraphViewState extends State<GraphView> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      localStorage.saveMeditation(
+                                          (widget.simpleMeditation
+                                              as Meditation),
+                                          widget.ttsSource);
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: Colors.purple,

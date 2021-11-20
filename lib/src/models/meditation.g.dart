@@ -19,8 +19,7 @@ class SimpleMeditationAdapter extends TypeAdapter<SimpleMeditation> {
     return SimpleMeditation(
       path: fields[0] as String,
       name: fields[1] as String,
-      duration: fields[2] as Duration,
-    );
+    )..durationInSeconds = fields[2] as num;
   }
 
   @override
@@ -32,7 +31,7 @@ class SimpleMeditationAdapter extends TypeAdapter<SimpleMeditation> {
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.duration);
+      ..write(obj.durationInSeconds);
   }
 
   @override

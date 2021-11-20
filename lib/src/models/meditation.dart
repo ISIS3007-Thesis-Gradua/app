@@ -30,12 +30,21 @@ class SimpleMeditation {
 
   ///Meditation Duration.
   @HiveField(2)
+  late num durationInSeconds;
+
   Duration duration;
 
   SimpleMeditation(
       {this.path = "default-path",
       this.name = "Generated Meditation",
-      this.duration = Duration.zero});
+      this.duration = Duration.zero}) {
+    durationInSeconds = duration.inMilliseconds / 1000;
+  }
+
+  void set durationInSec(Duration duration) {
+    this.duration = duration;
+    durationInSeconds = duration.inMilliseconds / 1000;
+  }
 
   ///Returns a String with the duration formatted as: "mm:ss mins"
   String formattedDuration() {
@@ -187,7 +196,7 @@ class StepChunk implements ChunkSource {
 
   @override
   AudioSource chunkSource(String ttsPath) {
-    return LockCachingAudioSource(Uri.parse(ttsPath + chunkText));
+    return AudioSource.uri(Uri.parse(ttsPath + chunkText));
   }
 
   @override
@@ -231,7 +240,7 @@ class StepSilence implements ChunkSource {
 
   @override
   AudioSource chunkSource(String ttsPath) {
-    return LockCachingAudioSource(Uri.parse(filePath));
+    return AudioSource.uri(Uri.parse(filePath));
   }
 
   @override
