@@ -226,14 +226,18 @@ class PlayerViewModel extends ChangeNotifier {
   ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
   ///would seek to the start of step2.
   Future<void> seekToWithDuration(Duration duration) async {
-    print("Seeking Duration: $duration");
-    print(rangesToChunks[DurationRange.fromDuration(duration)]);
-    DurationRangeInt value =
-        rangesToChunks[DurationRange.fromDuration(duration)] ??
-            DurationRangeInt.empty();
-    totalDuration = value.range.start;
-    notifyListeners();
-    await player.seek(Duration.zero, index: value.index);
+    if (meditation is Meditation) {
+      print("Seeking Duration: $duration");
+      print(rangesToChunks[DurationRange.fromDuration(duration)]);
+      DurationRangeInt value =
+          rangesToChunks[DurationRange.fromDuration(duration)] ??
+              DurationRangeInt.empty();
+      totalDuration = value.range.start;
+      notifyListeners();
+      await player.seek(Duration.zero, index: value.index);
+    } else {
+      await player.seek(duration);
+    }
     // totalDuration = value.range.start;
   }
 
@@ -255,23 +259,30 @@ class PlayerViewModel extends ChangeNotifier {
   //     };
 
   @override
-  void dispose() {
-    player.dispose();
+  Future<void> dispose() async {
+    print("Disposing player view model");
+    if (player.audioSource is ConcatenatingAudioSource) {
+      await (player.audioSource as ConcatenatingAudioSource).clear();
+    }
+    // player.set
+    await player.stop();
+    await player.dispose();
+    AudioPlayer.clearAssetCache();
     super.dispose();
   }
 }
 
-class PositionData {
-  Duration duration;
-  Duration position;
-  Duration bufferedPosition;
-
-  PositionData(this.position, this.bufferedPosition, this.duration);
-
-  get sliderValue => (position != null &&
-          duration != null &&
-          position.inMilliseconds > 0 &&
-          position.inMilliseconds < duration.inMilliseconds)
-      ? position.inMilliseconds / duration.inMilliseconds
-      : 0.0;
-}
+// class PositionData {
+//   Duration duration;
+//   Duration position;
+//   Duration bufferedPosition;
+//
+//   PositionData(this.position, this.bufferedPosition, this.duration);
+//
+//   get sliderValue => (position != null &&
+//           duration != null &&
+//           position.inMilliseconds > 0 &&
+//           position.inMilliseconds < duration.inMilliseconds)
+//       ? position.inMilliseconds / duration.inMilliseconds
+//       : 0.0;
+// }

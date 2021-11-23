@@ -80,6 +80,7 @@ class LocalStorageService {
     //   }
     // }
     print("in");
+    print((meditation.getChunks()[0] as StepChunk).chunkText);
     Uint8List bytes = await http.readBytes(
         Uri.parse(
             (meditation.getChunks()[0] as StepChunk).sourcePath(ttsSource.url)),
@@ -89,25 +90,28 @@ class LocalStorageService {
 
     print("out");
     String savedMeditationName = "exampleMeditation1";
-    File savedMeditationFile =
+    File savedWavMeditationFile =
         await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
 
-    savedMeditationFile = await convertWavToMp3(savedMeditationFile,
+    File savedMeditationFile = await convertWavToMp3(savedWavMeditationFile,
         applicationMeditationsFolderPath, savedMeditationName);
 
     // meditation.path = savedMeditationFile.path;
     // WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
-
-    meditation.durationInSec =
-        await AudioFileInfo.fileDuration(savedMeditationFile)
-            .onError((error, stackTrace) {
-      print("[ERROR] reading duration.");
-      print(error);
-      print(stackTrace);
-      return Duration.zero;
-    });
-    print("[INFO] Got Duration");
-    putMeditation(meditation);
+    meditation.path = savedMeditationFile.path;
+    meditation.durationInSec = WavFileInfo.fileInfoFromBytes(
+            await savedWavMeditationFile.readAsBytes())
+        .duration;
+    //     await AudioFileInfo.fileDuration(savedMeditationFile)
+    //         .onError((error, stackTrace) {
+    //   print("[ERROR] reading duration.");
+    //   print(error);
+    //   print(stackTrace);
+    //   return Duration.zero;
+    // });
+    print("[INFO] Got Duration: ${meditation.durationInSeconds}");
+    meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
+    putMeditationWithKey(meditation.id, meditation);
 
     // compute();
   }
@@ -192,8 +196,9 @@ class LocalStorageService {
 
   ///Puts the meditation with the given key inside the meditation's Hive Box.
   ///Throws an Exception if an error occurs in the process.
-  void putMeditationWithKey(String key, SimpleMeditation meditation) {
-    meditationsBox.put(key, meditation).then((_) {
+  Future<void> putMeditationWithKey(
+      String key, SimpleMeditation meditation) async {
+    await meditationsBox.put(key, meditation).then((_) {
       print("Meditation saved successfully, key: $key");
     },
         onError: (e) => Exception(
@@ -202,9 +207,9 @@ class LocalStorageService {
 
   ///Puts the meditation inside the meditation's Hive Box at the last available index.
   ///Throws an Exception if an error occurs in the process.
-  void putMeditation(SimpleMeditation meditation) {
+  Future<void> putMeditation(SimpleMeditation meditation) async {
     print("Putting meditation");
-    meditationsBox.add(meditation).then((value) {
+    await meditationsBox.add(meditation).then((value) {
       print("Meditation saved successfully, index: $value");
     }, onError: (e) {
       print("Error saving meditation.\nMessage: ${e.toString()}");
@@ -214,8 +219,8 @@ class LocalStorageService {
 
   ///Deletes the meditation at the given index inside the Hive Box.
   ///Throws Exception if an error occurs in the process.
-  void deleteMeditationAtIndex(int index) {
-    meditationsBox.deleteAt(index).then((value) {
+  Future<void> deleteMeditationAtIndex(int index) async {
+    await meditationsBox.deleteAt(index).then((value) {
       print("Meditation at index: $index deleted successfully.");
     },
         onError: (e) => Exception(
@@ -225,9 +230,9 @@ class LocalStorageService {
   ///Deletes the meditations with the given key inside the Hive Box.
   ///If it doesn't exists a meditation with this key it will throw an Exception.
   ///If an error occurs in the process it will Throw an Exception.
-  void deleteMeditationWithKey(dynamic key) {
+  Future<void> deleteMeditationWithKey(dynamic key) async {
     if (meditationsBox.containsKey(key)) {
-      meditationsBox.delete(key).then((value) {
+      await meditationsBox.delete(key).then((value) {
         print("Meditation with key: $key deleted successfully.");
       },
           onError: (e) => Exception(

@@ -278,7 +278,7 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
                               height: height * 0.065,
                               fontSize: height * 0.02,
                               onPressed: () {
-                                navigationService.navigateTo(Routes.graph_view,
+                                navigationService.replaceWith(Routes.graph_view,
                                     arguments: GraphViewArguments(
                                       prevEmotionsMeasure:
                                           widget.prevEmotionsMeasure,

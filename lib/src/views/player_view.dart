@@ -66,7 +66,6 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     WidgetsBinding.instance?.removeObserver(this);
     // Release decoders and buffers back to the operating system making them
     // available for other apps to use.
-    vm.dispose();
     super.dispose();
   }
 
@@ -112,7 +111,8 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       size: height * 0.03,
                       color: Colors.black,
                     ),
-                    onPressed: () => {navigationService.back()},
+                    onPressed: () =>
+                        {navigationService.navigateTo(Routes.homeView)},
                   ),
                 ),
                 Align(
@@ -123,19 +123,20 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       size: height * 0.03,
                       color: Colors.red,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      TtsSource ttsSource = vm.ttsSource;
+                      await vm.dispose();
                       EmotionsMeasure prevEmotion =
                           widget.meditation is Meditation
                               ? (widget.meditation as Meditation)
                                   .getEmotionMeasure()
                               : EmotionsMeasure.blank();
-                      vm.player.stop();
-                      navigationService.navigateTo(
+                      navigationService.replaceWith(
                         Routes.meditation_rating,
                         arguments: MeditationRatingViewArguments(
                           prevEmotionsMeasure: prevEmotion,
                           simpleMeditation: widget.meditation,
-                          ttsSource: vm.ttsSource,
+                          ttsSource: ttsSource,
                         ),
                       );
                     },

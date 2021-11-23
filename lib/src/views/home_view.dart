@@ -11,6 +11,8 @@ import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/instructions.dart';
+import 'package:serenity/src/components/side_bar.dart';
+import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -31,10 +33,12 @@ class _HomeViewState extends State<HomeView> {
   GetIt locator = GetIt.instance;
   final _controller = PanelController();
   late final NavigationService navigationService;
+  GlobalKey scaffoldKey = GlobalKey();
 
   @override
   void initState() {
     navigationService = locator<NavigationService>();
+    locator<LocalStorageService>();
     super.initState();
   }
 
@@ -55,7 +59,9 @@ class _HomeViewState extends State<HomeView> {
         viewModelBuilder: () => HomeViewModel.exampleData(),
         builder: (context, vm, child) {
           return Scaffold(
+            key: scaffoldKey,
             backgroundColor: const Color(0xFFF6F9FF),
+            drawer: SideBar(),
             body: ScrollSheet(
               controllerType: ControllerType.fromFields,
               controller: _controller,
@@ -115,26 +121,63 @@ class _HomeViewState extends State<HomeView> {
 
                         Padding(
                           padding: EdgeInsets.all(height * .02),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: SvgPicture.asset(
-                                  assetName,
-                                  semanticsLabel: 'Acme Logo',
-                                  height: height * .2,
+                          child: SizedBox(
+                            height: height * .2,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: SvgPicture.asset(
+                                    assetName,
+                                    semanticsLabel: 'Acme Logo',
+                                    height: height * .2,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(0, 0, width * .2, 0),
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: getHelperButton(
-                                      HelperDialog.meditationBenefits, context),
+                                Positioned(
+                                  left: -height * .02,
+                                  top: height * .05,
+                                  child: Builder(builder: (context) {
+                                    return SizedBox(
+                                      height: height * .1,
+                                      width: width * .25,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                icon: Icon(Icons
+                                                    .download_for_offline_outlined),
+                                                onPressed: () {
+                                                  Scaffold.of(context)
+                                                      .openDrawer();
+                                                },
+                                              ),
+                                              Text(
+                                                "Abrir\nGuardadas",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding:
+                                      EdgeInsets.fromLTRB(0, 0, width * .2, 0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: getHelperButton(
+                                        HelperDialog.meditationBenefits,
+                                        context),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         MeditationConfigView(vm: vm),

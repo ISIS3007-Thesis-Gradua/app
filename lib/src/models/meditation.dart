@@ -20,17 +20,21 @@ part 'meditation.g.dart';
 ///More info, see: https://docs.hivedb.dev/#/custom-objects/generate_adapter
 @HiveType(typeId: 0)
 class SimpleMeditation {
-  ///Path to local file containing the audio for this meditation.
+  ///Meditation id, by default is a String representation of the timestamp of its creation.
   @HiveField(0)
+  String id = '';
+
+  ///Path to local file containing the audio for this meditation.
+  @HiveField(1)
   String path;
 
   ///Meditation Name.
-  @HiveField(1)
+  @HiveField(2)
   String name;
 
   ///Meditation Duration.
-  @HiveField(2)
-  late num durationInSeconds;
+  @HiveField(3)
+  late double durationInSeconds;
 
   Duration duration;
 
@@ -39,6 +43,7 @@ class SimpleMeditation {
       this.name = "Generated Meditation",
       this.duration = Duration.zero}) {
     durationInSeconds = duration.inMilliseconds / 1000;
+    id = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   void set durationInSec(Duration duration) {
@@ -56,7 +61,6 @@ class SimpleMeditation {
 ///parameters passed at the HomeView. This will alsa contain the generated Steps and the
 ///corresponding meditation's entire text (Concatenation of each step text with SSML break times)
 class Meditation extends SimpleMeditation {
-  String id = '';
   String meditationText = '';
   MeditationConfig config = MeditationConfig();
   List<Step> steps = [];
@@ -64,7 +68,6 @@ class Meditation extends SimpleMeditation {
   Meditation.blank() : super();
 
   Meditation({
-    this.id = '',
     this.steps = const [],
     required this.meditationText,
     required this.config,
