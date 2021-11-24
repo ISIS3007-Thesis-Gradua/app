@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -63,30 +62,33 @@ class LocalStorageService {
       Meditation meditation, TtsSource ttsSource) async {
     print("Saving");
     final WaveBuilder builder = WaveBuilder();
+    int counter = 0;
 
-    // for (ChunkSource chunk in meditation.getChunks()) {
-    //   if (chunk is StepChunk) {
-    //     print("PATH");
-    //     print(chunk.sourcePath(ttsSource.url));
-    //     http.Response meditationAudioBytes =
-    //         await http.get(Uri.parse(chunk.sourcePath(ttsSource.url)));
-    //
-    //     builder.appendFileContents(meditationAudioBytes.bodyBytes);
-    //     break;
-    //   } else if (chunk is StepSilence) {
-    //     builder.appendSilence(chunk.silenceDuration.inMilliseconds,
-    //         WaveBuilderSilenceType.BeginningOfLastSample);
-    //     break;
-    //   }
-    // }
+    for (ChunkSource chunk in meditation.getChunks()) {
+      if (chunk is StepChunk) {
+        counter++;
+        print("[COUNTER] $counter");
+        print("PATH");
+        print(chunk.sourcePath(ttsSource.url));
+        http.Response meditationAudioBytes =
+            await http.get(Uri.parse(chunk.sourcePath(ttsSource.url)));
+
+        builder.appendFileContents(meditationAudioBytes.bodyBytes);
+        break;
+      } else if (chunk is StepSilence) {
+        builder.appendSilence(chunk.silenceDuration.inMilliseconds,
+            WaveBuilderSilenceType.BeginningOfLastSample);
+        break;
+      }
+    }
     print("in");
-    print((meditation.getChunks()[0] as StepChunk).chunkText);
-    Uint8List bytes = await http.readBytes(
-        Uri.parse(
-            (meditation.getChunks()[0] as StepChunk).sourcePath(ttsSource.url)),
-        headers: {"Keep-Alive": "timeout=20, max=10"});
-    print("received");
-    builder.appendFileContents(bytes);
+    // print((meditation.getChunks()[0] as StepChunk).chunkText);
+    // Uint8List bytes = await http.readBytes(
+    //     Uri.parse(
+    //         (meditation.getChunks()[0] as StepChunk).sourcePath(ttsSource.url)),
+    //     headers: {"Keep-Alive": "timeout=20, max=10"});
+    // print("received");
+    // builder.appendFileContents(bytes);
 
     print("out");
     String savedMeditationName = "exampleMeditation1";

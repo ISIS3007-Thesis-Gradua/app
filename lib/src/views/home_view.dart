@@ -66,7 +66,11 @@ class _HomeViewState extends State<HomeView> {
               controllerType: ControllerType.fromFields,
               controller: _controller,
               body: Padding(
-                padding: EdgeInsets.fromLTRB(0, height * 0.05, 0, height * 0.1),
+                padding: EdgeInsets.fromLTRB(
+                    0,
+                    height * 0.05 + MediaQuery.of(context).padding.top,
+                    0,
+                    height * 0.1),
                 child: Stack(
                   children: [
                     Column(

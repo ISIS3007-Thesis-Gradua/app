@@ -91,6 +91,7 @@ Future<File> convertWavToMp3(
       "The target output directory does not exist.");
 
   final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+  FlutterFFmpegConfig().disableLogs();
   String outputPath = p.join(outputDirectory, fileName + ".mp3");
 
   ///See what this command does:
