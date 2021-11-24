@@ -100,7 +100,10 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
           controllerType: ControllerType.fromFields,
           body: Padding(
             padding: EdgeInsets.fromLTRB(
-                width * 0.03, height * 0.03, width * 0.03, 0),
+                width * 0.03,
+                MediaQuery.of(context).padding.top + height * 0.03,
+                width * 0.03,
+                0),
             child: Stack(
               children: [
                 Align(
@@ -147,7 +150,13 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                 ),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Text(widget.meditation.name),
+                  child: Text(
+                    widget.meditation.name,
+                    style: GoogleFonts.raleway(
+                        fontWeight: FontWeight.w700,
+                        fontSize: height * .02,
+                        color: Colors.black),
+                  ),
                 ),
                 Padding(
                   padding:
@@ -167,12 +176,12 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(width * .1),
                             child: Center(
                               child: SvgPicture.asset(
                                 'assets/images/meditating_man.svg',
                                 semanticsLabel: 'Acme Logo',
-                                height: height * .4,
+                                height: height * .3,
                               ),
                             ),
                           ),

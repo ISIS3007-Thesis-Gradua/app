@@ -85,7 +85,11 @@ class _MeditationRatingViewState extends State<MeditationRatingView> {
               controller: _controller,
             ),
             body: Padding(
-              padding: EdgeInsets.fromLTRB(0, height * .05, 0, height * .1),
+              padding: EdgeInsets.fromLTRB(
+                  0,
+                  MediaQuery.of(context).padding.top + height * .02,
+                  0,
+                  height * .1),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,

@@ -35,7 +35,8 @@ class _SideBarState extends State<SideBar> {
       color: const Color(0xFFF6F9FF),
       child: Drawer(
         elevation: 16,
-        child: SafeArea(
+        child: Container(
+          color: const Color(0xFFF6F9FF),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

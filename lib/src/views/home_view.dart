@@ -155,12 +155,23 @@ class _HomeViewState extends State<HomeView> {
                                               crossAxisAlignment:
                                                   WrapCrossAlignment.center,
                                               spacing: width * .01,
-                                              children: const [
-                                                Icon(Icons
-                                                    .download_for_offline_outlined),
+                                              children: [
+                                                // ignore: prefer_const_constructors
+                                                Icon(
+                                                  Icons
+                                                      .download_for_offline_outlined,
+                                                  color: Colors.black,
+                                                ),
                                                 Text(
                                                   "Abrir\nGuardadas",
                                                   textAlign: TextAlign.center,
+                                                  style: GoogleFonts.raleway(
+                                                    color:
+                                                        const Color(0xFF768596),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: width * 0.026,
+                                                    height: 1,
+                                                  ),
                                                 ),
                                               ],
                                             ),
