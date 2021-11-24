@@ -128,7 +128,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                     onPressed: () async {
                       print("Da fak");
                       TtsSource ttsSource = vm.ttsSource;
-                      await vm.dispose();
+                      vm.dispose();
                       EmotionsMeasure prevEmotion =
                           widget.meditation is Meditation
                               ? (widget.meditation as Meditation)
