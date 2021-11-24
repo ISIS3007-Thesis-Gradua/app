@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/src/components/downloaded_meditations.dart';
 
 class SideBar extends StatefulWidget {
@@ -14,18 +15,40 @@ class _SideBarState extends State<SideBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    double getHeight() {
+      return MediaQuery.of(context).size.height -
+          MediaQuery.of(context).padding.top -
+          MediaQuery.of(context).padding.bottom;
+    }
+
+    final double height = getHeight();
+    final width = MediaQuery.of(context).size.width;
+
+    TextStyle meditationNameStyle = GoogleFonts.raleway(
+      fontWeight: FontWeight.w700,
+      fontSize: width * .05,
+      color: const Color(0xFF768596),
+    );
+    return Container(
       width: MediaQuery.of(context).size.width * 0.85,
+      height: height,
+      color: const Color(0xFFF6F9FF),
       child: Drawer(
         elevation: 16,
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              DonwloadedMeditations(),
-              Text("Meditaciones Guardadas"),
+              Text(
+                "Meditaciones Guardadas",
+                style: meditationNameStyle,
+              ),
+              const DonwloadedMeditations(),
               IconButton(
-                icon: Icon(CupertinoIcons.xmark),
+                icon: const Icon(
+                  CupertinoIcons.xmark,
+                  color: Colors.black,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],

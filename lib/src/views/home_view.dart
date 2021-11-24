@@ -149,21 +149,24 @@ class _HomeViewState extends State<HomeView> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                icon: Icon(Icons
+                                          InkWell(
+                                            child: Wrap(
+                                              direction: Axis.vertical,
+                                              crossAxisAlignment:
+                                                  WrapCrossAlignment.center,
+                                              spacing: width * .01,
+                                              children: const [
+                                                Icon(Icons
                                                     .download_for_offline_outlined),
-                                                onPressed: () {
-                                                  Scaffold.of(context)
-                                                      .openDrawer();
-                                                },
-                                              ),
-                                              Text(
-                                                "Abrir\nGuardadas",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
+                                                Text(
+                                                  "Abrir\nGuardadas",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              Scaffold.of(context).openDrawer();
+                                            },
                                           ),
                                         ],
                                       ),
