@@ -2,8 +2,12 @@ PODS:
   - audio_session (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_ffmpeg/audio-lts (0.4.2):
+    - Flutter
+    - mobile-ffmpeg-audio (= 4.4.LTS)
   - just_audio (0.0.1):
     - Flutter
+  - mobile-ffmpeg-audio (4.4.LTS)
   - path_provider (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -12,15 +16,22 @@ PODS:
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - Flutter (from `Flutter`)
+  - flutter_ffmpeg/audio-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+
+SPEC REPOS:
+  trunk:
+    - mobile-ffmpeg-audio
 
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
   Flutter:
     :path: Flutter
+  flutter_ffmpeg:
+    :path: ".symlinks/plugins/flutter_ffmpeg/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   path_provider:
@@ -31,10 +42,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_ffmpeg: 3ec3912c74649851e6c3b1885511eef78142ac4f
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
   path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
   url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 8d76b26ea06b6f68765ed43cac524324a50cc9b0
 
 COCOAPODS: 1.11.2

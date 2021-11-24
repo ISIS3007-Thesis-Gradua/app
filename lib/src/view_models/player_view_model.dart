@@ -78,7 +78,7 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   Duration get effectivePosition {
-    return totalDuration + player.position;
+    return player.position;
   }
 
   Duration get effectiveBufferedPosition {
@@ -186,6 +186,8 @@ class PlayerViewModel extends ChangeNotifier {
     // Try to load audio from a source and catch any errors.
     try {
       if (meditation is Meditation) {
+        // await player.setAudioSource(AudioSource.uri(Uri.parse(
+        //     "http://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
         List<AudioSource> audioSources = [];
         for (Step step in (meditation as Meditation).steps) {
           Iterable<AudioSource> stepAudioSources = step.chunks.map<AudioSource>(
@@ -233,9 +235,11 @@ class PlayerViewModel extends ChangeNotifier {
           rangesToChunks[DurationRange.fromDuration(duration)] ??
               DurationRangeInt.empty();
       totalDuration = value.range.start;
+      currentDuration = duration;
       notifyListeners();
-      await player.seek(Duration.zero, index: value.index);
+      await player.seek(duration - value.range.start, index: value.index);
     } else {
+      print(duration);
       await player.seek(duration);
     }
     // totalDuration = value.range.start;
@@ -267,7 +271,7 @@ class PlayerViewModel extends ChangeNotifier {
     // player.set
     await player.stop();
     await player.dispose();
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     super.dispose();
   }
 }

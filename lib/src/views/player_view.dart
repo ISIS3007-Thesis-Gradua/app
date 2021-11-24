@@ -111,8 +111,10 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       size: height * 0.03,
                       color: Colors.black,
                     ),
-                    onPressed: () =>
-                        {navigationService.navigateTo(Routes.homeView)},
+                    onPressed: () {
+                      vm.dispose();
+                      navigationService.navigateTo(Routes.homeView);
+                    },
                   ),
                 ),
                 Align(
@@ -124,8 +126,9 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       color: Colors.red,
                     ),
                     onPressed: () async {
+                      print("Da fak");
                       TtsSource ttsSource = vm.ttsSource;
-                      await vm.dispose();
+                      vm.dispose();
                       EmotionsMeasure prevEmotion =
                           widget.meditation is Meditation
                               ? (widget.meditation as Meditation)
@@ -193,7 +196,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: width * 0.066),
                                   child: SeekBar(
-                                    position: vm.totalDuration,
+                                    position: vm.effectivePosition,
                                     duration: vm.effectiveTotalDuration,
                                     bufferedPosition:
                                         vm.effectiveBufferedPosition,
