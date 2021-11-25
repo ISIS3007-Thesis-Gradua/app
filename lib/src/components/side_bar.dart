@@ -29,30 +29,35 @@ class _SideBarState extends State<SideBar> {
       fontSize: width * .05,
       color: const Color(0xFF768596),
     );
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      height: height,
-      color: const Color(0xFFF6F9FF),
-      child: Drawer(
-        elevation: 16,
-        child: Container(
-          color: const Color(0xFFF6F9FF),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                "Meditaciones Guardadas",
-                style: meditationNameStyle,
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.85,
+        height: height,
+        child: Drawer(
+          elevation: 16,
+          child: Container(
+            color: const Color(0xFFF6F9FF),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "Meditaciones Guardadas",
+                    style: meditationNameStyle,
+                  ),
+                  const DonwloadedMeditations(),
+                  IconButton(
+                    icon: const Icon(
+                      CupertinoIcons.xmark,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
-              const DonwloadedMeditations(),
-              IconButton(
-                icon: const Icon(
-                  CupertinoIcons.xmark,
-                  color: Colors.black,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+            ),
           ),
         ),
       ),
