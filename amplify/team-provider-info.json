@@ -10,30 +10,6 @@
       "StackName": "amplify-serenity-dev-194102",
       "StackId": "arn:aws:cloudformation:us-east-1:838438968296:stack/amplify-serenity-dev-194102/400d3230-2bbe-11ec-a980-129b0ebd9c57",
       "AmplifyAppId": "d3ryhofadydsy0"
-    },
-    "categories": {
-      "function": {
-        "Randomizer": {
-          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Randomizer-47656b354a4437746268-build.zip"
-        },
-        "Feedback": {
-          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Feedback-43676a34445937514a50-build.zip"
-        },
-        "serenityDataGeneratorManager": {
-          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersion9f27e784-build.zip"
-        },
-        "Generator": {
-          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Generator-7635377a395a634b524e-build.zip"
-        },
-        "Recomender": {
-          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
-          "s3Key": "amplify-builds/Recomender-33667736686b52517167-build.zip"
-        }
-      }
     }
   }
 }
