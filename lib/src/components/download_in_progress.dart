@@ -60,22 +60,13 @@ class SingleDownload extends StatefulWidget {
 }
 
 class _SingleDownloadState extends State<SingleDownload> {
-  // double percentage = 0.0;
-  //
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
         animation: widget.controller,
         builder: (context, child) {
           return Text(
-            "${widget.controller.id}: ${widget.controller.downloadState}. Per: ${widget.controller.progress}",
+            "${widget.controller.id}: ${widget.controller.downloadState}. Per: ${(widget.controller.progress * 100).round()}",
             style: TextStyle(
               color: Colors.black,
             ),

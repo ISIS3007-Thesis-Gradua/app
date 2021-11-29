@@ -43,11 +43,14 @@ class DownloadController extends ChangeNotifier {
 
   DownloadState _downloadState;
 
+  DownloadResult _downloadResult;
+
   DownloadController.create()
       : id = DateTime.now().millisecondsSinceEpoch.toString(),
         _downloadInProgress = true,
         _progress = 0.0,
-        _downloadState = DownloadState.initializing;
+        _downloadState = DownloadState.initializing,
+        _downloadResult = DownloadResult.none;
 
   ///[True] if the download state is anything but [DownloadState.finished],
   ///in which case this is [False].
@@ -67,6 +70,9 @@ class DownloadController extends ChangeNotifier {
   ///It will notify all listeners of this variable.
   set downloadState(DownloadState downloadState) {
     _downloadState = downloadState;
+    if (downloadState == DownloadState.finished) {
+      _downloadInProgress = false;
+    }
     notifyListeners();
   }
 
@@ -79,6 +85,15 @@ class DownloadController extends ChangeNotifier {
   ///It will notify all listeners of this variable.
   set progress(double progress) {
     _progress = progress;
+    notifyListeners();
+  }
+
+  ///The result of this process. Is [DownloadResult.none] if the
+  ///process has not finished yet.
+  DownloadResult get downloadResult => _downloadResult;
+
+  set downloadResult(DownloadResult downloadResult) {
+    _downloadResult = downloadResult;
     notifyListeners();
   }
 }
