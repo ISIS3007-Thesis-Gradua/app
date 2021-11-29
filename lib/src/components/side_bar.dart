@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:serenity/src/components/download_in_progress.dart';
 import 'package:serenity/src/components/downloaded_meditations.dart';
 
 class SideBar extends StatefulWidget {
@@ -24,11 +24,6 @@ class _SideBarState extends State<SideBar> {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
 
-    TextStyle meditationNameStyle = GoogleFonts.raleway(
-      fontWeight: FontWeight.w700,
-      fontSize: width * .05,
-      color: const Color(0xFF768596),
-    );
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       child: Container(
@@ -41,13 +36,11 @@ class _SideBarState extends State<SideBar> {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "Meditaciones Guardadas",
-                    style: meditationNameStyle,
-                  ),
+                  const DownloadsInProgress(),
                   const DonwloadedMeditations(),
+                  const Spacer(flex: 1),
                   IconButton(
                     icon: const Icon(
                       CupertinoIcons.xmark,
@@ -55,6 +48,7 @@ class _SideBarState extends State<SideBar> {
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
+                  const Spacer(flex: 2),
                 ],
               ),
             ),

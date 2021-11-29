@@ -1,4 +1,5 @@
 import 'package:serenity/src/services/local_storage_service.dart';
+import 'package:serenity/src/services/notifications_service.dart';
 import 'package:serenity/src/views/graph_view.dart';
 import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/loading_meditation.dart';
@@ -29,6 +30,7 @@ import 'package:stacked_services/stacked_services.dart';
 ], dependencies: [
   Singleton(classType: NavigationService),
   Singleton(classType: DialogService),
+  Singleton(classType: NotificationService),
   LazySingleton(classType: LocalStorageService)
 ])
 class App {

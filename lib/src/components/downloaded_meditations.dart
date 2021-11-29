@@ -42,57 +42,64 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
       color: const Color(0xFF768596),
     );
 
+    TextStyle titleStyle = meditationNameStyle.copyWith(fontSize: width * .05);
+
     return StreamBuilder<List<SimpleMeditation>>(
         stream: localStorage.watchAllSavedMeditations(),
         builder: (context, snapshot) {
           List<SimpleMeditation> savedMeditations = snapshot.data ?? [];
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            decoration: const BoxDecoration(
-              color: Color(0xFFF6F9FF),
-            ),
-            child: ListView.builder(
-              itemCount: savedMeditations.length,
-              itemBuilder: (context, index) {
-                print(savedMeditations[index].duration);
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: BasicCard(
-                    child: ListTile(
-                      tileColor: Colors.grey.withAlpha(100),
-                      title: Text(
-                        savedMeditations[index].name,
-                        style: meditationNameStyle,
-                      ),
-                      leading: IconButton(
-                        icon: const Icon(
-                          CupertinoIcons.play_arrow,
-                          color: Colors.black54,
+          return Column(
+            children: [
+              Text("Meditaciones Guardadas", style: titleStyle),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF6F9FF),
+                ),
+                child: ListView.builder(
+                  itemCount: savedMeditations.length,
+                  itemBuilder: (context, index) {
+                    print(savedMeditations[index].duration);
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: BasicCard(
+                        child: ListTile(
+                          tileColor: Colors.grey.withAlpha(100),
+                          title: Text(
+                            savedMeditations[index].name,
+                            style: meditationNameStyle,
+                          ),
+                          leading: IconButton(
+                            icon: const Icon(
+                              CupertinoIcons.play_arrow,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              navigationService.replaceWith(
+                                Routes.player,
+                                arguments: PlayerArguments(
+                                    meditation: savedMeditations[index]),
+                              );
+                            },
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(CupertinoIcons.delete),
+                            color: Colors.redAccent,
+                            onPressed: () =>
+                                deleteGivenMeditation(savedMeditations[index]),
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
                         ),
-                        onPressed: () {
-                          navigationService.replaceWith(
-                            Routes.player,
-                            arguments: PlayerArguments(
-                                meditation: savedMeditations[index]),
-                          );
-                        },
                       ),
-                      trailing: IconButton(
-                        icon: const Icon(CupertinoIcons.delete),
-                        color: Colors.redAccent,
-                        onPressed: () =>
-                            deleteGivenMeditation(savedMeditations[index]),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         });
   }

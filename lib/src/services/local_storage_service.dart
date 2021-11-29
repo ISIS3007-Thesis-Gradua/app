@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:io' as io;
 
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -9,6 +10,8 @@ import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/utils/sound_manipulation.dart';
 import 'package:serenity/src/utils/wave_builder.dart';
 import 'package:serenity/src/view_models/player_view_model.dart';
+
+import 'notifications_service.dart';
 
 const String meditationsFolder = "meditations";
 
@@ -61,14 +64,19 @@ class LocalStorageService {
   ///Does all corresponding steps to save the given meditation locally.
   Future<void> saveMeditation(
       Meditation meditation, TtsSource ttsSource) async {
+    NotificationService notifications = GetIt.instance<NotificationService>();
+
     print("Saving");
     // final WaveBuilder builder = WaveBuilder();
     int counter = 0;
+    int totalChunks = meditation.getChunks().length;
     List<File> chunkFiles = [];
-
+    DownloadController download = notifications.addDownload();
+    download.downloadState = DownloadState.downloading;
     for (ChunkSource chunk in meditation.getChunks()) {
       if (chunk is StepChunk) {
         counter++;
+        download.progress = counter / totalChunks;
         print("[COUNTER] $counter");
         print("PATH");
         print(chunk.sourcePath(ttsSource.url));
@@ -82,6 +90,7 @@ class LocalStorageService {
         // if (counter == 20) break;
       } else if (chunk is StepSilence) {
         counter++;
+        download.progress = counter / totalChunks;
         // builder.appendSilence(chunk.silenceDuration.inMilliseconds,
         //     WaveBuilderSilenceType.BeginningOfLastSample);
 
@@ -108,9 +117,10 @@ class LocalStorageService {
     String savedMeditationName = "exampleMeditation1";
     // File savedWavMeditationFile =
     //     await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
-
+    download.downloadState = DownloadState.processing;
     File savedMeditationFile = await concatenateListOfAudioFiles(
         chunkFiles, applicationMeditationsFolderPath, meditation.id);
+    download.downloadState = DownloadState.saving;
 
     meditation.path = savedMeditationFile.path;
     meditation.durationInSec =
@@ -130,6 +140,7 @@ class LocalStorageService {
     print("[INFO] Got Duration: ${meditation.durationInSeconds}");
     meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
     putMeditationWithKey(meditation.id, meditation.asSimpleMeditation());
+    download.downloadState = DownloadState.finished;
 
     // compute();
   }
