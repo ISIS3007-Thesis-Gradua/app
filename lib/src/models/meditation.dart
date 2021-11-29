@@ -46,7 +46,12 @@ class SimpleMeditation {
     id = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
-  void set durationInSec(Duration duration) {
+  @override
+  String toString() {
+    return "Instance of Simple Meditation. Path: $path";
+  }
+
+  set durationInSec(Duration duration) {
     this.duration = duration;
     durationInSeconds = duration.inMilliseconds / 1000;
   }
@@ -120,6 +125,14 @@ class Meditation extends SimpleMeditation {
       chunks.addAll(step.chunks);
     }
     return chunks;
+  }
+
+  SimpleMeditation asSimpleMeditation() {
+    SimpleMeditation simpleMeditation =
+        SimpleMeditation(path: path, name: name, duration: duration);
+    simpleMeditation.id = id;
+    simpleMeditation.durationInSec = duration;
+    return simpleMeditation;
   }
 }
 

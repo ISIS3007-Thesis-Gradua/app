@@ -22,16 +22,9 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
   Widget build(BuildContext context) {
     LocalStorageService localStorage = locator<LocalStorageService>();
     NavigationService navigationService = locator<NavigationService>();
-    List<SimpleMeditation> savedMeditations =
-        localStorage.getAllSavedMeditations();
-    // print(localStorage.getAllSavedMeditations());
 
-    Future<void> deleteMeditation(int index) async {
-      // await localStorage.deleteMeditationAtIndex(index);
-      await localStorage.deleteMeditationWithKey(savedMeditations[index].id);
-      setState(() {
-        savedMeditations = localStorage.getAllSavedMeditations();
-      });
+    void deleteGivenMeditation(SimpleMeditation meditation) {
+      localStorage.deleteMeditationWithKey(meditation.id);
     }
 
     double getHeight() {
@@ -49,52 +42,58 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
       color: const Color(0xFF768596),
     );
 
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F9FF),
-      ),
-      child: ListView.builder(
-        itemCount: savedMeditations.length,
-        itemBuilder: (context, index) {
-          print(savedMeditations[index].duration);
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BasicCard(
-              child: ListTile(
-                tileColor: Colors.grey.withAlpha(100),
-                title: Text(
-                  savedMeditations[index].name,
-                  style: meditationNameStyle,
-                ),
-                leading: IconButton(
-                  icon: const Icon(
-                    CupertinoIcons.play_arrow,
-                    color: Colors.black54,
+    return StreamBuilder<List<SimpleMeditation>>(
+        stream: localStorage.watchAllSavedMeditations(),
+        builder: (context, snapshot) {
+          List<SimpleMeditation> savedMeditations = snapshot.data ?? [];
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            decoration: const BoxDecoration(
+              color: Color(0xFFF6F9FF),
+            ),
+            child: ListView.builder(
+              itemCount: savedMeditations.length,
+              itemBuilder: (context, index) {
+                print(savedMeditations[index].duration);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: BasicCard(
+                    child: ListTile(
+                      tileColor: Colors.grey.withAlpha(100),
+                      title: Text(
+                        savedMeditations[index].name,
+                        style: meditationNameStyle,
+                      ),
+                      leading: IconButton(
+                        icon: const Icon(
+                          CupertinoIcons.play_arrow,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          navigationService.replaceWith(
+                            Routes.player,
+                            arguments: PlayerArguments(
+                                meditation: savedMeditations[index]),
+                          );
+                        },
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(CupertinoIcons.delete),
+                        color: Colors.redAccent,
+                        onPressed: () =>
+                            deleteGivenMeditation(savedMeditations[index]),
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
                   ),
-                  onPressed: () {
-                    navigationService.replaceWith(
-                      Routes.player,
-                      arguments:
-                          PlayerArguments(meditation: savedMeditations[index]),
-                    );
-                  },
-                ),
-                trailing: IconButton(
-                  icon: Icon(CupertinoIcons.delete),
-                  color: Colors.redAccent,
-                  onPressed: () => deleteMeditation(index),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                ),
-              ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
+        });
   }
 }

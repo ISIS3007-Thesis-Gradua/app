@@ -129,7 +129,7 @@ class LocalStorageService {
     // });
     print("[INFO] Got Duration: ${meditation.durationInSeconds}");
     meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
-    putMeditationWithKey(meditation.id, meditation);
+    putMeditationWithKey(meditation.id, meditation.asSimpleMeditation());
 
     // compute();
   }
@@ -142,7 +142,8 @@ class LocalStorageService {
     String filePath =
         p.join(appMeditationsCacheFolderPath, fileName + fileExtension);
     File savedMeditationFile = File(filePath);
-    return savedMeditationFile.writeAsBytes(fileContents);
+    return savedMeditationFile.writeAsBytes(fileContents,
+        mode: io.FileMode.write);
   }
 
   ///Given a meditation audio File as a sequence of Bytes it will write this bytes
@@ -179,12 +180,27 @@ class LocalStorageService {
     return meditationsBox.values.toList();
   }
 
+  ///Creates a Stream that will produce new values whenever there is a change
+  ///to the meditationsBox
+  Stream<List<SimpleMeditation>> watchAllSavedMeditations() async* {
+    yield meditationsBox.values.toList();
+    await for (BoxEvent e in meditationsBox.watch()) {
+      yield meditationsBox.values.toList();
+    }
+  }
+
   ///Given a path, it will look for that path inside local File System to see
   ///if a File exists in that location. If it does it will delete it.
   Future<void> deleteMeditationFile(String path) async {
     File meditationFile = File(path);
     if (await meditationFile.exists()) {
-      await meditationFile.delete();
+      await meditationFile.delete().onError((error, stackTrace) {
+        throw Exception(
+            "Error deleting meditation at: $path.\nError: $error.\nTrace:$stackTrace");
+      });
+      print("Successfully deleted meditation file at: $path");
+    } else {
+      print("There is no meditation file at: $path");
     }
   }
 
@@ -237,24 +253,34 @@ class LocalStorageService {
 
   ///Deletes the meditation at the given index inside the Hive Box.
   ///Throws Exception if an error occurs in the process.
-  Future<void> deleteMeditationAtIndex(int index) async {
+  Future<void> deleteMeditationAtIndex(int index,
+      {bool deleteFile = true}) async {
+    SimpleMeditation? meditation = meditationsBox.getAt(index);
     await meditationsBox.deleteAt(index).then((value) {
       print("Meditation at index: $index deleted successfully.");
     },
         onError: (e) => Exception(
             "Error deleting meditation at index: $index.\nMessage: ${e.toString()}"));
+    if (deleteFile && meditation != null) {
+      await deleteMeditationFile(meditation.path);
+    }
   }
 
   ///Deletes the meditations with the given key inside the Hive Box.
   ///If it doesn't exists a meditation with this key it will throw an Exception.
   ///If an error occurs in the process it will Throw an Exception.
-  Future<void> deleteMeditationWithKey(dynamic key) async {
+  Future<void> deleteMeditationWithKey(dynamic key,
+      {bool deleteFile = true}) async {
     if (meditationsBox.containsKey(key)) {
+      SimpleMeditation meditation = meditationsBox.get(key)!;
       await meditationsBox.delete(key).then((value) {
         print("Meditation with key: $key deleted successfully.");
       },
           onError: (e) => Exception(
               "Error deleting meditation with key: $key.\nMessage: ${e.toString()}"));
+      if (deleteFile) {
+        await deleteMeditationFile(meditation.path);
+      }
     } else {
       Exception(
           "Error deleting meditation with key: $key. This key wasn't found.");
