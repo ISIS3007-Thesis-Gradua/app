@@ -188,6 +188,7 @@ class PlayerViewModel extends ChangeNotifier {
       if (meditation is Meditation) {
         // await player.setAudioSource(AudioSource.uri(Uri.parse(
         //     "http://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
+        print("[COMPLEX MEDITATION]");
         List<AudioSource> audioSources = [];
         for (Step step in (meditation as Meditation).steps) {
           Iterable<AudioSource> stepAudioSources = step.chunks.map<AudioSource>(
@@ -205,6 +206,8 @@ class PlayerViewModel extends ChangeNotifier {
       } else {
         await player
             .setAudioSource(AudioSource.uri(Uri.parse(meditation.path)));
+        print("[SPEED] ${player.speed}");
+        // await player.setSpeed(0.2);
       }
       //Test 60 seconds of playback
       player.play();

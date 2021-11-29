@@ -38,6 +38,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     vm = PlayerViewModel(meditation: widget.meditation);
+    print("[AUDIO SOURCE] ${vm.player.audioSource} ");
 
     if (widget.meditation is Meditation) {
       setState(() {
@@ -204,12 +205,15 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: width * 0.066),
-                                  child: SeekBar(
-                                    position: vm.effectivePosition,
-                                    duration: vm.effectiveTotalDuration,
-                                    bufferedPosition:
-                                        vm.effectiveBufferedPosition,
-                                    onChanged: vm.seekToWithDuration,
+                                  child: Visibility(
+                                    visible: isSimple,
+                                    child: SeekBar(
+                                      position: vm.effectivePosition,
+                                      duration: vm.effectiveTotalDuration,
+                                      bufferedPosition:
+                                          vm.effectiveBufferedPosition,
+                                      onChanged: vm.seekToWithDuration,
+                                    ),
                                   ),
                                 ),
                                 Text(

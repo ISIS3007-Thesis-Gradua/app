@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -61,8 +62,9 @@ class LocalStorageService {
   Future<void> saveMeditation(
       Meditation meditation, TtsSource ttsSource) async {
     print("Saving");
-    final WaveBuilder builder = WaveBuilder();
+    // final WaveBuilder builder = WaveBuilder();
     int counter = 0;
+    List<File> chunkFiles = [];
 
     for (ChunkSource chunk in meditation.getChunks()) {
       if (chunk is StepChunk) {
@@ -73,12 +75,24 @@ class LocalStorageService {
         http.Response meditationAudioBytes =
             await http.get(Uri.parse(chunk.sourcePath(ttsSource.url)));
 
-        builder.appendFileContents(meditationAudioBytes.bodyBytes);
-        break;
+        chunkFiles.add(await saveMeditationFileToCache(
+            "audio_file_$counter", meditationAudioBytes.bodyBytes));
+
+        // builder.appendFileContents(meditationAudioBytes.bodyBytes);
+        // if (counter == 20) break;
       } else if (chunk is StepSilence) {
-        builder.appendSilence(chunk.silenceDuration.inMilliseconds,
-            WaveBuilderSilenceType.BeginningOfLastSample);
-        break;
+        counter++;
+        // builder.appendSilence(chunk.silenceDuration.inMilliseconds,
+        //     WaveBuilderSilenceType.BeginningOfLastSample);
+
+        var silenceBuilder = WaveBuilder()
+          ..appendSilence(chunk.silenceDuration.inMilliseconds,
+              WaveBuilderSilenceType.BeginningOfLastSample);
+        var silenceBytes = silenceBuilder.fileBytes;
+        chunkFiles.add(await saveMeditationFileToCache(
+            "audio_file_$counter", silenceBytes));
+
+        // if (counter == 20) break;
       }
     }
     print("in");
@@ -92,18 +106,20 @@ class LocalStorageService {
 
     print("out");
     String savedMeditationName = "exampleMeditation1";
-    File savedWavMeditationFile =
-        await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
+    // File savedWavMeditationFile =
+    //     await saveMeditationFileToCache(savedMeditationName, builder.fileBytes);
 
-    File savedMeditationFile = await convertWavToMp3(savedWavMeditationFile,
-        applicationMeditationsFolderPath, savedMeditationName);
+    File savedMeditationFile = await concatenateListOfAudioFiles(
+        chunkFiles, applicationMeditationsFolderPath, meditation.id);
 
-    // meditation.path = savedMeditationFile.path;
-    // WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
     meditation.path = savedMeditationFile.path;
-    meditation.durationInSec = WavFileInfo.fileInfoFromBytes(
-            await savedWavMeditationFile.readAsBytes())
-        .duration;
+    meditation.durationInSec =
+        await AudioFileInfo.fileDuration(savedMeditationFile);
+    // WavFileInfo wavInfo = WavFileInfo.fileInfoFromBytes(builder.fileBytes);
+    // meditation.path = savedWavMeditationFile.path;
+    // meditation.durationInSec = WavFileInfo.fileInfoFromBytes(
+    //         await savedWavMeditationFile.readAsBytes())
+    //     .duration;
     //     await AudioFileInfo.fileDuration(savedMeditationFile)
     //         .onError((error, stackTrace) {
     //   print("[ERROR] reading duration.");

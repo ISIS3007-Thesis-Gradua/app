@@ -107,13 +107,51 @@ Future<File> convertWavToMp3(
   }
 }
 
+Future<File> concatenateListOfAudioFiles(
+    List<File> audioFiles, String outputDirectory, String fileName,
+    {bool enableFFmpegLogs = false}) async {
+  assert(await Directory(outputDirectory).exists(),
+      "The target output directory does not exist.");
+
+  String ffmpegConcatCommand = "-y ";
+  int n = audioFiles.length;
+  for (File file in audioFiles) {
+    String audioPath = file.path;
+    ffmpegConcatCommand += "-i $audioPath ";
+  }
+  ffmpegConcatCommand += "-filter_complex '";
+  for (int i = 0; i < n; i++) {
+    ffmpegConcatCommand += "[$i:0]";
+  }
+  ffmpegConcatCommand +=
+      "concat=n=$n:v=0:a=1[out]' -map '[out]' -codec:a libmp3lame -q:a 3 ";
+
+  String outputPath = p.join(outputDirectory, fileName + ".mp3");
+  ffmpegConcatCommand += outputPath;
+
+  final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+  if (enableFFmpegLogs) {
+    FlutterFFmpegConfig().enableLogs();
+  } else {
+    FlutterFFmpegConfig().disableLogs();
+  }
+  print("[CONCAT FILES COMMAND] $ffmpegConcatCommand");
+  int rc = await flutterFFmpeg.execute(ffmpegConcatCommand);
+  if (rc == 0) {
+    print("Successfully converted $n audio files to mp3");
+    return File(outputPath);
+  } else {
+    throw Exception("[ERROR] converting $n audio files to mp3");
+  }
+}
+
 class AudioFileInfo {
   ///Get the duration of an MP3 file.
   ///Technically it should work for other file formats also but i haven't test it for more.
   static Future<Duration> fileDuration(File file) async {
-    FlutterFFprobe fFprobe = FlutterFFprobe();
+    FlutterFFprobe FFprobe = FlutterFFprobe();
     MediaInformation mediaInformation =
-        await fFprobe.getMediaInformation(file.path);
+        await FFprobe.getMediaInformation(file.path);
     String durationInSeconds =
         mediaInformation.getMediaProperties()?["duration"] ?? "0.0";
     print("[Duration in seconds:] $durationInSeconds");
