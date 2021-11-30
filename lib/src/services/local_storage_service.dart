@@ -29,6 +29,9 @@ class LocalStorageService {
     init();
   }
 
+  ///Registers Hive adapters, open boxes, and creates the directories inside
+  ///the local application and cache paths that will contain the meditation
+  ///audio files.
   Future<void> init() async {
     //Go to Hive docs for more info on what is going on here:
     //QuickStart: https://docs.hivedb.dev/#/README
@@ -61,47 +64,86 @@ class LocalStorageService {
     print("end");
   }
 
-  //TODO maybe convert this method to multiple functions to improve readability
   ///Does all corresponding steps to save the given meditation locally.
   Future<void> saveMeditation(
       Meditation meditation, TtsSource ttsSource) async {
     NotificationService notifications = GetIt.instance<NotificationService>();
 
-    print("Saving");
+    print("[INFO] Started de Downloading and saving meditation process.");
     // final WaveBuilder builder = WaveBuilder();
     int counter = 0;
     int totalChunks = meditation.getChunks().length;
+    List<int> chunkFileBytes = [];
     List<File> chunkFiles = [];
     DownloadController download = notifications.addDownload();
     download.downloadState = DownloadState.downloading;
+
+    //Goes to every chunk of this meditation and generates the corresponding
+    //audio file. If is a silence chunk generates a .wav for the specified period
+    //of silence. If is a text chunk saves the generated TTS audio.
     for (ChunkSource chunk in meditation.getChunks()) {
       counter++;
       download.progress = counter / totalChunks;
-      if (chunk is StepChunk) {
-        print("[COUNTER] $counter");
-        print("PATH");
-        print(chunk.sourcePath(ttsSource.url));
-        http.Response meditationAudioBytes = await http
-            .get(Uri.parse(chunk.sourcePath(ttsSource.url)))
-            .onError((e, _) {
-          saveMeditationFailed(download);
-          throw Exception(
-              "Error getting audio bytes from ttsSource. ${chunk.sourcePath(ttsSource.url)}");
-        });
+      print("[DOWNLOADED CHUNKS COUNTER] $counter");
 
-        //TODO handle error saving meditation file to cache
-        chunkFiles.add(await saveMeditationFileToCache(
-            "audio_file_$counter", meditationAudioBytes.bodyBytes));
+      if (chunk is StepChunk) {
+        chunkFileBytes = await processStepChunk(chunk, ttsSource, download);
       } else if (chunk is StepSilence) {
-        var silenceBuilder = WaveBuilder()
-          ..appendSilence(chunk.silenceDuration.inMilliseconds,
-              WaveBuilderSilenceType.BeginningOfLastSample);
-        var silenceBytes = silenceBuilder.fileBytes;
-        chunkFiles.add(await saveMeditationFileToCache(
-            "audio_file_$counter", silenceBytes));
+        chunkFileBytes = processSilenceChunk(chunk);
       }
+      //TODO handle error saving meditation file to cache
+      chunkFiles.add(await saveMeditationFileToCache(
+          "audio_file_$counter", chunkFileBytes));
     }
-    print("in");
+
+    //Concatenates all the audio files for each chunk as a single mp3 file.
+    File savedMeditationFile =
+        await concatenateAndSaveChunks(chunkFiles, download, meditation);
+
+    //Save the meditation file path to the meditation's Hive Box as a
+    //SimpleMeditation instance.
+    await storeMeditationAudioPath(savedMeditationFile, meditation, download);
+
+    print("[INFO] Clearing local cache");
+    //Clear cache files
+    clearMeditationsCacheFolder();
+  }
+
+  ///Given a [StepChunk] it goes to the also given [ttsSource] and saves the
+  ///tts audio response as a .wav file inside the cache folder.
+  Future<List<int>> processStepChunk(StepChunk chunk, TtsSource ttsSource,
+      DownloadController controller) async {
+    print("[TTS-PATH] ${chunk.sourcePath(ttsSource.url)}");
+    http.Response meditationAudioResponse = await http
+        .get(Uri.parse(chunk.sourcePath(ttsSource.url)))
+        .onError((e, _) {
+      saveMeditationFailed(controller);
+      throw Exception(
+          "Error getting audio bytes from ttsSource. ${chunk.sourcePath(ttsSource.url)}");
+    });
+    return meditationAudioResponse.bodyBytes;
+  }
+
+  ///Informs to the Download Controller that the current download process has failed.
+  void saveMeditationFailed(DownloadController controller) {
+    controller.downloadResult = DownloadResult.error;
+    controller.downloadState = DownloadState.finished;
+  }
+
+  ///Given a [StepSilence] it saves a .wav file on the cache folder with the period
+  ///of silence corresponding to the [StepSilence.silenceDuration]
+  List<int> processSilenceChunk(StepSilence chunk) {
+    var silenceBuilder = WaveBuilder()
+      ..appendSilence(chunk.silenceDuration.inMilliseconds,
+          WaveBuilderSilenceType.BeginningOfLastSample);
+    return silenceBuilder.fileBytes;
+  }
+
+  ///Concatenates all the audio files for each chunk as a single mp3 file and
+  ///return this concatenated mp3 file.
+  Future<File> concatenateAndSaveChunks(List<File> chunkFiles,
+      DownloadController download, Meditation meditation) async {
+    print("[INFO] Start concatenating audio files");
     download.downloadState = DownloadState.processing;
     File savedMeditationFile = await concatenateListOfAudioFiles(
             chunkFiles, applicationMeditationsFolderPath, meditation.id)
@@ -110,23 +152,28 @@ class LocalStorageService {
       throw Exception("Error concatenating and converting to mp3.");
     });
     download.downloadState = DownloadState.saving;
+    return savedMeditationFile;
+  }
 
+  Future<void> storeMeditationAudioPath(File savedMeditationFile,
+      Meditation meditation, DownloadController download) async {
+    print("[INFO] Saving path to final meditation audio file to HiveBox.");
+    //Save the meditation file path to the meditation's Hive Box as a
+    //SimpleMeditation instance.
     meditation.path = savedMeditationFile.path;
     meditation.durationInSec =
         await AudioFileInfo.fileDuration(savedMeditationFile);
-
     print("[INFO] Got Duration: ${meditation.durationInSeconds}");
     meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
+    download.downloadState = DownloadState.saving;
     putMeditationWithKey(meditation.id, meditation.asSimpleMeditation());
     download.downloadState = DownloadState.finished;
     download.downloadResult = DownloadResult.success;
-    //TODO clear cache files
   }
 
-  ///Informs to the Download Controller that the current download process has failed.
-  void saveMeditationFailed(DownloadController controller) {
-    controller.downloadResult = DownloadResult.error;
-    controller.downloadState = DownloadState.finished;
+  ///Deletes all the files inside the meditation Cache folder.
+  void clearMeditationsCacheFolder() {
+    Directory(appMeditationsCacheFolderPath).delete(recursive: true);
   }
 
   ///Given a meditation audio File as a sequence of Bytes it will write this bytes
