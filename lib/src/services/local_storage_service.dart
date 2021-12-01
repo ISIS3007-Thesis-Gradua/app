@@ -75,7 +75,8 @@ class LocalStorageService {
     int totalChunks = meditation.getChunks().length;
     List<int> chunkFileBytes = [];
     List<File> chunkFiles = [];
-    DownloadController download = notifications.addDownload();
+    DownloadController<Meditation> download =
+        notifications.addDownload(downloadingObject: meditation);
     download.downloadState = DownloadState.downloading;
 
     //Goes to every chunk of this meditation and generates the corresponding
@@ -93,8 +94,11 @@ class LocalStorageService {
       }
       //TODO handle error saving meditation file to cache
       chunkFiles.add(await saveMeditationFileToCache(
-          "audio_file_$counter", chunkFileBytes));
+          meditation.id + "_audio_file_$counter", chunkFileBytes));
     }
+
+    //Change meditation name
+    meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
 
     //Concatenates all the audio files for each chunk as a single mp3 file.
     File savedMeditationFile =
@@ -146,7 +150,8 @@ class LocalStorageService {
     print("[INFO] Start concatenating audio files");
     download.downloadState = DownloadState.processing;
     File savedMeditationFile = await concatenateListOfAudioFiles(
-            chunkFiles, applicationMeditationsFolderPath, meditation.id)
+            chunkFiles, applicationMeditationsFolderPath, meditation.id,
+            enableFFmpegLogs: true)
         .onError((e, _) {
       saveMeditationFailed(download);
       throw Exception("Error concatenating and converting to mp3.");
@@ -164,7 +169,6 @@ class LocalStorageService {
     meditation.durationInSec =
         await AudioFileInfo.fileDuration(savedMeditationFile);
     print("[INFO] Got Duration: ${meditation.durationInSeconds}");
-    meditation.name = "Meditación #${getAllSavedMeditations().length + 1}";
     download.downloadState = DownloadState.saving;
     putMeditationWithKey(meditation.id, meditation.asSimpleMeditation());
     download.downloadState = DownloadState.finished;
@@ -172,15 +176,19 @@ class LocalStorageService {
   }
 
   ///Deletes all the files inside the meditation Cache folder.
-  void clearMeditationsCacheFolder() {
-    Directory(appMeditationsCacheFolderPath).delete(recursive: true);
+  Future<void> clearMeditationsCacheFolder() async {
+    await for (FileSystemEntity entity
+        in Directory(appMeditationsCacheFolderPath).list()) {
+      await entity.delete();
+    }
   }
 
   ///Given a meditation audio File as a sequence of Bytes it will write this bytes
   ///to the meditations subfolder inside the Applications Cache folder.
   Future<File> saveMeditationFileToCache(
       String fileName, List<int> fileContents,
-      {String fileExtension = ".wav"}) {
+      {String fileExtension = ".wav"}) async {
+    bool exists = await Directory(appMeditationsCacheFolderPath).exists();
     String filePath =
         p.join(appMeditationsCacheFolderPath, fileName + fileExtension);
     File savedMeditationFile = File(filePath);

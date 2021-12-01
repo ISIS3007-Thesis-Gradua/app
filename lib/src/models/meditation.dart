@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation_config.dart';
@@ -243,7 +244,7 @@ class StepSilence implements ChunkSource {
   ///player will use to emulate the periods of silence.
   Future<void> init() async {
     Directory tempDir = await getTemporaryDirectory();
-    filePath = tempDir.path + id + ".wav";
+    filePath = p.join(tempDir.path, id + ".wav");
     print(filePath);
 
     File fileOut = File(filePath);

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:serenity/src/models/meditation.dart';
 
 class NotificationService extends ChangeNotifier {
   List<DownloadController> _activeDownloads;
@@ -12,9 +13,11 @@ class NotificationService extends ChangeNotifier {
     notifyListeners();
   }
 
-  DownloadController addDownload() {
-    DownloadController download = DownloadController.create();
-    activeDownloads.add(download);
+  DownloadController<T> addDownload<T>({T? downloadingObject}) {
+    DownloadController<T> download =
+        DownloadController.create(downloadingObject: downloadingObject);
+    activeDownloads.insert(0, download);
+    // activeDownloads.
     notifyListeners();
     return download;
   }
@@ -31,7 +34,7 @@ enum DownloadResult { none, success, error }
 
 ///This class will handle the general state of a single meditation download
 ///process.
-class DownloadController extends ChangeNotifier {
+class DownloadController<T> extends ChangeNotifier {
   /// Id of the download in progress.
   ///
   /// (It is just a Stringify version of the TimeStamp of the moment when the instance was created)
@@ -45,7 +48,11 @@ class DownloadController extends ChangeNotifier {
 
   DownloadResult _downloadResult;
 
-  DownloadController.create()
+  ///The model for the object that is being downloaded. In the case of meditations
+  ///this will be of type [Meditation]
+  T? downloadingObject;
+
+  DownloadController.create({this.downloadingObject})
       : id = DateTime.now().millisecondsSinceEpoch.toString(),
         _downloadInProgress = true,
         _progress = 0.0,

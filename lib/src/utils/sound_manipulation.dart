@@ -4,6 +4,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_ffmpeg/media_information.dart';
 import 'package:path/path.dart' as p;
 import 'package:serenity/src/utils/bytes_manipulation.dart';
+import 'package:synchronized/synchronized.dart';
 
 ///This class gets some basic info (Including the header params) for a .wav file.
 ///For more info see WAVE format specification:
@@ -107,6 +108,8 @@ Future<File> convertWavToMp3(
   }
 }
 
+///Global instance for the inner function lock
+final Lock lock = Lock(reentrant: true);
 Future<File> concatenateListOfAudioFiles(
     List<File> audioFiles, String outputDirectory, String fileName,
     {bool enableFFmpegLogs = false}) async {
@@ -129,20 +132,25 @@ Future<File> concatenateListOfAudioFiles(
   String outputPath = p.join(outputDirectory, fileName + ".mp3");
   ffmpegConcatCommand += outputPath;
 
-  final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
-  if (enableFFmpegLogs) {
-    FlutterFFmpegConfig().enableLogs();
-  } else {
-    FlutterFFmpegConfig().disableLogs();
-  }
-  print("[CONCAT FILES COMMAND] $ffmpegConcatCommand");
-  int rc = await flutterFFmpeg.execute(ffmpegConcatCommand);
-  if (rc == 0) {
-    print("Successfully converted $n audio files to mp3");
-    return File(outputPath);
-  } else {
-    throw Exception("[ERROR] converting $n audio files to mp3");
-  }
+  //Since flutterFFmpeg can not run parallel commands, we use the synchronized
+  //package to ensure synchronous execution of ffmpeg commands even by async calls.
+  return await lock.synchronized(() async {
+    final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+    if (enableFFmpegLogs) {
+      FlutterFFmpegConfig().enableLogs();
+    } else {
+      FlutterFFmpegConfig().disableLogs();
+    }
+    print("[CONCAT FILES COMMAND] $ffmpegConcatCommand");
+    int rc = await lock
+        .synchronized(() async => flutterFFmpeg.execute(ffmpegConcatCommand));
+    if (rc == 0) {
+      print("Successfully converted $n audio files to mp3");
+      return File(outputPath);
+    } else {
+      throw Exception("[ERROR] converting $n audio files to mp3");
+    }
+  });
 }
 
 class AudioFileInfo {

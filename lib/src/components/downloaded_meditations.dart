@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/services/local_storage_service.dart';
+import 'package:serenity/src/style/text_theme.dart';
+import 'package:serenity/src/utils/datetime_utils.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -37,12 +39,18 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
     final width = MediaQuery.of(context).size.width;
 
     TextStyle meditationNameStyle = GoogleFonts.raleway(
-      fontWeight: FontWeight.w700,
-      fontSize: width * .025,
-      color: const Color(0xFF768596),
+      fontWeight: FontWeight.bold,
+      fontSize: width * .03,
+      color: Colors.black,
+      // color: const Color(0xFF768596),
     );
 
-    TextStyle titleStyle = meditationNameStyle.copyWith(fontSize: width * .05);
+    TextStyle pageTitleStyle = meditationNameStyle.copyWith(
+      fontSize: width * .05,
+      color: Colors.black,
+    );
+    TextStyle subtitleStyle =
+        pageTitleStyle.copyWith(fontSize: width * .025, color: Colors.black54);
 
     return StreamBuilder<List<SimpleMeditation>>(
         stream: localStorage.watchAllSavedMeditations(),
@@ -50,7 +58,7 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
           List<SimpleMeditation> savedMeditations = snapshot.data ?? [];
           return Column(
             children: [
-              Text("Meditaciones Guardadas", style: titleStyle),
+              GradientText("Meditaciones Guardadas", style: pageTitleStyle),
               Container(
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: const BoxDecoration(
@@ -64,15 +72,23 @@ class _DonwloadedMeditationsState extends State<DonwloadedMeditations> {
                       padding: const EdgeInsets.all(2.0),
                       child: BasicCard(
                         child: ListTile(
+                          contentPadding: EdgeInsets.zero,
                           tileColor: Colors.grey.withAlpha(100),
-                          title: Text(
-                            savedMeditations[index].name,
-                            style: meditationNameStyle,
+                          title: Text(savedMeditations[index].name,
+                              style: meditationNameStyle),
+                          subtitle: Text(
+                            formatDuration(
+                              Duration(
+                                  seconds: savedMeditations[index]
+                                      .durationInSeconds
+                                      .round()),
+                            ),
+                            style: subtitleStyle,
                           ),
                           leading: IconButton(
                             icon: const Icon(
                               CupertinoIcons.play_arrow,
-                              color: Colors.black54,
+                              color: Colors.black,
                             ),
                             onPressed: () {
                               navigationService.replaceWith(

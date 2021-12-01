@@ -1,3 +1,20 @@
+///Extension on String Objects for common capitalization requirements
+extension StringCasingExtension on String {
+  ///Capitalizes all the first letter of the whole string.
+  ///
+  /// Ex: 'hello world' => 'Hello world'.
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
+
+  ///Capitalizes all the first letters of each word.
+  ///
+  /// Ex: 'hello world' => 'Hello World'.
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(" ")
+      .map((str) => str.toCapitalized())
+      .join(" ");
+}
+
 ///Removes some SSML text from the input. Doesn't touch
 ///the SSML corresponding to break times. Just the <speak> and <speak/> tags.
 String sanitizeTtsText(String text) {
@@ -38,7 +55,7 @@ Duration getDurationFromBreakSSML(String text) {
 }
 
 ///This method takes a String as input and splits it into a list of Strings
-///where each Substring contains 0 or 1 ocurrences of the pattern (RegExp pattern).
+///where each Substring contains 0 or 1 occurrences of the pattern (RegExp pattern).
 ///Ex: text = "Hello, how are you? I just said hello..." and pattern=RegExp("Hello", caseSensitive=false),
 ///returns ["Hello", ", how are you? I just said ", "hello", "..."]
 /// This is mainly used in the helper dialog method to separate the words with different styles from de json file annotations.
@@ -54,4 +71,13 @@ List<String> separateStringByPattern(String text, Pattern pattern) {
     text = text.replaceRange(text.length - 2, text.length, "");
   }
   return text.split("<>");
+}
+
+///Extracts the actual value of an enum's toString() method.
+///
+///When you do toString() on an enum value it returns 'enumName.value'
+///instead of just 'value'. This method extracts this value.
+String enumValue(Object enumObject, {bool capitalize = true}) {
+  String enumValue = enumObject.toString().split('.').last;
+  return capitalize ? enumValue.toCapitalized() : enumValue;
 }
