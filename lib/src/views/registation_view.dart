@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/app/app.locator.dart';
-import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/view_models/registration_view_model.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -40,16 +38,16 @@ class _RegistrationState extends State<Registration> {
 
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registrando usuario'),
-        ),
-      );
       await _registrationViewModel.registerUser();
       _btnController.success();
-      Timer(const Duration(seconds: 2), () {
+      Timer(const Duration(milliseconds: 500), () {
         navigationService.back();
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuario Registrado Exitosamente'),
+        ),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -100,7 +98,13 @@ class _RegistrationState extends State<Registration> {
                       ),
                       value: _registrationViewModel.gender,
                       onChanged: _registrationViewModel.setGender,
-                      items: _registrationViewModel.optionsGender,
+                      items: _registrationViewModel.genders.map(
+                        (String gender) {
+                          return DropdownMenuItem<String>(
+                              value: gender, child: Text(gender));
+                        },
+                      ).toList(),
+                      validator: _registrationViewModel.genderValidator,
                       autovalidateMode: _autoValidateMode,
                     ),
                     //////
@@ -164,26 +168,11 @@ class _RegistrationState extends State<Registration> {
                     ),
                     RoundedLoadingButton(
                       child: const Text(
-                        'Registrarse ahora!',
+                        'Registrarse',
                         style: TextStyle(color: Colors.white),
                       ),
                       controller: _btnController,
                       onPressed: _register,
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Si no tienes una cuenta',
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Registrate aqui!',
-                            style: const TextStyle(color: Colors.blue),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () =>
-                                  navigationService.navigateTo(Routes.register),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 )),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/app/app.locator.dart';
 import 'package:serenity/app/app.router.dart';
@@ -36,17 +37,17 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
-  void _login() async {
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      await _loginViewModel.loginUser();
+      //await _loginViewModel.loginUser();
       _btnController.success();
+      navigationService.clearTillFirstAndShow(
+        Routes.homeView,
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Autenticacion completa'),
         ),
-      );
-      navigationService.replaceWith(
-        Routes.homeView,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -55,13 +56,13 @@ class _LoginState extends State<Login> {
         ),
       );
       _btnController.error();
-      Timer(
-        const Duration(seconds: 2),
-        () {
-          _btnController.reset();
-        },
-      );
     }
+    Timer(
+      const Duration(seconds: 2),
+      () {
+        _btnController.reset();
+      },
+    );
   }
 
   @override
@@ -102,12 +103,30 @@ class _LoginState extends State<Login> {
                     /////
                     RoundedLoadingButton(
                       child: const Text(
-                        'Ingresa!',
+                        'Ingresar',
                         style: TextStyle(color: Colors.white),
                       ),
                       controller: _btnController,
                       onPressed: _login,
-                    )
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Si no tienes una cuenta ',
+                        style: const TextStyle(fontSize: 20),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Registrate aqui!',
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => {
+                                    navigationService.navigateTo(
+                                      Routes.registration,
+                                    ),
+                                  },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )),
           ),

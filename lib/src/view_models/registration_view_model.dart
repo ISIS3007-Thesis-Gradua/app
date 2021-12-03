@@ -12,12 +12,18 @@ import 'dart:developer' as developer;
 /// Controllers glue Data Services to Flutter Widgets. The EmployeeUpdateController
 /// uses the EmployeeUpdateService to store and retrieve user settings.
 class RegistrationViewModel with ChangeNotifier {
-  String _gender = "Otro";
+  static const String _gendersNone = "Ninguno";
+  String _gender = _gendersNone;
   String _name = "";
   String _pass = "";
   String _confirmPass = "";
   String _email = "";
-
+  List<String> genders = <String>[
+    _gendersNone,
+    "Masculino",
+    "Femenino",
+    "Otros"
+  ];
   // validators
   final importantValidator = MultiValidator([
     RequiredValidator(errorText: 'Entrada requerida'),
@@ -35,6 +41,11 @@ class RegistrationViewModel with ChangeNotifier {
     PatternValidator(r'(?=.*?[#?!@$%^&*-])',
         errorText: 'La contraseña debe tener por lo menos un caracter especial')
   ]);
+  String? genderValidator(val) {
+    return _gender == _gendersNone
+        ? 'Se debe seleccionar una opcion de genero'
+        : null;
+  }
 
   String? confirmPassValidator(val) {
     return MatchValidator(errorText: 'Las contraseñas coinciden')
@@ -47,14 +58,6 @@ class RegistrationViewModel with ChangeNotifier {
   get pass => _pass;
   get confirmPass => _confirmPass;
   get email => _email;
-
-  //
-  List<DropdownMenuItem<String>> get optionsGender =>
-      ["Masculino", "Femenino", "Otro"].map(
-        (String gender) {
-          return DropdownMenuItem<String>(value: gender, child: Text(gender));
-        },
-      ).toList();
 
   // setters
   Future<void> setName(String? newName) async {
@@ -132,7 +135,6 @@ class RegistrationViewModel with ChangeNotifier {
       developer.log(
         '${res.isSignUpComplete}',
       );
-      print(res.isSignUpComplete);
     } on AuthException catch (e) {
       developer.log(
         'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
