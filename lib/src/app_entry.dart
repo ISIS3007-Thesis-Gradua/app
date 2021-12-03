@@ -1,15 +1,17 @@
-import 'dart:convert';
-
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
-import 'package:amplify_api/amplify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/amplifyconfiguration.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/view_models/login_view_model.dart';
+import 'package:serenity/src/view_models/registration_view_model.dart';
 import 'package:serenity/src/views/home_view.dart';
+import 'package:serenity/src/views/login_view.dart';
+import 'package:serenity/src/views/registation_view.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'settings/settings_controller.dart';
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:serenity/src/settings/settings_controller.dart';
 import 'dart:developer' as developer;
 
 /// The Widget that configures your application.
@@ -24,10 +26,21 @@ class Serenity extends StatefulWidget {
 }
 
 class _SerenityState extends State<Serenity> {
+  bool _isLoading = true;
+  Future<void> _initializeApp() async {
+    // configure Amplify
+    await _configureAmplify();
+
+    // after configuring Amplify, update loading ui state to loaded state
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   initState() {
     super.initState();
-    _configureAmplify();
+    _initializeApp();
   }
 
   @override
@@ -73,8 +86,17 @@ class _SerenityState extends State<Serenity> {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: widget.settingsController.themeMode,
-          home: const HomeView(),
-
+          home: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : const HomeView(),
+          // home: Registration(
+          //   registrationViewModel: RegistrationViewModel(),
+          // ),
+          // home: Login(
+          //   loginViewModel: LoginViewModel(),
+          // ),
           // GraphView(
           //     EmotionsMeasure(emotion: 6.0, stress: 2.0, anxiety: 9.0),
           //     EmotionsMeasure(emotion: 3.0, stress: 8.0, anxiety: 0.0)),
@@ -85,13 +107,14 @@ class _SerenityState extends State<Serenity> {
   }
 }
 
-void _configureAmplify() async {
+Future<void> _configureAmplify() async {
   // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
-  AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
-  AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-  AmplifyAPI apiPlugin = AmplifyAPI();
+
   await Amplify.addPlugins(
-    [authPlugin, analyticsPlugin, apiPlugin],
+    [
+      AmplifyAuthCognito(),
+      AmplifyAPI(),
+    ],
   );
 
   // Once Plugins are added, configure Amplify
@@ -100,7 +123,7 @@ void _configureAmplify() async {
     await Amplify.configure(amplifyconfig);
   } on AmplifyAlreadyConfiguredException catch (e) {
     developer.log(
-      'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}',
+      'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
     );
   }
 }

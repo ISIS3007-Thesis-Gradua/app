@@ -9,11 +9,9 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 class Login extends StatefulWidget {
   const Login({
     Key? key,
-    required this.employeeId,
-    required this.loginViewMode,
+    required this.loginViewModel,
   }) : super(key: key);
-  final LoginViewModel loginViewMode;
-  final int employeeId;
+  final LoginViewModel loginViewModel;
   @override
   _LoginState createState() => _LoginState();
 }
@@ -30,9 +28,28 @@ class _LoginState extends State<Login> {
       RoundedLoadingButtonController();
 
   void _login() async {
-    Timer(const Duration(seconds: 3), () {
+    if (_formKey.currentState!.validate()) {
+      await widget.loginViewModel.loginUser();
       _btnController.success();
-    });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuario ingresado'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error ingresando'),
+        ),
+      );
+      _btnController.error();
+    }
+    Timer(
+      const Duration(seconds: 1),
+      () {
+        _btnController.reset();
+      },
+    );
   }
 
   @override
@@ -62,7 +79,7 @@ class _LoginState extends State<Login> {
                           decoration: const InputDecoration(
                             labelText: 'Correo Electronico',
                           ),
-                          onChanged: widget.loginViewMode.setEmail,
+                          onChanged: widget.loginViewModel.setEmail,
                           autovalidateMode: _autoValidateMode,
                         ),
                         //////
@@ -70,7 +87,7 @@ class _LoginState extends State<Login> {
                           decoration: const InputDecoration(
                             labelText: 'Contraseña',
                           ),
-                          onChanged: widget.loginViewMode.setPass,
+                          onChanged: widget.loginViewModel.setPass,
                           autovalidateMode: _autoValidateMode,
                         ),
                         /////

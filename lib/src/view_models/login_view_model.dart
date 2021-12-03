@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,5 +37,17 @@ class LoginViewModel with ChangeNotifier {
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
+  }
+
+  Future<void> loginUser() async {
+    try {
+      SignInResult res = await Amplify.Auth.signIn(
+        username: _email,
+        password: _pass,
+      );
+      print(res.isSignedIn);
+    } on AuthException catch (e) {
+      print(e.message);
+    }
   }
 }

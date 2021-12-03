@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/src/view_models/registration_view_model.dart';
@@ -9,11 +8,9 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 class Registration extends StatefulWidget {
   const Registration({
     Key? key,
-    required this.employeeId,
-    required this.registrationViewMode,
+    required this.registrationViewModel,
   }) : super(key: key);
-  final RegistrationViewModel registrationViewMode;
-  final int employeeId;
+  final RegistrationViewModel registrationViewModel;
   @override
   _RegistrationState createState() => _RegistrationState();
 }
@@ -28,18 +25,37 @@ class _RegistrationState extends State<Registration> {
   final AutovalidateMode _autoValidateMode = AutovalidateMode.onUserInteraction;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
-
+  bool _passwordInVisible = true;
   void _register() async {
-    Timer(const Duration(seconds: 3), () {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registrando usuario'),
+        ),
+      );
+      await widget.registrationViewModel.registerUser();
       _btnController.success();
-    });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error registrando usuario'),
+        ),
+      );
+      _btnController.error();
+    }
+    Timer(
+      const Duration(seconds: 1),
+      () {
+        _btnController.reset();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Crea una nueva cuenta'),
+          title: const Text('Registrate en Gradua!'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16),
@@ -61,9 +77,9 @@ class _RegistrationState extends State<Registration> {
                           decoration: const InputDecoration(
                             labelText: 'Nombre',
                           ),
-                          onChanged: widget.registrationViewMode.setName,
+                          onChanged: widget.registrationViewModel.setName,
                           validator:
-                              widget.registrationViewMode.importantValidator,
+                              widget.registrationViewModel.importantValidator,
                           autovalidateMode: _autoValidateMode,
                         ),
                         //////
@@ -71,9 +87,9 @@ class _RegistrationState extends State<Registration> {
                           decoration: const InputDecoration(
                             labelText: 'Genero',
                           ),
-                          value: widget.registrationViewMode.gender,
-                          onChanged: widget.registrationViewMode.setGender,
-                          items: widget.registrationViewMode.optionsGender,
+                          value: widget.registrationViewModel.gender,
+                          onChanged: widget.registrationViewModel.setGender,
+                          items: widget.registrationViewModel.optionsGender,
                           autovalidateMode: _autoValidateMode,
                         ),
                         //////
@@ -81,33 +97,66 @@ class _RegistrationState extends State<Registration> {
                           decoration: const InputDecoration(
                             labelText: 'Correo Electronico',
                           ),
-                          onChanged: widget.registrationViewMode.setEmail,
+                          onChanged: widget.registrationViewModel.setEmail,
                           validator:
-                              widget.registrationViewMode.importantValidator,
+                              widget.registrationViewModel.emailValidator,
                           autovalidateMode: _autoValidateMode,
                         ),
                         //////
                         TextFormField(
-                          decoration: const InputDecoration(
+                          obscureText: _passwordInVisible,
+                          decoration: InputDecoration(
                             labelText: 'Contraseña',
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordInVisible
+                                    ? Icons.visibility_off
+                                    : Icons
+                                        .visibility, //change icon based on boolean value
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordInVisible =
+                                      !_passwordInVisible; //change boolean value
+                                });
+                              },
+                            ),
                           ),
-                          onChanged: widget.registrationViewMode.setPass,
-                          validator: widget.registrationViewMode.passValidator,
+                          onChanged: widget.registrationViewModel.setPass,
+                          validator: widget.registrationViewModel.passValidator,
                           autovalidateMode: _autoValidateMode,
                         ),
                         //////
                         TextFormField(
-                          decoration: const InputDecoration(
+                          obscureText: _passwordInVisible,
+                          decoration: InputDecoration(
                             labelText: 'Confirmar Contraseña',
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordInVisible
+                                    ? Icons.visibility_off
+                                    : Icons
+                                        .visibility, //change icon based on boolean value
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordInVisible =
+                                      !_passwordInVisible; //change boolean value
+                                });
+                              },
+                            ),
                           ),
-                          onChanged: widget.registrationViewMode.setConfirmPass,
+                          onChanged:
+                              widget.registrationViewModel.setConfirmPass,
                           validator:
-                              widget.registrationViewMode.confirmPassValidator,
+                              widget.registrationViewModel.confirmPassValidator,
                           autovalidateMode: _autoValidateMode,
                         ),
                         RoundedLoadingButton(
                           child: const Text(
-                            'Registrate!',
+                            'Registrarse ahora!',
                             style: TextStyle(color: Colors.white),
                           ),
                           controller: _btnController,

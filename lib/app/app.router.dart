@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/cupertino.dart';
+import 'package:serenity/src/views/registation_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -28,6 +29,8 @@ class Routes {
   static const String meditation_rating = 'meditation_rating';
   static const String loading_meditation = 'loading_meditation';
   static const String graph_view = 'graph_view';
+  static const String register = 'register';
+  static const String login = 'login';
   static const all = <String>{
     homeView,
     player,
@@ -35,6 +38,8 @@ class Routes {
     meditation_rating,
     loading_meditation,
     graph_view,
+    register,
+    login,
   };
 }
 
@@ -48,6 +53,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.meditation_rating, page: MeditationRatingView),
     RouteDef(Routes.loading_meditation, page: LoadingMeditationView),
     RouteDef(Routes.graph_view, page: GraphView),
+    RouteDef(Routes.register, page: Registration),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
