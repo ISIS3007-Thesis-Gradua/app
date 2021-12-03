@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/cupertino.dart';
+import 'package:serenity/src/views/login_view.dart';
 import 'package:serenity/src/views/registation_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -54,6 +55,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.loading_meditation, page: LoadingMeditationView),
     RouteDef(Routes.graph_view, page: GraphView),
     RouteDef(Routes.register, page: Registration),
+    RouteDef(Routes.login, page: Login),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;

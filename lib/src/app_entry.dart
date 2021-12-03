@@ -90,7 +90,7 @@ class _SerenityState extends State<Serenity> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : const HomeView(),
+              : const Login(),
           // home: Registration(
           //   registrationViewModel: RegistrationViewModel(),
           // ),
