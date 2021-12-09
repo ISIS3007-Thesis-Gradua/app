@@ -37,6 +37,8 @@ dependencies:
   amplify_analytics_pinpoint: ^0.2.10
   amplify_api: ^0.2.10
   synchronized: ^3.0.0
+  firebase_core: ^1.10.5
+  firebase_auth: ^3.3.3
 
 dev_dependencies:
   hive_generator: ^1.1.1

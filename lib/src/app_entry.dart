@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:serenity/amplifyconfiguration.dart';
-import 'package:serenity/app/app.router.dart';
-import 'package:serenity/src/view_models/login_view_model.dart';
-import 'package:serenity/src/view_models/registration_view_model.dart';
-import 'package:serenity/src/views/home_view.dart';
-import 'package:serenity/src/views/login_view.dart';
-import 'package:serenity/src/views/registation_view.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'dart:developer' as developer;
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:serenity/amplifyconfiguration.dart';
+import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/services/authentication_service.dart';
 import 'package:serenity/src/settings/settings_controller.dart';
-import 'dart:developer' as developer;
+import 'package:serenity/src/views/authentication_wrapper_view.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 /// The Widget that configures your application.
 class Serenity extends StatefulWidget {
@@ -29,7 +28,7 @@ class _SerenityState extends State<Serenity> {
   bool _isLoading = true;
   Future<void> _initializeApp() async {
     // configure Amplify
-    await _configureAmplify();
+    // await _configureAmplify();
 
     // after configuring Amplify, update loading ui state to loaded state
     setState(() {
@@ -49,31 +48,37 @@ class _SerenityState extends State<Serenity> {
     //
     // The AnimatedBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
-    return AnimatedBuilder(
-      animation: widget.settingsController,
-      builder: (BuildContext context, Widget? child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
-          themeMode: widget.settingsController.themeMode,
-          home: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : const Login(),
-          // home: Registration(
-          //   registrationViewModel: RegistrationViewModel(),
-          // ),
-          // home: Login(
-          //   loginViewModel: LoginViewModel(),
-          // ),
-          // GraphView(
-          //     EmotionsMeasure(emotion: 6.0, stress: 2.0, anxiety: 9.0),
-          //     EmotionsMeasure(emotion: 3.0, stress: 8.0, anxiety: 0.0)),
-          onGenerateRoute: StackedRouter().onGenerateRoute,
-        );
-      },
+    return MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          initialData: null,
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+        ),
+      ],
+      child: AnimatedBuilder(
+        animation: widget.settingsController,
+        builder: (BuildContext context, Widget? child) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(),
+            darkTheme: ThemeData.dark(),
+            themeMode: widget.settingsController.themeMode,
+            home: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AuthenticationWrapperView(),
+            // home: Registration(
+            //   registrationViewModel: RegistrationViewModel(),
+            // ),
+            onGenerateRoute: StackedRouter().onGenerateRoute,
+          );
+        },
+      ),
     );
   }
 }

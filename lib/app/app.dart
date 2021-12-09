@@ -1,7 +1,7 @@
 import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/services/notifications_service.dart';
+import 'package:serenity/src/views/authentication_wrapper_view.dart';
 import 'package:serenity/src/views/graph_view.dart';
-import 'package:serenity/src/views/home_view.dart';
 import 'package:serenity/src/views/loading_meditation.dart';
 import 'package:serenity/src/views/login_view.dart';
 import 'package:serenity/src/views/meditation_rating_view.dart';
@@ -19,7 +19,7 @@ import 'package:stacked_services/stacked_services.dart';
 @StackedApp(
   routes: [
     CupertinoRoute(
-      page: HomeView,
+      page: AuthenticationWrapperView,
       initial: true,
     ),
     CupertinoRoute(
@@ -62,8 +62,9 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(
       classType: LocalStorageService,
     ),
-    Singleton(classType: NotificationService,
-    ),
+    Singleton(
+      classType: NotificationService,
+    )
   ],
 )
 class App {
