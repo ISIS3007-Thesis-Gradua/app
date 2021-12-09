@@ -19,9 +19,9 @@ import 'package:stacked_services/stacked_services.dart';
 class GraphView extends StatefulWidget {
   final EmotionsMeasure prevEmotionsMeasure;
   final EmotionsMeasure posEmotionsMeasure;
-  TtsSource ttsSource;
-  SimpleMeditation simpleMeditation;
-  GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure,
+  final TtsSource ttsSource;
+  final SimpleMeditation simpleMeditation;
+  const GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure,
       {Key? key, required this.simpleMeditation, required this.ttsSource})
       : super(key: key);
 
@@ -56,7 +56,7 @@ class _GraphViewState extends State<GraphView> {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
 
-    List<Widget> summaryPanel = <Widget>[ResultsTitle(width, context)];
+    List<Widget> summaryPanel = <Widget>[resultsTitle(width, context)];
     summaryPanel.addAll(
       summaryResults(
           widget.prevEmotionsMeasure, widget.posEmotionsMeasure, width),
@@ -190,7 +190,7 @@ class _GraphViewState extends State<GraphView> {
   }
 }
 
-Widget ResultsTitle(double width, BuildContext context) {
+Widget resultsTitle(double width, BuildContext context) {
   return Padding(
     padding: EdgeInsets.symmetric(vertical: width * .04),
     child: Row(

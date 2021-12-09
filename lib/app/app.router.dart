@@ -17,12 +17,16 @@ import '../src/view_models/player_view_model.dart';
 import '../src/views/graph_view.dart';
 import '../src/views/home_view.dart';
 import '../src/views/loading_meditation.dart';
+import '../src/views/login_view.dart';
 import '../src/views/meditation_rating_view.dart';
 import '../src/views/other_player.dart';
 import '../src/views/player_view.dart';
+import '../src/views/registation_view.dart';
 
 class Routes {
   static const String homeView = '/';
+  static const String login = 'login';
+  static const String registration = 'registration';
   static const String player = 'player';
   static const String other_player = 'other_player';
   static const String meditation_rating = 'meditation_rating';
@@ -30,6 +34,8 @@ class Routes {
   static const String graph_view = 'graph_view';
   static const all = <String>{
     homeView,
+    login,
+    registration,
     player,
     other_player,
     meditation_rating,
@@ -43,6 +49,8 @@ class StackedRouter extends RouterBase {
   List<RouteDef> get routes => _routes;
   final _routes = <RouteDef>[
     RouteDef(Routes.homeView, page: HomeView),
+    RouteDef(Routes.login, page: Login),
+    RouteDef(Routes.registration, page: Registration),
     RouteDef(Routes.player, page: Player),
     RouteDef(Routes.other_player, page: OtherPlayer),
     RouteDef(Routes.meditation_rating, page: MeditationRatingView),
@@ -55,6 +63,18 @@ class StackedRouter extends RouterBase {
     HomeView: (data) {
       return CupertinoPageRoute<CupertinoRoute<dynamic>>(
         builder: (context) => const HomeView(),
+        settings: data,
+      );
+    },
+    Login: (data) {
+      return CupertinoPageRoute<CupertinoRoute<dynamic>>(
+        builder: (context) => const Login(),
+        settings: data,
+      );
+    },
+    Registration: (data) {
+      return CupertinoPageRoute<CupertinoRoute<dynamic>>(
+        builder: (context) => const Registration(),
         settings: data,
       );
     },
