@@ -1,10 +1,11 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'dart:developer' as developer;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'dart:developer' as developer;
+import 'package:serenity/src/services/authentication_service.dart';
+import 'package:serenity/src/utils/string_manipulation.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.
@@ -12,6 +13,10 @@ import 'dart:developer' as developer;
 /// Controllers glue Data Services to Flutter Widgets. The EmployeeUpdateController
 /// uses the EmployeeUpdateService to store and retrieve user settings.
 class RegistrationViewModel with ChangeNotifier {
+  final AuthenticationService authenticationService;
+
+  RegistrationViewModel(this.authenticationService);
+
   static const String _gendersNone = "Ninguno";
   String _gender = _gendersNone;
   String _name = "";
@@ -120,25 +125,24 @@ class RegistrationViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> registerUser() async {
-    try {
-      Map<String, String> userAttributes = {
-        'gender': _gender,
-        'name': _name,
-        'email': _email,
-        // additional attributes as needed
-      };
-      SignUpResult res = await Amplify.Auth.signUp(
-          username: _email,
-          password: _pass,
-          options: CognitoSignUpOptions(userAttributes: userAttributes));
-      developer.log(
-        '${res.isSignUpComplete}',
-      );
-    } on AuthException catch (e) {
-      developer.log(
-        'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
-      );
-    }
+  Future<SignUpResult> registerUser() async {
+    // try {
+    Map<String, String> userAttributes = {
+      'gender': _gender,
+      'name': _name,
+      'email': _email,
+      // additional attributes as needed
+    };
+    SignUpResult res =
+        await authenticationService.signUp(email: _email, password: _pass);
+    developer.log(
+      '${enumValue(res)}',
+    );
+    return res;
+    // } on AuthException catch (e) {
+    //   developer.log(
+    //     'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
+    //   );
+    // }
   }
 }

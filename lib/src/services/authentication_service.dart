@@ -42,6 +42,7 @@ class AuthenticationService {
     try {
       credentials = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      print('[CREDENTIALS] ${credentials?.user?.email}');
       return AuthResult.signedIn;
     } on FirebaseAuthException catch (e) {
       print(e.message);
@@ -56,7 +57,7 @@ class AuthenticationService {
           .createUserWithEmailAndPassword(email: email, password: password);
       return SignUpResult(AuthResult.signedUp, credentials);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      print('[LOGIN ERROR] ${e.message}');
       return SignUpResult(AuthResult.error, null);
     }
   }

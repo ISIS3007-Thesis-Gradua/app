@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:serenity/app/app.locator.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/services/authentication_service.dart';
 import 'package:serenity/src/view_models/login_view_model.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 /// Creates an employee in te system.
@@ -28,7 +30,7 @@ class _LoginState extends State<Login> {
   final AutovalidateMode _autoValidateMode = AutovalidateMode.onUserInteraction;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
-  final LoginViewModel _loginViewModel = LoginViewModel();
+  late LoginViewModel _loginViewModel;
   late final NavigationService navigationService;
 
   @override
@@ -40,19 +42,29 @@ class _LoginState extends State<Login> {
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       //await _loginViewModel.loginUser();
-      _btnController.success();
-      navigationService.clearTillFirstAndShow(
-        Routes.homeView,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Autenticacion completa'),
-        ),
-      );
-    } else {
+      // navigationService.clearTillFirstAndShow(
+      //   Routes.homeView,
+      // );
+      AuthResult res = await _loginViewModel.loginUser();
+
+      if (res == AuthResult.signedIn) {
+        _btnController.success();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Autenticacion completa'),
+          ),
+        );
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Error al autenticar'),
+        ),
+      );
+      _btnController.error();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Campos erroneos'),
         ),
       );
       _btnController.error();
@@ -67,6 +79,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    AuthenticationService authenticationService =
+        context.read<AuthenticationService>();
+    _loginViewModel = LoginViewModel(authenticationService);
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(16),

@@ -117,7 +117,8 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                     ),
                     onPressed: () {
                       vm.dispose();
-                      navigationService.navigateTo(Routes.homeView);
+                      navigationService
+                          .navigateTo(Routes.authenticationWrapperView);
                     },
                   ),
                 ),

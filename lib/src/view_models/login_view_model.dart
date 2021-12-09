@@ -1,8 +1,8 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:serenity/src/services/authentication_service.dart';
+import 'package:serenity/src/utils/string_manipulation.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.
@@ -12,6 +12,10 @@ import 'package:flutter/material.dart';
 class LoginViewModel with ChangeNotifier {
   String _pass = "";
   String _email = "";
+  final AuthenticationService authenticationService;
+
+  LoginViewModel(this.authenticationService);
+
   // getters
   get email => _email;
   get pass => _pass;
@@ -39,15 +43,14 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loginUser() async {
-    try {
-      SignInResult res = await Amplify.Auth.signIn(
-        username: _email,
-        password: _pass,
-      );
-      print(res.isSignedIn);
-    } on AuthException catch (e) {
-      print(e.message);
-    }
+  Future<AuthResult> loginUser() async {
+    AuthResult res =
+        await authenticationService.signIn(email: _email, password: _pass);
+    // SignInResult res = await Amplify.Auth.signIn(
+    //   username: _email,
+    //   password: _pass,
+    // );
+    print(enumValue(res));
+    return res;
   }
 }

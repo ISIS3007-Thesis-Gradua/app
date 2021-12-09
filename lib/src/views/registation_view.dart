@@ -1,9 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:serenity/app/app.locator.dart';
-import 'package:serenity/src/view_models/registration_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:serenity/app/app.locator.dart';
+import 'package:serenity/src/services/authentication_service.dart';
+import 'package:serenity/src/view_models/registration_view_model.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 /// Creates an employee in te system.
@@ -28,7 +31,7 @@ class _RegistrationState extends State<Registration> {
       RoundedLoadingButtonController();
   late final NavigationService navigationService;
   bool _passwordInVisible = true;
-  final RegistrationViewModel _registrationViewModel = RegistrationViewModel();
+  late RegistrationViewModel _registrationViewModel;
 
   @override
   void initState() {
@@ -66,6 +69,10 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    AuthenticationService authenticationService =
+        context.read<AuthenticationService>();
+
+    _registrationViewModel = RegistrationViewModel(authenticationService);
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(16),
