@@ -1,0 +1,258 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Root Stack for AWS Amplify CLI",
+  "Parameters": {
+    "DeploymentBucketName": {
+      "Description": "Name of the common deployment bucket provided by the parent stack",
+      "Type": "String",
+      "Default": "DeploymentBucket"
+    },
+    "AuthRoleName": {
+      "Type": "String",
+      "Default": "AuthRoleName"
+    },
+    "UnauthRoleName": {
+      "Type": "String",
+      "Default": "UnauthRoleName"
+    }
+  },
+  "Resources": {
+    "DeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketName": {
+          "Ref": "DeploymentBucketName"
+        }
+      }
+    },
+    "AuthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Ref": "AuthRoleName"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Deny",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity"
+            }
+          ]
+        }
+      }
+    },
+    "UnauthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Ref": "UnauthRoleName"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Deny",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity"
+            }
+          ]
+        }
+      }
+    },
+    "functionRandomizer": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/function/Randomizer-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Randomizer-47656b354a4437746268-build.zip",
+          "functionserenityDataGeneratorManagerArn": {
+            "Fn::GetAtt": [
+              "functionserenityDataGeneratorManager",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
+    "functionFeedback": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/function/Feedback-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Feedback-43676a34445937514a50-build.zip",
+          "functionserenityDataGeneratorManagerArn": {
+            "Fn::GetAtt": [
+              "functionserenityDataGeneratorManager",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
+    "functionserenityDataGeneratorManager": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/function/serenityDataGeneratorManager-awscloudformation-template.json",
+        "Parameters": {
+          "runtimes": "nodejs14.x",
+          "description": "Updated layer version 2021-11-05T19:11:23.664Z",
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/serenityDataGeneratorManager-LambdaLayerVersiond616722f-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionRecomender": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/function/Recomender-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Recomender-33667736686b52517167-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionGenerator": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/function/Generator-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-serenity-dev-194102-deployment",
+          "s3Key": "amplify-builds/Generator-7635377a395a634b524e-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "apigradua": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-serenity-dev-194102-deployment/amplify-cfn-templates/api/gradua-cloudformation-template.json",
+        "Parameters": {
+          "functionRandomizerName": {
+            "Fn::GetAtt": [
+              "functionRandomizer",
+              "Outputs.Name"
+            ]
+          },
+          "functionRandomizerArn": {
+            "Fn::GetAtt": [
+              "functionRandomizer",
+              "Outputs.Arn"
+            ]
+          },
+          "functionFeedbackName": {
+            "Fn::GetAtt": [
+              "functionFeedback",
+              "Outputs.Name"
+            ]
+          },
+          "functionFeedbackArn": {
+            "Fn::GetAtt": [
+              "functionFeedback",
+              "Outputs.Arn"
+            ]
+          },
+          "functionRecomenderName": {
+            "Fn::GetAtt": [
+              "functionRecomender",
+              "Outputs.Name"
+            ]
+          },
+          "functionRecomenderArn": {
+            "Fn::GetAtt": [
+              "functionRecomender",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "Region": {
+      "Description": "CloudFormation provider root stack Region",
+      "Value": {
+        "Ref": "AWS::Region"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-Region"
+        }
+      }
+    },
+    "StackName": {
+      "Description": "CloudFormation provider root stack ID",
+      "Value": {
+        "Ref": "AWS::StackName"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-StackName"
+        }
+      }
+    },
+    "StackId": {
+      "Description": "CloudFormation provider root stack name",
+      "Value": {
+        "Ref": "AWS::StackId"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-StackId"
+        }
+      }
+    },
+    "DeploymentBucketName": {
+      "Description": "CloudFormation provider root stack deployment bucket name",
+      "Value": {
+        "Ref": "DeploymentBucketName"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-DeploymentBucketName"
+        }
+      }
+    },
+    "AuthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AuthRole",
+          "Arn"
+        ]
+      }
+    },
+    "UnauthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UnauthRole",
+          "Arn"
+        ]
+      }
+    },
+    "AuthRoleName": {
+      "Value": {
+        "Ref": "AuthRole"
+      }
+    },
+    "UnauthRoleName": {
+      "Value": {
+        "Ref": "UnauthRole"
+      }
+    }
+  }
+}
