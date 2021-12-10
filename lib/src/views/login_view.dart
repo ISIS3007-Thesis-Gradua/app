@@ -98,7 +98,6 @@ class _LoginState extends State<Login> {
       color: Colors.black87,
       fontWeight: FontWeight.w700,
       fontSize: height * .026,
-      // height: height * .003,
     );
 
     TextStyle subtitleStyle = titleStyle.copyWith(
