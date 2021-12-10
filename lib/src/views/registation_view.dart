@@ -35,7 +35,7 @@ class _RegistrationState extends State<Registration> {
       RoundedLoadingButtonController();
   late final NavigationService navigationService;
   bool _passwordInVisible = true;
-  late RegistrationViewModel _registrationViewModel;
+  RegistrationViewModel? _registrationViewModel;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _RegistrationState extends State<Registration> {
 
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
-      await _registrationViewModel.registerUser();
+      await _registrationViewModel!.registerUser();
       _btnController.success();
       Timer(const Duration(milliseconds: 500), () {
         navigationService.back();
@@ -73,9 +73,11 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-    AuthenticationService authenticationService =
-        context.read<AuthenticationService>();
-    _registrationViewModel = RegistrationViewModel(authenticationService);
+    if (_registrationViewModel == null) {
+      AuthenticationService authenticationService =
+          context.read<AuthenticationService>();
+      _registrationViewModel = RegistrationViewModel(authenticationService);
+    }
 
     double getHeight() {
       return MediaQuery.of(context).size.height -
@@ -136,8 +138,8 @@ class _RegistrationState extends State<Registration> {
                     decoration: const InputDecoration(
                       labelText: 'Nombre',
                     ),
-                    onChanged: _registrationViewModel.setName,
-                    validator: _registrationViewModel.importantValidator,
+                    onChanged: _registrationViewModel!.setName,
+                    validator: _registrationViewModel!.importantValidator,
                     autovalidateMode: _autoValidateMode,
                   ),
                   //////
@@ -145,15 +147,15 @@ class _RegistrationState extends State<Registration> {
                     decoration: const InputDecoration(
                       labelText: 'Genero',
                     ),
-                    value: _registrationViewModel.gender,
-                    onChanged: _registrationViewModel.setGender,
-                    items: _registrationViewModel.genders.map(
+                    value: _registrationViewModel!.gender,
+                    onChanged: _registrationViewModel!.setGender,
+                    items: _registrationViewModel!.genders.map(
                       (String gender) {
                         return DropdownMenuItem<String>(
                             value: gender, child: Text(gender));
                       },
                     ).toList(),
-                    validator: _registrationViewModel.genderValidator,
+                    validator: _registrationViewModel!.genderValidator,
                     autovalidateMode: _autoValidateMode,
                   ),
                   //////
@@ -161,8 +163,8 @@ class _RegistrationState extends State<Registration> {
                     decoration: const InputDecoration(
                       labelText: 'Correo Electronico',
                     ),
-                    onChanged: _registrationViewModel.setEmail,
-                    validator: _registrationViewModel.emailValidator,
+                    onChanged: _registrationViewModel!.setEmail,
+                    validator: _registrationViewModel!.emailValidator,
                     autovalidateMode: _autoValidateMode,
                   ),
                   //////
@@ -186,8 +188,8 @@ class _RegistrationState extends State<Registration> {
                         },
                       ),
                     ),
-                    onChanged: _registrationViewModel.setPass,
-                    validator: _registrationViewModel.passValidator,
+                    onChanged: _registrationViewModel!.setPass,
+                    validator: _registrationViewModel!.passValidator,
                     autovalidateMode: _autoValidateMode,
                   ),
                   //////
@@ -211,8 +213,8 @@ class _RegistrationState extends State<Registration> {
                         },
                       ),
                     ),
-                    onChanged: _registrationViewModel.setConfirmPass,
-                    validator: _registrationViewModel.confirmPassValidator,
+                    onChanged: _registrationViewModel!.setConfirmPass,
+                    validator: _registrationViewModel!.confirmPassValidator,
                     autovalidateMode: _autoValidateMode,
                   ),
                   Padding(

@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
   final AutovalidateMode _autoValidateMode = AutovalidateMode.onUserInteraction;
   final RoundedLoadingButtonController _btnController =
       RoundedLoadingButtonController();
-  late LoginViewModel _loginViewModel;
+  LoginViewModel? _loginViewModel;
   late final NavigationService navigationService;
 
   @override
@@ -47,7 +47,8 @@ class _LoginState extends State<Login> {
       // navigationService.clearTillFirstAndShow(
       //   Routes.homeView,
       // );
-      AuthResult res = await _loginViewModel.loginUser();
+      print('[Login info] ${_loginViewModel!.email} ${_loginViewModel!.pass}');
+      AuthResult res = await _loginViewModel!.loginUser();
 
       if (res == AuthResult.signedIn) {
         _btnController.success();
@@ -70,20 +71,22 @@ class _LoginState extends State<Login> {
         ),
       );
       _btnController.error();
+      Timer(
+        const Duration(seconds: 2),
+        () {
+          _btnController.reset();
+        },
+      );
     }
-    Timer(
-      const Duration(seconds: 2),
-      () {
-        _btnController.reset();
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    AuthenticationService authenticationService =
-        context.read<AuthenticationService>();
-    _loginViewModel = LoginViewModel(authenticationService);
+    if (_loginViewModel == null) {
+      AuthenticationService authenticationService =
+          context.read<AuthenticationService>();
+      _loginViewModel = LoginViewModel(authenticationService);
+    }
 
     double getHeight() {
       return MediaQuery.of(context).size.height -
@@ -143,7 +146,7 @@ class _LoginState extends State<Login> {
                     decoration: const InputDecoration(
                       labelText: 'Correo Electronico',
                     ),
-                    onChanged: _loginViewModel.setEmail,
+                    onChanged: _loginViewModel!.setEmail,
                     autovalidateMode: _autoValidateMode,
                   ),
                   //////
@@ -151,7 +154,7 @@ class _LoginState extends State<Login> {
                     decoration: const InputDecoration(
                       labelText: 'Contraseña',
                     ),
-                    onChanged: _loginViewModel.setPass,
+                    onChanged: _loginViewModel!.setPass,
                     autovalidateMode: _autoValidateMode,
                   ),
                   /////
