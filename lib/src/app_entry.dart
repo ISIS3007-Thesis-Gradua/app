@@ -28,12 +28,17 @@ class _SerenityState extends State<Serenity> {
   bool _isLoading = true;
   Future<void> _initializeApp() async {
     // configure Amplify
-    // await _configureAmplify();
-
-    // after configuring Amplify, update loading ui state to loaded state
+    try {
+      await _configureAmplify();
+    } on AmplifyAlreadyConfiguredException catch (e) {
+      developer.log(
+        'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
+      );
+    }
     setState(() {
       _isLoading = false;
     });
+    // after configuring Amplify, update loading ui state to loaded state
   }
 
   @override
@@ -95,11 +100,5 @@ Future<void> _configureAmplify() async {
 
   // Once Plugins are added, configure Amplify
   // Note: Amplify can only be configured once.
-  try {
-    await Amplify.configure(amplifyconfig);
-  } on AmplifyAlreadyConfiguredException catch (e) {
-    developer.log(
-      'Error at Amplify: ${e.message}, Suggetion: ${e.recoverySuggestion}, Under: ${e.underlyingException}',
-    );
-  }
+  return Amplify.configure(amplifyconfig);
 }

@@ -21,7 +21,7 @@ class MeditationConfig {
   double goalLevels;
 
   MeditationConfig(
-      {this.time = 5.0,
+      {this.time = 6.0,
       this.emotion = 0,
       this.stress = 0,
       this.anxiety = 0,
