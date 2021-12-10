@@ -4,6 +4,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_ffmpeg/media_information.dart';
 import 'package:path/path.dart' as p;
 import 'package:serenity/src/utils/bytes_manipulation.dart';
+import 'package:synchronized/synchronized.dart';
 
 ///This class gets some basic info (Including the header params) for a .wav file.
 ///For more info see WAVE format specification:
@@ -91,6 +92,7 @@ Future<File> convertWavToMp3(
       "The target output directory does not exist.");
 
   final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+  FlutterFFmpegConfig().disableLogs();
   String outputPath = p.join(outputDirectory, fileName + ".mp3");
 
   ///See what this command does:
@@ -106,13 +108,58 @@ Future<File> convertWavToMp3(
   }
 }
 
+///Global instance for the inner function lock
+final Lock lock = Lock(reentrant: true);
+Future<File> concatenateListOfAudioFiles(
+    List<File> audioFiles, String outputDirectory, String fileName,
+    {bool enableFFmpegLogs = false}) async {
+  assert(await Directory(outputDirectory).exists(),
+      "The target output directory does not exist.");
+
+  String ffmpegConcatCommand = "-y ";
+  int n = audioFiles.length;
+  for (File file in audioFiles) {
+    String audioPath = file.path;
+    ffmpegConcatCommand += "-i $audioPath ";
+  }
+  ffmpegConcatCommand += "-filter_complex '";
+  for (int i = 0; i < n; i++) {
+    ffmpegConcatCommand += "[$i:0]";
+  }
+  ffmpegConcatCommand +=
+      "concat=n=$n:v=0:a=1[out]' -map '[out]' -codec:a libmp3lame -q:a 3 ";
+
+  String outputPath = p.join(outputDirectory, fileName + ".mp3");
+  ffmpegConcatCommand += outputPath;
+
+  //Since flutterFFmpeg can not run parallel commands, we use the synchronized
+  //package to ensure synchronous execution of ffmpeg commands even by async calls.
+  return await lock.synchronized(() async {
+    final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
+    if (enableFFmpegLogs) {
+      FlutterFFmpegConfig().enableLogs();
+    } else {
+      FlutterFFmpegConfig().disableLogs();
+    }
+    print("[CONCAT FILES COMMAND] $ffmpegConcatCommand");
+    int rc = await lock
+        .synchronized(() async => flutterFFmpeg.execute(ffmpegConcatCommand));
+    if (rc == 0) {
+      print("Successfully converted $n audio files to mp3");
+      return File(outputPath);
+    } else {
+      throw Exception("[ERROR] converting $n audio files to mp3");
+    }
+  });
+}
+
 class AudioFileInfo {
   ///Get the duration of an MP3 file.
   ///Technically it should work for other file formats also but i haven't test it for more.
   static Future<Duration> fileDuration(File file) async {
-    FlutterFFprobe fFprobe = FlutterFFprobe();
+    FlutterFFprobe FFprobe = FlutterFFprobe();
     MediaInformation mediaInformation =
-        await fFprobe.getMediaInformation(file.path);
+        await FFprobe.getMediaInformation(file.path);
     String durationInSeconds =
         mediaInformation.getMediaProperties()?["duration"] ?? "0.0";
     print("[Duration in seconds:] $durationInSeconds");

@@ -60,7 +60,7 @@ class _SavedMeditationsViewState extends State<SavedMeditationsView> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.01),
                   child: Text(
-                    meditation.name ?? "",
+                    meditation.name,
                     style: GoogleFonts.openSans(
                       color: Colors.black,
                       fontWeight: FontWeight.w600,

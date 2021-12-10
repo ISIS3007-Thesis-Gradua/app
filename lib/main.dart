@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/app/app.locator.dart';
 
+import 'firebase_options.dart';
 import 'src/app_entry.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
@@ -16,6 +18,12 @@ void main() async {
 
   //Initialize the singletons described in the app/app.locator.dart file
   setupLocator();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  //Initialize firebase Core servcies
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the

@@ -38,6 +38,7 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     vm = PlayerViewModel(meditation: widget.meditation);
+    print("[AUDIO SOURCE] ${vm.player.audioSource} ");
 
     if (widget.meditation is Meditation) {
       setState(() {
@@ -66,7 +67,6 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     WidgetsBinding.instance?.removeObserver(this);
     // Release decoders and buffers back to the operating system making them
     // available for other apps to use.
-    vm.dispose();
     super.dispose();
   }
 
@@ -101,7 +101,10 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
           controllerType: ControllerType.fromFields,
           body: Padding(
             padding: EdgeInsets.fromLTRB(
-                width * 0.03, height * 0.03, width * 0.03, 0),
+                width * 0.03,
+                MediaQuery.of(context).padding.top + height * 0.03,
+                width * 0.03,
+                0),
             child: Stack(
               children: [
                 Align(
@@ -112,7 +115,11 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       size: height * 0.03,
                       color: Colors.black,
                     ),
-                    onPressed: () => {navigationService.back()},
+                    onPressed: () {
+                      vm.dispose();
+                      navigationService
+                          .navigateTo(Routes.authenticationWrapperView);
+                    },
                   ),
                 ),
                 Align(
@@ -123,19 +130,21 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                       size: height * 0.03,
                       color: Colors.red,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      print("Da fak");
+                      TtsSource ttsSource = vm.ttsSource;
+                      vm.dispose();
                       EmotionsMeasure prevEmotion =
                           widget.meditation is Meditation
                               ? (widget.meditation as Meditation)
                                   .getEmotionMeasure()
                               : EmotionsMeasure.blank();
-                      vm.player.stop();
-                      navigationService.navigateTo(
+                      navigationService.replaceWith(
                         Routes.meditation_rating,
                         arguments: MeditationRatingViewArguments(
                           prevEmotionsMeasure: prevEmotion,
                           simpleMeditation: widget.meditation,
-                          ttsSource: vm.ttsSource,
+                          ttsSource: ttsSource,
                         ),
                       );
                     },
@@ -143,7 +152,13 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                 ),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Text(widget.meditation.name),
+                  child: Text(
+                    widget.meditation.name,
+                    style: GoogleFonts.raleway(
+                        fontWeight: FontWeight.w700,
+                        fontSize: height * .02,
+                        color: Colors.black),
+                  ),
                 ),
                 Padding(
                   padding:
@@ -163,12 +178,12 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(width * .1),
                             child: Center(
                               child: SvgPicture.asset(
                                 'assets/images/meditating_man.svg',
                                 semanticsLabel: 'Acme Logo',
-                                height: height * .4,
+                                height: height * .3,
                               ),
                             ),
                           ),
@@ -191,12 +206,15 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: width * 0.066),
-                                  child: SeekBar(
-                                    position: vm.totalDuration,
-                                    duration: vm.effectiveTotalDuration,
-                                    bufferedPosition:
-                                        vm.effectiveBufferedPosition,
-                                    onChanged: vm.seekToWithDuration,
+                                  child: Visibility(
+                                    visible: isSimple,
+                                    child: SeekBar(
+                                      position: vm.effectivePosition,
+                                      duration: vm.effectiveTotalDuration,
+                                      bufferedPosition:
+                                          vm.effectiveBufferedPosition,
+                                      onChanged: vm.seekToWithDuration,
+                                    ),
                                   ),
                                 ),
                                 Text(

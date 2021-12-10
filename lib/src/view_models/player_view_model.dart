@@ -78,7 +78,7 @@ class PlayerViewModel extends ChangeNotifier {
   }
 
   Duration get effectivePosition {
-    return totalDuration + player.position;
+    return player.position;
   }
 
   Duration get effectiveBufferedPosition {
@@ -186,6 +186,9 @@ class PlayerViewModel extends ChangeNotifier {
     // Try to load audio from a source and catch any errors.
     try {
       if (meditation is Meditation) {
+        // await player.setAudioSource(AudioSource.uri(Uri.parse(
+        //     "http://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
+        print("[COMPLEX MEDITATION]");
         List<AudioSource> audioSources = [];
         for (Step step in (meditation as Meditation).steps) {
           Iterable<AudioSource> stepAudioSources = step.chunks.map<AudioSource>(
@@ -203,6 +206,8 @@ class PlayerViewModel extends ChangeNotifier {
       } else {
         await player
             .setAudioSource(AudioSource.uri(Uri.parse(meditation.path)));
+        print("[SPEED] ${player.speed}");
+        // await player.setSpeed(0.2);
       }
       //Test 60 seconds of playback
       player.play();
@@ -226,14 +231,20 @@ class PlayerViewModel extends ChangeNotifier {
   ///Ej: Playlist: [0, 10s) step1, [10, 30) step2, then calling with Duration(15secs)
   ///would seek to the start of step2.
   Future<void> seekToWithDuration(Duration duration) async {
-    print("Seeking Duration: $duration");
-    print(rangesToChunks[DurationRange.fromDuration(duration)]);
-    DurationRangeInt value =
-        rangesToChunks[DurationRange.fromDuration(duration)] ??
-            DurationRangeInt.empty();
-    totalDuration = value.range.start;
-    notifyListeners();
-    await player.seek(Duration.zero, index: value.index);
+    if (meditation is Meditation) {
+      print("Seeking Duration: $duration");
+      print(rangesToChunks[DurationRange.fromDuration(duration)]);
+      DurationRangeInt value =
+          rangesToChunks[DurationRange.fromDuration(duration)] ??
+              DurationRangeInt.empty();
+      totalDuration = value.range.start;
+      currentDuration = duration;
+      notifyListeners();
+      await player.seek(duration - value.range.start, index: value.index);
+    } else {
+      print(duration);
+      await player.seek(duration);
+    }
     // totalDuration = value.range.start;
   }
 
@@ -255,23 +266,30 @@ class PlayerViewModel extends ChangeNotifier {
   //     };
 
   @override
-  void dispose() {
-    player.dispose();
+  Future<void> dispose() async {
+    print("Disposing player view model");
+    if (player.audioSource is ConcatenatingAudioSource) {
+      await (player.audioSource as ConcatenatingAudioSource).clear();
+    }
+    // player.set
+    await player.stop();
+    await player.dispose();
+    // AudioPlayer.clearAssetCache();
     super.dispose();
   }
 }
 
-class PositionData {
-  Duration duration;
-  Duration position;
-  Duration bufferedPosition;
-
-  PositionData(this.position, this.bufferedPosition, this.duration);
-
-  get sliderValue => (position != null &&
-          duration != null &&
-          position.inMilliseconds > 0 &&
-          position.inMilliseconds < duration.inMilliseconds)
-      ? position.inMilliseconds / duration.inMilliseconds
-      : 0.0;
-}
+// class PositionData {
+//   Duration duration;
+//   Duration position;
+//   Duration bufferedPosition;
+//
+//   PositionData(this.position, this.bufferedPosition, this.duration);
+//
+//   get sliderValue => (position != null &&
+//           duration != null &&
+//           position.inMilliseconds > 0 &&
+//           position.inMilliseconds < duration.inMilliseconds)
+//       ? position.inMilliseconds / duration.inMilliseconds
+//       : 0.0;
+// }

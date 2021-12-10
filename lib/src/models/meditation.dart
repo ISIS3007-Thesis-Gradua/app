@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:serenity/src/models/emotions_measure.dart';
 import 'package:serenity/src/models/meditation_config.dart';
@@ -20,17 +21,21 @@ part 'meditation.g.dart';
 ///More info, see: https://docs.hivedb.dev/#/custom-objects/generate_adapter
 @HiveType(typeId: 0)
 class SimpleMeditation {
-  ///Path to local file containing the audio for this meditation.
+  ///Meditation id, by default is a String representation of the timestamp of its creation.
   @HiveField(0)
+  String id = '';
+
+  ///Path to local file containing the audio for this meditation.
+  @HiveField(1)
   String path;
 
   ///Meditation Name.
-  @HiveField(1)
+  @HiveField(2)
   String name;
 
   ///Meditation Duration.
-  @HiveField(2)
-  late num durationInSeconds;
+  @HiveField(3)
+  late double durationInSeconds;
 
   Duration duration;
 
@@ -39,9 +44,15 @@ class SimpleMeditation {
       this.name = "Generated Meditation",
       this.duration = Duration.zero}) {
     durationInSeconds = duration.inMilliseconds / 1000;
+    id = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
-  void set durationInSec(Duration duration) {
+  @override
+  String toString() {
+    return "Instance of Simple Meditation. Path: $path";
+  }
+
+  set durationInSec(Duration duration) {
     this.duration = duration;
     durationInSeconds = duration.inMilliseconds / 1000;
   }
@@ -56,7 +67,6 @@ class SimpleMeditation {
 ///parameters passed at the HomeView. This will alsa contain the generated Steps and the
 ///corresponding meditation's entire text (Concatenation of each step text with SSML break times)
 class Meditation extends SimpleMeditation {
-  String id = '';
   String meditationText = '';
   MeditationConfig config = MeditationConfig();
   List<Step> steps = [];
@@ -64,7 +74,6 @@ class Meditation extends SimpleMeditation {
   Meditation.blank() : super();
 
   Meditation({
-    this.id = '',
     this.steps = const [],
     required this.meditationText,
     required this.config,
@@ -117,6 +126,14 @@ class Meditation extends SimpleMeditation {
       chunks.addAll(step.chunks);
     }
     return chunks;
+  }
+
+  SimpleMeditation asSimpleMeditation() {
+    SimpleMeditation simpleMeditation =
+        SimpleMeditation(path: path, name: name, duration: duration);
+    simpleMeditation.id = id;
+    simpleMeditation.durationInSec = duration;
+    return simpleMeditation;
   }
 }
 
@@ -227,7 +244,7 @@ class StepSilence implements ChunkSource {
   ///player will use to emulate the periods of silence.
   Future<void> init() async {
     Directory tempDir = await getTemporaryDirectory();
-    filePath = tempDir.path + id + ".wav";
+    filePath = p.join(tempDir.path, id + ".wav");
     print(filePath);
 
     File fileOut = File(filePath);

@@ -19,9 +19,9 @@ import 'package:stacked_services/stacked_services.dart';
 class GraphView extends StatefulWidget {
   final EmotionsMeasure prevEmotionsMeasure;
   final EmotionsMeasure posEmotionsMeasure;
-  TtsSource ttsSource;
-  SimpleMeditation simpleMeditation;
-  GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure,
+  final TtsSource ttsSource;
+  final SimpleMeditation simpleMeditation;
+  const GraphView(this.prevEmotionsMeasure, this.posEmotionsMeasure,
       {Key? key, required this.simpleMeditation, required this.ttsSource})
       : super(key: key);
 
@@ -56,7 +56,7 @@ class _GraphViewState extends State<GraphView> {
     final double height = getHeight();
     final width = MediaQuery.of(context).size.width;
 
-    List<Widget> summaryPanel = <Widget>[ResultsTitle(width, context)];
+    List<Widget> summaryPanel = <Widget>[resultsTitle(width, context)];
     summaryPanel.addAll(
       summaryResults(
           widget.prevEmotionsMeasure, widget.posEmotionsMeasure, width),
@@ -64,128 +64,125 @@ class _GraphViewState extends State<GraphView> {
 
     LocalStorageService localStorage = locator<LocalStorageService>();
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF6F9FF),
-        body: SlidingUpPanel(
-          backdropOpacity: 0.17,
-          controller: _controller,
-          isDraggable: false,
-          maxHeight: height * 0.67,
-          minHeight: height * 0.06,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          collapsed: CollapsedContainer(_controller, height, width),
-          panel: Text(""),
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(0, height * .02, 0, height * .1),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                BasicCard(
-                  height: height * .25,
-                  width: width * .9,
-                  child: MeasuresGraph(measures),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F9FF),
+      body: SlidingUpPanel(
+        backdropOpacity: 0.17,
+        controller: _controller,
+        isDraggable: false,
+        maxHeight: height * 0.67,
+        minHeight: height * 0.06,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+        collapsed: CollapsedContainer(_controller, height, width),
+        panel: Text(""),
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(0, height * .02, 0, height * .1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BasicCard(
+                height: height * .25,
+                width: width * .9,
+                child: MeasuresGraph(measures),
+              ),
+              SizedBox(
+                height: height * .2,
+                width: width * .9,
+                child: Column(
+                  children: summaryPanel,
                 ),
-                SizedBox(
-                  height: height * .2,
-                  width: width * .9,
-                  child: Column(
-                    children: summaryPanel,
-                  ),
-                ),
-                SizedBox(
-                  height: width * .9 * (3 / 5),
-                  width: width * .9,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: InkWell(
-                            onTap: () {
-                              navigationService.back();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue.withAlpha(150),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Center(
-                                child: Icon(CupertinoIcons.back,
-                                    size: width * .12, color: Colors.white),
-                              ),
+              ),
+              SizedBox(
+                height: width * .9 * (3 / 5),
+                width: width * .9,
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: InkWell(
+                          onTap: () {
+                            navigationService.back();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withAlpha(150),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Icon(CupertinoIcons.back,
+                                  size: width * .12, color: Colors.white),
                             ),
                           ),
                         ),
                       ),
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          child: Column(
-                            children: [
-                              Flexible(
-                                flex: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.blueAccent,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.share,
-                                          size: width * .07,
-                                          color: Colors.white,
-                                        ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.blueAccent,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.share,
+                                        size: width * .07,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              Flexible(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      localStorage.saveMeditation(
-                                          (widget.simpleMeditation
-                                              as Meditation),
-                                          widget.ttsSource);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.purple,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          GraduaIcons.saved,
-                                          size: width * .05,
-                                          color: Colors.white,
-                                        ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    localStorage.saveMeditation(
+                                        (widget.simpleMeditation as Meditation),
+                                        widget.ttsSource);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.purple,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        GraduaIcons.saved,
+                                        size: width * .05,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -193,7 +190,7 @@ class _GraphViewState extends State<GraphView> {
   }
 }
 
-Widget ResultsTitle(double width, BuildContext context) {
+Widget resultsTitle(double width, BuildContext context) {
   return Padding(
     padding: EdgeInsets.symmetric(vertical: width * .04),
     child: Row(

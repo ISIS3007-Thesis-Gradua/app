@@ -11,6 +11,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../src/services/local_storage_service.dart';
+import '../src/services/notifications_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -23,4 +24,5 @@ void setupLocator({String? environment, EnvironmentFilter? environmentFilter}) {
   locator.registerSingleton(NavigationService());
   locator.registerSingleton(DialogService());
   locator.registerLazySingleton(() => LocalStorageService());
+  locator.registerSingleton(NotificationService());
 }

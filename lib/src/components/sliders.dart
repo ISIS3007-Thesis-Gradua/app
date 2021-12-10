@@ -22,15 +22,25 @@ class GradientSlider extends StatefulWidget {
 }
 
 class _GradientSliderState extends State<GradientSlider> {
-  final double trackHeight = 12;
-  final double trackRadius = 8;
-  final double thumbWidth = 100;
+  double trackHeight = 12;
+  double trackRadius = 8;
+  double thumbWidth = 100;
 
   @override
   Widget build(BuildContext context) {
     // print("Building shit slider");
+    double getHeight() {
+      return MediaQuery.of(context).size.height -
+          MediaQuery.of(context).padding.top -
+          MediaQuery.of(context).padding.bottom;
+    }
+
+    final double height = getHeight();
+
+    trackHeight = height * .015;
+    trackRadius = height * .0095;
     return Container(
-      height: 20,
+      height: trackHeight * 1.02,
       width: double.infinity,
       decoration: BoxDecoration(
         // color: Colors.white,
@@ -60,16 +70,19 @@ class _GradientSliderState extends State<GradientSlider> {
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.transparent,
                   inactiveTrackColor: Colors.transparent,
-                  trackShape: RoundedRectSliderTrackShape(),
+
                   trackHeight: trackHeight,
+                  trackShape: RoundedRectSliderTrackShape(),
                   thumbColor: Colors.redAccent,
                   thumbShape: CustomSliderThumbRect(
+                      height: trackHeight,
                       thumbRadius: trackRadius,
                       thumbWidth: thumbWidth,
                       min: 2,
                       max: 20),
                   // overlayColor: Colors.red.withAlpha(32),
                   // overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0),
+
                   tickMarkShape: RoundSliderTickMarkShape(),
                   activeTickMarkColor: Colors.white,
                   inactiveTickMarkColor: Colors.white,
@@ -106,9 +119,10 @@ class CustomSliderThumbRect extends SliderComponentShape {
   final double thumbWidth;
   final int min;
   final int max;
-  final double height = 12;
+  final double height;
 
   const CustomSliderThumbRect({
+    required this.height,
     required this.thumbRadius,
     required this.thumbWidth,
     required this.min,
