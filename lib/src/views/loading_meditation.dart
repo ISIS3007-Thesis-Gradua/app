@@ -22,10 +22,11 @@ class LoadingMeditationView extends StatelessWidget {
       path: '/randomize',
       queryParameters: {
         'time': config.time.toString(),
-        'avg': 5.toString(),
+        // 'avg': 5.toString(),
       },
     );
     RestOperation restOperation = Amplify.API.get(restOptions: options);
+    print('[Response] ${(await restOperation.response).body}');
     // Future.delayed(Duration(seconds: 1), """{"step00":[{"_id":"6169c53d201ebe4f6a58c769","content":"<speak> Bienvenido a tu meditación guiada por Gradúa, espero que esta práctica te traiga muchos beneficios</speak>"}],"step01":[{"_id":"6169c584201ebe4f6a58c77d","content":"<speak> Cierra tus ojos, busca una posición cómoda y quédate quieto. <break time=\"900ms\"/> Busca una postura relajada y atenta a la vez. </speak>"}],"step1":[{"_id":"6169b81336651c7498ee7d1b","content":"<speak> Gandhi decía:No hay camino para la paz, la paz es el camino. <break time=\"900ms\"/>  ¿Con qué? ¿o con quien? <break time=\"300ms\"/>  te hace falta reconciliarte?  <break time=\"900ms\"/>  Lo cierto, es que el rencor es un peso innecesario. </speak>"}],"step2":[{"_id":"6169b8ec36651c7498ee7d28","content":"<speak> En principio, volvamos sobre nuestra postura. <break time=\"1600ms\"/>  ¿estás cómodo y atento?<break time=\"1300ms\"/> ¿tienes tu espalda derecha? <break time=\"1500ms\"/>     apoya tus manos en las piernas o crúzalas en tu regazo. </speak>"}],"step3":[{"_id":"6169ba7a36651c7498ee7d7b","content":"<speak> relájate con cada exhalación.. <break time=\"2600ms\"/> centra tu atención en las sensaciones de tu respiración. <break time=\"2600ms\"/>  INHALA profundamente. <break time=\"4000ms\"/>EXHALA profundamente. <break time=\"4000ms\"/> INHALA. <break time=\"4000ms\"/>EXHALA. <break time=\"4000ms\"/>INHALA. <break time=\"4000ms\"/>EXHALA. <break time=\"4000ms\"/>relájate en cada exhalación. <break time=\"600ms\"/> INHALA. <break time=\"4000ms\"/>EXHALA. <break time=\"4000ms\"/>continua un moemnto.<break time=\"22600ms\"/> </speak> "}],"step4":[{"_id":"6169b94136651c7498ee7d38","content":"<speak> piensa en alguna persona cercana. <break time=\"10600ms\"/> visualízala y recuérdala. <break time=\"5600ms\"/> imagina a esta persona siendo feliz. <break time=\"18600ms\"/> piensa en la felicidad que esta persona ha brindado a los demás. <break time=\"16600ms\"/> </speak>  "}],"step5":[{"_id":"6169b97e36651c7498ee7d46","content":"<speak> ahora enfócate en todos los sonidos que escuches por tres minutos. <break time=\"700ms\"/> si te distraes no te preocupes. <break time=\"800ms\"/>  vuelve a enfocarte en los sonidos del ambiente. <break time=\"180000ms\"/> finaliza dejando tu mente libre de cualquier tarea.<break time=\"25000ms\"/>  </speak> "}],"step6":[{"_id":"6169b9d136651c7498ee7d50","content":"<speak> para finalizar, trae tu atención otra vez  al presente. <break time=\"5000ms\"/> mueve ligeramente cualquier parte del cuerpo que te genere incomodidad o que necesite moverse. <break time=\"8000ms\"/>  date un momento para volver a recuperar tu conciencia. <break time=\"5000ms\"/> ¿como te sientes en este instante? </speak>"}],"step7":[{"_id":"6169ba2036651c7498ee7d5b","content":"<speak> abre los ojos. <break time=\"2000ms\"/> ¿Que tal estuvo la práctica de hoy? <break time=\"3000ms\"/> hemos terminado. Hasta pronto. </speak> "}]}")""
     return restOperation.response;
   }
@@ -83,7 +84,7 @@ class LoadingMeditationView extends StatelessWidget {
                 () => navigationService.replaceWith(
                   Routes.player,
                   arguments: PlayerArguments(
-                    meditation: Meditation.fromRawJson(body, config),
+                    meditation: Meditation.fromRawJson(body["routine"], config),
                   ),
                 ),
               );

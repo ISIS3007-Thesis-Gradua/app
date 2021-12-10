@@ -42,21 +42,16 @@ class PlayerViewModel extends ChangeNotifier {
       {
       // this.steps = const [],
       this.ttsSource = TtsSource.mozilla,
-      required this.meditation});
+      required this.meditation}) {
+    if (meditation is Meditation) {
+      // print('[Meditation text] ${(meditation as Meditation).getChunks()[0]}');
+    }
+  }
 
   ///Dado un pedazo de texto devuelve el endpoint correspondiente al TTS provider Actual
   String constructSingleSource(String ttsChunk) {
     return ttsSource.url + ttsChunk;
   }
-
-  // @override
-  // Stream<PositionData> get stream =>
-  //     Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-  //         player.positionStream,
-  //         player.bufferedPositionStream,
-  //         player.durationStream,
-  //         (position, bufferedPosition, duration) => PositionData(
-  //             position, bufferedPosition, duration ?? Duration.zero));
 
   Duration? currentDuration;
 
