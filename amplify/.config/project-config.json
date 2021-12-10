@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "serenity",
+  "projectName": "Serenity",
   "version": "3.1",
   "frontend": "flutter",
   "flutter": {
