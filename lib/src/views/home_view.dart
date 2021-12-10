@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/components/buttons.dart';
 import 'package:serenity/src/components/cards.dart';
@@ -12,6 +13,7 @@ import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/instructions.dart';
 import 'package:serenity/src/components/side_bar.dart';
+import 'package:serenity/src/services/authentication_service.dart';
 import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
@@ -58,6 +60,9 @@ class _HomeViewState extends State<HomeView> {
     return ViewModelBuilder<HomeViewModel>.reactive(
         viewModelBuilder: () => HomeViewModel.exampleData(),
         builder: (context, vm, child) {
+          //TODO ver bien dónde poner esto
+          AuthenticationService authenticationService =
+              context.read<AuthenticationService>();
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: const Color(0xFFF6F9FF),
@@ -183,6 +188,15 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     );
                                   }),
+                                ),
+                                Positioned(
+                                  right: height * .02,
+                                  top: height * .05,
+                                  child: IconButton(
+                                    icon: Icon(Icons.logout_rounded),
+                                    onPressed: () =>
+                                        authenticationService.signOut(),
+                                  ),
                                 ),
                                 Padding(
                                   padding:
