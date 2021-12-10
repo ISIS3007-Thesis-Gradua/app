@@ -20,30 +20,35 @@ class LoginViewModel with ChangeNotifier {
   get email => _email;
   get pass => _pass;
   Future<void> setPass(String? newPass) async {
+    print('Set pass: $newPass');
     if (newPass == null) return;
 
     // Dot not perform any work if new and old ThemeMode are identical
     if (_pass == newPass) return;
     // Otherwise, store the new theme mode in memory
     _pass = newPass;
+    print('Set ___pass: $_pass');
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
 
   Future<void> setEmail(String? newEmail) async {
+    print('Set email: $newEmail');
     if (newEmail == null) return;
 
     // Dot not perform any work if new and old ThemeMode are identical
     if (_email == newEmail) return;
     // Otherwise, store the new theme mode in memory
     _email = newEmail;
-
+    print('Set ___email: $_email');
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
 
   Future<AuthResult> loginUser() async {
+    print("Login $email $pass");
+    print("__ $_email $_pass");
     AuthResult res =
         await authenticationService.signIn(email: _email, password: _pass);
     // SignInResult res = await Amplify.Auth.signIn(
