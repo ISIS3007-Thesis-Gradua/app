@@ -5,20 +5,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:serenity/src/models/meditation.dart';
 import 'package:serenity/src/models/range_map.dart';
 
-const String _positionDataSreamKey = "positionData-stream";
-const String _playerStateStreamKey = "playerState-stream";
-const String ttsEndPoint = "http://3.237.62.115:5002/api/tts?text=";
-
-// 192.168.0.4 local
-// http://3.237.62.115:5002/ aws
-
 enum TtsSource { mozilla, aws, native }
 
 extension EndPoint on TtsSource {
   String get url {
     switch (this) {
       case TtsSource.mozilla:
-        return "http://192.168.0.4:5002/api/tts?text=";
+        return "http://ec2-3-230-3-167.compute-1.amazonaws.com/api/tts?text=";
       case TtsSource.native:
         return "not-implemented";
       case TtsSource.aws:
