@@ -61,6 +61,7 @@ flutter_ios_podfile_setup
   end
 
 target 'Runner' do
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.9.0'
   use_frameworks!
   use_modular_headers!
 

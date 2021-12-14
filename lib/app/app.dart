@@ -1,3 +1,4 @@
+import 'package:serenity/src/services/firestore_service.dart';
 import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/services/notifications_service.dart';
 import 'package:serenity/src/views/authentication_wrapper_view.dart';
@@ -64,7 +65,8 @@ import 'package:stacked_services/stacked_services.dart';
     ),
     Singleton(
       classType: NotificationService,
-    )
+    ),
+    LazySingleton(classType: FireStoreService),
   ],
 )
 class App {

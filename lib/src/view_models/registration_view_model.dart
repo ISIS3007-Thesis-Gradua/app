@@ -4,7 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:serenity/app/app.locator.dart';
+import 'package:serenity/src/models/user.dart';
 import 'package:serenity/src/services/authentication_service.dart';
+import 'package:serenity/src/services/firestore_service.dart';
+import 'package:serenity/src/utils/generic_consts.dart';
 import 'package:serenity/src/utils/string_manipulation.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -14,6 +18,7 @@ import 'package:serenity/src/utils/string_manipulation.dart';
 /// uses the EmployeeUpdateService to store and retrieve user settings.
 class RegistrationViewModel with ChangeNotifier {
   final AuthenticationService authenticationService;
+  final FireStoreService fireStoreService = locator<FireStoreService>();
 
   RegistrationViewModel(this.authenticationService);
 
@@ -127,17 +132,19 @@ class RegistrationViewModel with ChangeNotifier {
 
   Future<SignUpResult> registerUser() async {
     // try {
-    Map<String, String> userAttributes = {
-      'gender': _gender,
-      'name': _name,
-      'email': _email,
-      // additional attributes as needed
-    };
     SignUpResult res =
         await authenticationService.signUp(email: _email, password: _pass);
-    developer.log(
-      '${enumValue(res)}',
-    );
+
+    Map<String, String> userAttributes = {
+      'id': res.credentials?.user?.uid ?? emptyUid,
+      'name': _name,
+      'email': _email,
+      'gender': _gender,
+      // additional attributes as needed
+    };
+    GraduaUser user = GraduaUser.fromData(userAttributes);
+    developer.log('$enumValue(res)');
+    await fireStoreService.createUser(user);
     return res;
     // } on AuthException catch (e) {
     //   developer.log(
