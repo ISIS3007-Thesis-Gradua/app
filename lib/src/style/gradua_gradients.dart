@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
 ///Enum of radients used across the app
@@ -7,7 +8,9 @@ enum GraduaGradients {
   defaultGradient,
   instructionsGradient,
   neomorphicButtonGradient,
-  basicCardGradient
+  basicCardGradient,
+  successAlertGradient,
+  errorAlertGradient,
 }
 
 extension GraduaGradientsValues on GraduaGradients {
@@ -46,18 +49,54 @@ extension GraduaGradientsValues on GraduaGradients {
         );
       case GraduaGradients.basicCardGradient:
         return const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xA3A6D5FF),
-              Color(0xFFC9E0FF),
-              Color(0xFFE2EFFD),
-            ],
-            stops: [
-              0,
-              0.5,
-              0.9
-            ]);
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xA3A6D5FF),
+            Color(0xFFC9E0FF),
+            Color(0xFFE2EFFD),
+          ],
+          stops: [0, 0.5, 0.9],
+        );
+      case GraduaGradients.successAlertGradient:
+        return LinearGradient(
+          transform: GradientRotation(radians(0)),
+          // begin: Alignment.topLeft,
+          // end: Alignment.bottomRight,
+          colors: const [
+            Color(0xFF92FE9D),
+            Color(0xFF00C9FF),
+          ],
+        );
+      case GraduaGradients.errorAlertGradient:
+        return LinearGradient(
+          transform: GradientRotation(radians(-90)),
+          // begin: Alignment.topLeft,
+          // end: Alignment.bottomRight,
+          colors: const [
+            Color(0xFFBF072A),
+            Color(0xFFFFB199),
+          ],
+        );
+    }
+  }
+
+  Color get textContrastingColor {
+    switch (this) {
+      case GraduaGradients.helperTitleGradient:
+        return Colors.white;
+      case GraduaGradients.defaultGradient:
+        return Colors.white;
+      case GraduaGradients.instructionsGradient:
+        return Colors.white;
+      case GraduaGradients.neomorphicButtonGradient:
+        return Colors.black54;
+      case GraduaGradients.basicCardGradient:
+        return const Color(0xFF768596);
+      case GraduaGradients.successAlertGradient:
+        return Colors.black;
+      case GraduaGradients.errorAlertGradient:
+        return Colors.white;
     }
   }
 }

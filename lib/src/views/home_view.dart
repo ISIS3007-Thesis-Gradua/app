@@ -15,6 +15,7 @@ import 'package:serenity/src/components/instructions.dart';
 import 'package:serenity/src/components/side_bar.dart';
 import 'package:serenity/src/services/authentication_service.dart';
 import 'package:serenity/src/services/local_storage_service.dart';
+import 'package:serenity/src/style/gradua_gradients.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
 import 'package:serenity/src/view_models/home_view_model.dart';
 import 'package:serenity/src/views/scroll_sheet.dart';
@@ -101,7 +102,9 @@ class _HomeViewState extends State<HomeView> {
                                         "¡Hola! Bienvenido a Gradúa. \nDeseas iniciar con una \nmeditación sugerida?",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.raleway(
-                                          color: Color(0xFF768596),
+                                          color: GraduaGradients
+                                              .basicCardGradient
+                                              .textContrastingColor,
                                           fontWeight: FontWeight.w700,
                                           fontSize: height * 0.022,
                                           height: 1,
