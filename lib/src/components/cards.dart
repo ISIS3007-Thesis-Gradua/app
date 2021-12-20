@@ -7,7 +7,9 @@ class BasicCard extends StatelessWidget {
   final double? width;
   final double? height;
   final Widget child;
-  const BasicCard({Key? key, this.width, this.height, required this.child})
+  final Gradient? gradient;
+  const BasicCard(
+      {Key? key, this.width, this.height, required this.child, this.gradient})
       : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class BasicCard extends StatelessWidget {
             offset: Offset(-5, -10), // changes position of shadow
           ),
         ],
-        gradient: GraduaGradients.basicCardGradient.linearGradient,
+        gradient: gradient ?? GraduaGradients.basicCardGradient.linearGradient,
       ),
       child: child,
     );

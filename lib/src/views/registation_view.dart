@@ -9,7 +9,6 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:serenity/app/app.locator.dart';
 import 'package:serenity/app/app.router.dart';
 import 'package:serenity/src/services/authentication_service.dart';
-import 'package:serenity/src/services/firestore_service.dart';
 import 'package:serenity/src/style/text_theme.dart';
 import 'package:serenity/src/view_models/registration_view_model.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -41,7 +40,6 @@ class _RegistrationState extends State<Registration> {
   @override
   void initState() {
     navigationService = locator<NavigationService>();
-    var fireStoreService = locator<FireStoreService>();
 
     super.initState();
   }

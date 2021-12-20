@@ -11,7 +11,8 @@ extension EndPoint on TtsSource {
   String get url {
     switch (this) {
       case TtsSource.mozilla:
-        return "http://ec2-3-230-3-167.compute-1.amazonaws.com/api/tts?text=";
+        return "http://172.24.96.1:5002/api/tts?text=";
+      // return "http://ec2-3-230-3-167.compute-1.amazonaws.com/api/tts?text=";
       case TtsSource.native:
         return "not-implemented";
       case TtsSource.aws:
