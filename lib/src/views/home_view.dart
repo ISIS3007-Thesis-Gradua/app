@@ -5,15 +5,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:serenity/app/app.router.dart';
+import 'package:serenity/src/components/app_bar.dart';
 import 'package:serenity/src/components/buttons.dart';
 import 'package:serenity/src/components/cards.dart';
 import 'package:serenity/src/components/collapsed_container.dart';
 import 'package:serenity/src/components/helper_dialog.dart';
 import 'package:serenity/src/components/instructions.dart';
 import 'package:serenity/src/components/side_bar.dart';
-import 'package:serenity/src/services/authentication_service.dart';
 import 'package:serenity/src/services/local_storage_service.dart';
 import 'package:serenity/src/style/gradua_gradients.dart';
 import 'package:serenity/src/utils/gradua_icons.dart';
@@ -61,22 +60,16 @@ class _HomeViewState extends State<HomeView> {
     return ViewModelBuilder<HomeViewModel>.reactive(
         viewModelBuilder: () => HomeViewModel.exampleData(),
         builder: (context, vm, child) {
-          //TODO ver bien dónde poner esto
-          AuthenticationService authenticationService =
-              context.read<AuthenticationService>();
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: const Color(0xFFF6F9FF),
-            drawer: SideBar(),
+            appBar: mainAppBar(context),
+            drawer: const SideBar(),
             body: ScrollSheet(
               controllerType: ControllerType.fromFields,
               controller: _controller,
               body: Padding(
-                padding: EdgeInsets.fromLTRB(
-                    0,
-                    height * 0.05 + MediaQuery.of(context).padding.top,
-                    0,
-                    height * 0.1),
+                padding: EdgeInsets.fromLTRB(0, height * .02, 0, height * .16),
                 child: Stack(
                   children: [
                     Column(
@@ -144,61 +137,6 @@ class _HomeViewState extends State<HomeView> {
                                     assetName,
                                     semanticsLabel: 'Acme Logo',
                                     height: height * .2,
-                                  ),
-                                ),
-                                Positioned(
-                                  left: -height * .02,
-                                  top: height * .05,
-                                  child: Builder(builder: (context) {
-                                    return SizedBox(
-                                      height: height * .1,
-                                      width: width * .25,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            child: Wrap(
-                                              direction: Axis.vertical,
-                                              crossAxisAlignment:
-                                                  WrapCrossAlignment.center,
-                                              spacing: width * .01,
-                                              children: [
-                                                // ignore: prefer_const_constructors
-                                                Icon(
-                                                  Icons
-                                                      .download_for_offline_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                                Text(
-                                                  "Abrir\nGuardadas",
-                                                  textAlign: TextAlign.center,
-                                                  style: GoogleFonts.raleway(
-                                                    color:
-                                                        const Color(0xFF768596),
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: width * 0.026,
-                                                    height: 1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            onTap: () {
-                                              Scaffold.of(context).openDrawer();
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                ),
-                                Positioned(
-                                  right: height * .02,
-                                  top: height * .05,
-                                  child: IconButton(
-                                    icon: Icon(Icons.logout_rounded),
-                                    onPressed: () =>
-                                        authenticationService.signOut(),
                                   ),
                                 ),
                                 Padding(
