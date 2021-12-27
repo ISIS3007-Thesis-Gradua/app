@@ -40,7 +40,9 @@ class _MeditationConfigViewState extends State<MeditationConfigView> {
         fontWeight: FontWeight.w800,
         color: const Color(0xFF8B9EB0),
         fontSize: width * 0.04);
-    return Expanded(
+    return SizedBox(
+      width: double.infinity,
+      height: height * .3,
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.05, vertical: height * 0.02),

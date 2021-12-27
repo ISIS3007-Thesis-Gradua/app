@@ -72,7 +72,7 @@ class _InstructionsState extends State<Instructions> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                      width * .05, height * .02, width * .05, height * .05),
+                      width * .05, height * .05, width * .05, height * .05),
                   child: Column(
                     children: [
                       Align(

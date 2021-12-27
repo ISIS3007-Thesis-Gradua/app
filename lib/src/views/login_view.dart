@@ -113,92 +113,99 @@ class _LoginState extends State<Login> {
     return Scaffold(
         backgroundColor: const Color(0xFFF6F9FF),
         body: SingleChildScrollView(
-          child: Form(
-              key: _formKey,
-              child: SizedBox(
-                width: double.infinity,
-                height: height,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * .1),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .1),
-                        child: Image.asset(
-                          "assets/images/key.png",
-                          height: height * .15,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, height * .015),
-                        child: GradientText(
-                          "¡Bienvenido a Gradúa!",
-                          style: titleStyle,
-                          align: TextAlign.center,
-                        ),
-                      ),
-                      Text(
-                        "Tu asistente meditador\na la mano.",
-                        style: subtitleStyle,
-                        textAlign: TextAlign.center,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Correo Electronico',
-                        ),
-                        onChanged: _loginViewModel!.setEmail,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      //////
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Contraseña',
-                        ),
-                        onChanged: _loginViewModel!.setPass,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      /////
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, height * .02, 0, 0),
-                        child: RoundedLoadingButton(
-                          child: const Text(
-                            'Ingresar',
-                            style: TextStyle(color: Colors.white),
+          child: Theme(
+            data: ThemeData(
+              inputDecorationTheme: InputDecorationTheme(
+                labelStyle: subtitleStyle,
+              ),
+            ),
+            child: Form(
+                key: _formKey,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: height,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width * .1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .1),
+                          child: Image.asset(
+                            "assets/images/key.png",
+                            height: height * .15,
                           ),
-                          controller: _btnController,
-                          onPressed: _login,
-                          color: Colors.deepPurpleAccent,
                         ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, height * .02),
-                        child: RichText(
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, height * .015),
+                          child: GradientText(
+                            "¡Bienvenido a Gradúa!",
+                            style: titleStyle,
+                            align: TextAlign.center,
+                          ),
+                        ),
+                        Text(
+                          "Tu asistente meditador\na la mano.",
+                          style: subtitleStyle,
                           textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: 'Si no tienes una cuenta  ',
-                            style: subtitleStyle,
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '¡Registrate aqui!',
-                                style: const TextStyle(
-                                    color: Colors.deepPurpleAccent),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => {
-                                        navigationService.navigateTo(
-                                          Routes.registration,
-                                        ),
-                                      },
-                              ),
-                            ],
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Correo Electronico',
+                          ),
+                          onChanged: _loginViewModel!.setEmail,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        //////
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Contraseña',
+                          ),
+                          onChanged: _loginViewModel!.setPass,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        /////
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, height * .02, 0, 0),
+                          child: RoundedLoadingButton(
+                            child: const Text(
+                              'Ingresar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            controller: _btnController,
+                            onPressed: _login,
+                            color: Colors.deepPurpleAccent,
                           ),
                         ),
-                      ),
-                    ],
+                        const Spacer(),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, height * .02),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: 'Si no tienes una cuenta  ',
+                              style: subtitleStyle,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '¡Registrate aqui!',
+                                  style: const TextStyle(
+                                      color: Colors.deepPurpleAccent),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => {
+                                          navigationService.navigateTo(
+                                            Routes.registration,
+                                          ),
+                                        },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )),
+                )),
+          ),
         ));
   }
 }

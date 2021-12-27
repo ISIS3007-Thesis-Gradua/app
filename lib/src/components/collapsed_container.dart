@@ -21,6 +21,8 @@ void Function() createHandler(PanelController controller) {
 Widget CollapsedContainer(
         PanelController controller, double screenHeight, double screenWidth) =>
     Container(
+      width: double.infinity,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, screenHeight * .05),
       decoration: BoxDecoration(
         color: const Color(0xEEF6F5F5),
         borderRadius: const BorderRadius.only(
@@ -29,34 +31,31 @@ Widget CollapsedContainer(
         ),
         gradient: GraduaGradients.instructionsGradient.linearGradient,
       ),
-      child: SizedBox(
-        width: double.infinity,
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(screenWidth * 0.07, 0, 0, 0),
-                child: Text(
-                  "Instrucciones",
-                  style: GoogleFonts.raleway(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800),
-                ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(screenWidth * 0.07, 0, 0, 0),
+              child: Text(
+                "Instrucciones",
+                style: GoogleFonts.raleway(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800),
               ),
             ),
-            Center(
-              child: IconButton(
-                onPressed: createHandler(controller),
-                icon: Icon(
-                  CupertinoIcons.chevron_up,
-                  size: screenHeight * 0.025,
-                  color: Colors.white,
-                ),
+          ),
+          Center(
+            child: IconButton(
+              onPressed: createHandler(controller),
+              icon: Icon(
+                CupertinoIcons.chevron_up,
+                size: screenHeight * 0.025,
+                color: Colors.white,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );

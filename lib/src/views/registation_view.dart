@@ -110,153 +110,165 @@ class _RegistrationState extends State<Registration> {
             height: height,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: width * .1),
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .1),
-                        child: Image.asset(
-                          "assets/images/password.png",
-                          height: height * .15,
+              child: Theme(
+                data: ThemeData(
+                  inputDecorationTheme: InputDecorationTheme(
+                    labelStyle: subtitleStyle,
+                  ),
+                ),
+                child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .1),
+                          child: Image.asset(
+                            "assets/images/password.png",
+                            height: height * .15,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, height * .015),
-                        child: GradientText(
-                          "Registrate",
-                          style: titleStyle,
-                          align: TextAlign.center,
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, height * .015),
+                          child: GradientText(
+                            "Registrate",
+                            style: titleStyle,
+                            align: TextAlign.center,
+                          ),
                         ),
-                      ),
 
-                      Text(
-                        "Crea una cuenta para continuar.",
-                        style: subtitleStyle,
-                        textAlign: TextAlign.center,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Nombre',
-                        ),
-                        onChanged: _registrationViewModel!.setName,
-                        validator: _registrationViewModel!.importantValidator,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      //////
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          labelText: 'Genero',
-                        ),
-                        value: _registrationViewModel!.gender,
-                        onChanged: _registrationViewModel!.setGender,
-                        items: _registrationViewModel!.genders.map(
-                          (String gender) {
-                            return DropdownMenuItem<String>(
-                                value: gender, child: Text(gender));
-                          },
-                        ).toList(),
-                        validator: _registrationViewModel!.genderValidator,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      //////
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Correo Electronico',
-                        ),
-                        onChanged: _registrationViewModel!.setEmail,
-                        validator: _registrationViewModel!.emailValidator,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      //////
-                      TextFormField(
-                        obscureText: _passwordInVisible,
-                        decoration: InputDecoration(
-                          labelText: 'Contraseña',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordInVisible
-                                  ? Icons.visibility_off
-                                  : Icons
-                                      .visibility, //change icon based on boolean value
-                              color: Colors.purpleAccent,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _passwordInVisible =
-                                    !_passwordInVisible; //change boolean value
-                              });
-                            },
-                          ),
-                        ),
-                        onChanged: _registrationViewModel!.setPass,
-                        validator: _registrationViewModel!.passValidator,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      //////
-                      TextFormField(
-                        obscureText: _passwordInVisible,
-                        decoration: InputDecoration(
-                          labelText: 'Confirmar Contraseña',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordInVisible
-                                  ? Icons.visibility_off
-                                  : Icons
-                                      .visibility, //change icon based on boolean value
-                              color: Colors.purpleAccent,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _passwordInVisible =
-                                    !_passwordInVisible; //change boolean value
-                              });
-                            },
-                          ),
-                        ),
-                        onChanged: _registrationViewModel!.setConfirmPass,
-                        validator: _registrationViewModel!.confirmPassValidator,
-                        autovalidateMode: _autoValidateMode,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, height * .05, 0, 0),
-                        child: RoundedLoadingButton(
-                          child: const Text(
-                            'Registrarse',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          controller: _btnController,
-                          onPressed: _register,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, height * .02),
-                        child: RichText(
+                        Text(
+                          "Crea una cuenta para continuar.",
+                          style: subtitleStyle,
                           textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: 'Si ya tienes una cuenta  ',
-                            style: subtitleStyle,
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '¡Ingresa aqui!',
-                                style: const TextStyle(
-                                    color: Colors.deepPurpleAccent),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => {
-                                        navigationService.navigateTo(
-                                          Routes.login,
-                                        ),
-                                      },
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Nombre',
+                          ),
+                          onChanged: _registrationViewModel!.setName,
+                          validator: _registrationViewModel!.importantValidator,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        //////
+                        DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            labelText: 'Genero',
+                          ),
+                          value: _registrationViewModel!.gender,
+                          onChanged: _registrationViewModel!.setGender,
+                          items: _registrationViewModel!.genders.map(
+                            (String gender) {
+                              return DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(
+                                    gender,
+                                    style: subtitleStyle,
+                                  ));
+                            },
+                          ).toList(),
+                          validator: _registrationViewModel!.genderValidator,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        //////
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Correo Electronico',
+                          ),
+                          onChanged: _registrationViewModel!.setEmail,
+                          validator: _registrationViewModel!.emailValidator,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        //////
+                        TextFormField(
+                          obscureText: _passwordInVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Contraseña',
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordInVisible
+                                    ? Icons.visibility_off
+                                    : Icons
+                                        .visibility, //change icon based on boolean value
+                                color: Colors.purpleAccent,
                               ),
-                            ],
+                              onPressed: () {
+                                setState(() {
+                                  _passwordInVisible =
+                                      !_passwordInVisible; //change boolean value
+                                });
+                              },
+                            ),
+                          ),
+                          onChanged: _registrationViewModel!.setPass,
+                          validator: _registrationViewModel!.passValidator,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        //////
+                        TextFormField(
+                          obscureText: _passwordInVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmar Contraseña',
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordInVisible
+                                    ? Icons.visibility_off
+                                    : Icons
+                                        .visibility, //change icon based on boolean value
+                                color: Colors.purpleAccent,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordInVisible =
+                                      !_passwordInVisible; //change boolean value
+                                });
+                              },
+                            ),
+                          ),
+                          onChanged: _registrationViewModel!.setConfirmPass,
+                          validator:
+                              _registrationViewModel!.confirmPassValidator,
+                          autovalidateMode: _autoValidateMode,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, height * .05, 0, 0),
+                          child: RoundedLoadingButton(
+                            child: const Text(
+                              'Registrarse',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            controller: _btnController,
+                            onPressed: _register,
+                            color: Colors.deepPurpleAccent,
                           ),
                         ),
-                      ),
-                    ],
-                  )),
+                        const Spacer(),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, height * .02),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: 'Si ya tienes una cuenta  ',
+                              style: subtitleStyle,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '¡Ingresa aqui!',
+                                  style: const TextStyle(
+                                      color: Colors.deepPurpleAccent),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => {
+                                          navigationService.navigateTo(
+                                            Routes.login,
+                                          ),
+                                        },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
             ),
           ),
         ));

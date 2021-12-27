@@ -125,7 +125,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
 
                         Padding(
-                          padding: EdgeInsets.all(height * .02),
+                          padding: EdgeInsets.fromLTRB(0, height * .01, 0, 0),
                           child: SizedBox(
                             height: height * .2,
                             child: Stack(
@@ -136,7 +136,7 @@ class _HomeViewState extends State<HomeView> {
                                   child: SvgPicture.asset(
                                     assetName,
                                     semanticsLabel: 'Acme Logo',
-                                    height: height * .2,
+                                    height: height * .15,
                                   ),
                                 ),
                                 Padding(
@@ -197,7 +197,7 @@ class _HomeViewState extends State<HomeView> {
               collapse: CollapsedContainer(_controller, height, width),
               isDraggable: true,
               maxHeight: height * 0.67,
-              minHeight: height * 0.06,
+              minHeight: height * 0.1,
 
               // CupertinoIcons.clock
             ),

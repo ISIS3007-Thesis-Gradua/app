@@ -1,20 +1,160 @@
 PODS:
+  - Amplify (1.15.6):
+    - Amplify/Default (= 1.15.6)
+  - Amplify/Default (1.15.6)
+  - amplify_analytics_pinpoint (0.0.1):
+    - Amplify (~> 1.15.5)
+    - amplify_core
+    - AmplifyPlugins/AWSPinpointAnalyticsPlugin (~> 1.15.5)
+    - Flutter
+  - amplify_api (0.0.1):
+    - Amplify (~> 1.15.5)
+    - amplify_core
+    - AmplifyPlugins/AWSAPIPlugin (~> 1.15.5)
+    - Flutter
+  - amplify_auth_cognito (0.0.1):
+    - Amplify (~> 1.15.5)
+    - amplify_core
+    - AmplifyPlugins/AWSCognitoAuthPlugin (~> 1.15.5)
+    - Flutter
+    - ObjectMapper
+  - amplify_core (0.0.1):
+    - Flutter
+  - amplify_flutter (0.0.1):
+    - Amplify (~> 1.15.5)
+    - amplify_core
+    - AmplifyPlugins/AWSCognitoAuthPlugin (~> 1.15.5)
+    - AWSPluginsCore (~> 1.15.5)
+    - Flutter
+  - AmplifyPlugins/AWSAPIPlugin (1.15.6):
+    - AppSyncRealTimeClient (~> 1.4)
+    - AWSCore (~> 2.26.1)
+    - AWSPluginsCore (= 1.15.6)
+  - AmplifyPlugins/AWSCognitoAuthPlugin (1.15.6):
+    - AWSAuthCore (~> 2.26.1)
+    - AWSCognitoIdentityProvider (~> 2.26.1)
+    - AWSCognitoIdentityProviderASF (~> 2.26.1)
+    - AWSCore (~> 2.26.1)
+    - AWSMobileClient (~> 2.26.1)
+    - AWSPluginsCore (= 1.15.6)
+  - AmplifyPlugins/AWSPinpointAnalyticsPlugin (1.15.6):
+    - AWSCore (~> 2.26.1)
+    - AWSPinpoint (~> 2.26.1)
+    - AWSPluginsCore (= 1.15.6)
+  - AppSyncRealTimeClient (1.6.0):
+    - Starscream (~> 3.1.1)
   - audio_session (0.0.1):
     - Flutter
+  - AWSAuthCore (2.26.6):
+    - AWSCore (= 2.26.6)
+  - AWSCognitoIdentityProvider (2.26.6):
+    - AWSCognitoIdentityProviderASF (= 2.26.6)
+    - AWSCore (= 2.26.6)
+  - AWSCognitoIdentityProviderASF (2.26.6):
+    - AWSCore (= 2.26.6)
+  - AWSCore (2.26.6)
+  - AWSMobileClient (2.26.6):
+    - AWSAuthCore (= 2.26.6)
+    - AWSCognitoIdentityProvider (= 2.26.6)
+    - AWSCognitoIdentityProviderASF (= 2.26.6)
+    - AWSCore (= 2.26.6)
+  - AWSPinpoint (2.26.6):
+    - AWSCore (= 2.26.6)
+  - AWSPluginsCore (1.15.6):
+    - Amplify (= 1.15.6)
+    - AWSCore (~> 2.26.1)
+  - cloud_firestore (3.1.4):
+    - Firebase/Firestore (= 8.9.0)
+    - firebase_core
+    - Flutter
+  - Firebase/Auth (8.9.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 8.9.0)
+  - Firebase/CoreOnly (8.9.0):
+    - FirebaseCore (= 8.9.0)
+  - Firebase/Firestore (8.9.0):
+    - Firebase/CoreOnly
+    - FirebaseFirestore (~> 8.9.0)
+  - firebase_auth (3.3.3):
+    - Firebase/Auth (= 8.9.0)
+    - firebase_core
+    - Flutter
+  - firebase_core (1.10.5):
+    - Firebase/CoreOnly (= 8.9.0)
+    - Flutter
+  - FirebaseAuth (8.9.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GTMSessionFetcher/Core (~> 1.5)
+  - FirebaseCore (8.9.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Logger (~> 7.6)
+  - FirebaseCoreDiagnostics (8.10.0):
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Logger (~> 7.6)
+    - nanopb (~> 2.30908.0)
+  - FirebaseFirestore (8.9.0):
+    - FirebaseFirestore/AutodetectLeveldb (= 8.9.0)
+  - FirebaseFirestore/AutodetectLeveldb (8.9.0):
+    - FirebaseFirestore/Base
+    - FirebaseFirestore/WithLeveldb
+  - FirebaseFirestore/Base (8.9.0)
+  - FirebaseFirestore/WithLeveldb (8.9.0):
+    - FirebaseFirestore/Base
   - Flutter (1.0.0)
   - flutter_ffmpeg/audio-lts (0.4.2):
     - Flutter
     - mobile-ffmpeg-audio (= 4.4.LTS)
+  - GoogleDataTransport (9.1.2):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.6.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.6.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.6.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.6.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.6.0)"
+  - GoogleUtilities/Reachability (7.6.0):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.7.0)
   - just_audio (0.0.1):
     - Flutter
   - mobile-ffmpeg-audio (4.4.LTS)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
+  - ObjectMapper (4.2.0)
   - path_provider (0.0.1):
     - Flutter
+  - PromisesObjC (2.0.0)
+  - Starscream (3.1.1)
   - url_launcher (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - amplify_analytics_pinpoint (from `.symlinks/plugins/amplify_analytics_pinpoint/ios`)
+  - amplify_api (from `.symlinks/plugins/amplify_api/ios`)
+  - amplify_auth_cognito (from `.symlinks/plugins/amplify_auth_cognito/ios`)
+  - amplify_core (from `.symlinks/plugins/amplify_core/ios`)
+  - amplify_flutter (from `.symlinks/plugins/amplify_flutter/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.9.0`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg/audio-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
@@ -23,11 +163,51 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Amplify
+    - AmplifyPlugins
+    - AppSyncRealTimeClient
+    - AWSAuthCore
+    - AWSCognitoIdentityProvider
+    - AWSCognitoIdentityProviderASF
+    - AWSCore
+    - AWSMobileClient
+    - AWSPinpoint
+    - AWSPluginsCore
+    - Firebase
+    - FirebaseAuth
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - GoogleDataTransport
+    - GoogleUtilities
+    - GTMSessionFetcher
     - mobile-ffmpeg-audio
+    - nanopb
+    - ObjectMapper
+    - PromisesObjC
+    - Starscream
 
 EXTERNAL SOURCES:
+  amplify_analytics_pinpoint:
+    :path: ".symlinks/plugins/amplify_analytics_pinpoint/ios"
+  amplify_api:
+    :path: ".symlinks/plugins/amplify_api/ios"
+  amplify_auth_cognito:
+    :path: ".symlinks/plugins/amplify_auth_cognito/ios"
+  amplify_core:
+    :path: ".symlinks/plugins/amplify_core/ios"
+  amplify_flutter:
+    :path: ".symlinks/plugins/amplify_flutter/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
+  cloud_firestore:
+    :path: ".symlinks/plugins/cloud_firestore/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 8.9.0
   Flutter:
     :path: Flutter
   flutter_ffmpeg:
@@ -39,15 +219,50 @@ EXTERNAL SOURCES:
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
+CHECKOUT OPTIONS:
+  FirebaseFirestore:
+    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
+    :tag: 8.9.0
+
 SPEC CHECKSUMS:
+  Amplify: d6ec04316dd74852f6a968d89c0f8cab9947d4d5
+  amplify_analytics_pinpoint: 1c3059353f8a8cfc811ac321bc41e888b18f24bb
+  amplify_api: d2e245623799af22ef371b9bcc960277c965ebb4
+  amplify_auth_cognito: af3d562913c44b5508a68ed73105a0488a56bf36
+  amplify_core: 8b38d20089fe4f225c14db6892f586bd03824a42
+  amplify_flutter: 372e5d0210d6de0cbf7be025dbd20cc21831ab24
+  AmplifyPlugins: 7cfe5a34e97c6091855c10d83ccda538fb371cd1
+  AppSyncRealTimeClient: 8b5ec94085b8ee9bb6fb9d9d76a157beb538ec6f
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  AWSAuthCore: 19808b0221c0963c650e8d9d8c65465b7e50c6e1
+  AWSCognitoIdentityProvider: eeb90cf37247ce868fe3bbfdfb2a6b5bd2f47c73
+  AWSCognitoIdentityProviderASF: 2be698f72bebb21c1846d10c3d8d2e21c08d97bd
+  AWSCore: c60f9d6bd085bf9186d8629ca7ee7df54db1f494
+  AWSMobileClient: 78d19c70841c27e2a8b492569bae529b1ce0cf68
+  AWSPinpoint: b67a8ebb2f31990dd16ad4fa8f3c8da6ce2646f3
+  AWSPluginsCore: 46b75ee57b0a1f10d64f4fa6b3b4153f5900dd4f
+  cloud_firestore: c978a55e0bfc675cdc2291ef7670a69695cc663a
+  Firebase: 13d8d96499e2635428d5bf0ec675df21f95d9a95
+  firebase_auth: fe3a1deb12ebd850295344234abc15588d086baf
+  firebase_core: dfcae4c150a5e24436a0b7677c470478a234d5bf
+  FirebaseAuth: 2b78b2a32c07b3ecfa4970bdf1d3632b8304099b
+  FirebaseCore: 599ee609343eaf4941bd188f85e3aa077ffe325b
+  FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
+  FirebaseFirestore: 0fdc9473f894694858cebd6b97f88f08d43e0378
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_ffmpeg: 3ec3912c74649851e6c3b1885511eef78142ac4f
+  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
 
-PODFILE CHECKSUM: 8d76b26ea06b6f68765ed43cac524324a50cc9b0
+PODFILE CHECKSUM: 040d228b1adb73f481a0b66c842187f51b9fc5c4
 
 COCOAPODS: 1.11.2
