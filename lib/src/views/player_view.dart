@@ -45,17 +45,17 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
         isSimple = false;
       });
     }
-    WidgetsBinding.instance?.addObserver(this);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-    ));
+    // WidgetsBinding.instance?.addObserver(this);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.black,
+    // ));
     vm.init();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      // Release the player's resources when not in use. We use "stop" so that
+      // Release the player's resources when not in use. We`` use "stop" so that
       // if the app resumes later, it will still remember what position to
       // resume from.
       vm.player.stop();
@@ -82,174 +82,162 @@ class _PlayerState extends State<Player> with WidgetsBindingObserver {
     final width = MediaQuery.of(context).size.width;
     final navigationService = locator<NavigationService>();
 
-    return MultiProvider(
-      providers: [
-        Provider.value(
-          value: vm.ttsSource,
-        ),
-        Provider.value(
-          value: widget.meditation,
-        ),
-      ],
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF6F9FF),
-        body: ScrollSheet(
-          isDraggable: true,
-          maxHeight: height * 0.67,
-          minHeight: height * 0.06,
-          controller: _controller,
-          controllerType: ControllerType.fromFields,
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(
-                width * 0.03,
-                MediaQuery.of(context).padding.top + height * 0.03,
-                width * 0.03,
-                0),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.back,
-                      size: height * 0.03,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      vm.dispose();
-                      navigationService
-                          .navigateTo(Routes.authenticationWrapperView);
-                    },
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F9FF),
+      body: ScrollSheet(
+        isDraggable: true,
+        maxHeight: height * 0.67,
+        minHeight: height * 0.1,
+        controller: _controller,
+        controllerType: ControllerType.fromFields,
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(
+              width * 0.03,
+              MediaQuery.of(context).padding.top + height * 0.03,
+              width * 0.03,
+              0),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: Icon(
+                    CupertinoIcons.back,
+                    size: height * 0.03,
+                    color: Colors.black,
                   ),
+                  onPressed: () {
+                    // vm.dispose();
+                    navigationService
+                        .navigateTo(Routes.authenticationWrapperView);
+                  },
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.xmark,
-                      size: height * 0.03,
-                      color: Colors.red,
-                    ),
-                    onPressed: () async {
-                      print("Da fak");
-                      TtsSource ttsSource = vm.ttsSource;
-                      vm.dispose();
-                      EmotionsMeasure prevEmotion =
-                          widget.meditation is Meditation
-                              ? (widget.meditation as Meditation)
-                                  .getEmotionMeasure()
-                              : EmotionsMeasure.blank();
-                      navigationService.replaceWith(
-                        Routes.meditation_rating,
-                        arguments: MeditationRatingViewArguments(
-                          prevEmotionsMeasure: prevEmotion,
-                          simpleMeditation: widget.meditation,
-                          ttsSource: ttsSource,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    CupertinoIcons.xmark,
+                    size: height * 0.03,
+                    color: Colors.red,
+                  ),
+                  onPressed: () async {
+                    print("Da fak");
+                    TtsSource ttsSource = vm.ttsSource;
+                    // vm.dispose();
+                    EmotionsMeasure prevEmotion = widget.meditation
+                            is Meditation
+                        ? (widget.meditation as Meditation).getEmotionMeasure()
+                        : EmotionsMeasure.blank();
+                    navigationService.replaceWith(
+                      Routes.meditation_rating,
+                      arguments: MeditationRatingViewArguments(
+                        prevEmotionsMeasure: prevEmotion,
+                        simpleMeditation: widget.meditation,
+                        ttsSource: ttsSource,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.meditation.name,
+                  style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.w700,
+                      fontSize: height * .02,
+                      color: Colors.black),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, height * .05, 0, height * .15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: height * .03),
+                      child: Container(
+                        width: width * .97,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFDCE7EF),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    widget.meditation.name,
-                    style: GoogleFonts.raleway(
-                        fontWeight: FontWeight.w700,
-                        fontSize: height * .02,
-                        color: Colors.black),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.fromLTRB(0, height * .05, 0, height * .15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: height * .03),
-                        child: Container(
-                          width: width * .97,
+                        child: Padding(
+                          padding: EdgeInsets.all(width * .1),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/images/meditating_man.svg',
+                              semanticsLabel: 'Acme Logo',
+                              height: height * .3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    AnimatedBuilder(
+                      // stream: null,
+                      animation: vm,
+                      builder: (context, child) {
+                        return Container(
                           decoration: const BoxDecoration(
                             color: Color(0xFFDCE7EF),
                             borderRadius: BorderRadius.all(
                               Radius.circular(30),
                             ),
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(width * .1),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/images/meditating_man.svg',
-                                semanticsLabel: 'Acme Logo',
-                                height: height * .3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.066),
+                                child: Visibility(
+                                  visible: isSimple,
+                                  child: SeekBar(
+                                    position: vm.effectivePosition,
+                                    duration: vm.effectiveTotalDuration,
+                                    bufferedPosition:
+                                        vm.effectiveBufferedPosition,
+                                    onChanged: vm.seekToWithDuration,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Text(
+                                "Meditación #34",
+                                style: GoogleFonts.raleway(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: height * .03,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                "Atención Plena",
+                                style: GoogleFonts.raleway(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: height * .02,
+                                  color: Colors.black26,
+                                ),
+                              ),
+                              playPauseControls(context, vm, height, width),
+                            ],
                           ),
-                        ),
-                      ),
-                      ViewModelBuilder<PlayerViewModel>.reactive(
-                        // stream: null,
-                        viewModelBuilder: () => vm,
-                        builder: (context, vm, child) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFDCE7EF),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.066),
-                                  child: Visibility(
-                                    visible: isSimple,
-                                    child: SeekBar(
-                                      position: vm.effectivePosition,
-                                      duration: vm.effectiveTotalDuration,
-                                      bufferedPosition:
-                                          vm.effectiveBufferedPosition,
-                                      onChanged: vm.seekToWithDuration,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "Meditación #34",
-                                  style: GoogleFonts.raleway(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: height * .03,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "Atención Plena",
-                                  style: GoogleFonts.raleway(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: height * .02,
-                                    color: Colors.black26,
-                                  ),
-                                ),
-                                playPauseControls(context, vm, height, width),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
-          // ),
-          panel: Instructions(
-            controller: _controller,
-          ),
-          collapse: CollapsedContainer(_controller, height, width),
         ),
+        // ),
+        panel: Instructions(
+          controller: _controller,
+        ),
+        collapse: CollapsedContainer(_controller, height, width),
       ),
     );
   }

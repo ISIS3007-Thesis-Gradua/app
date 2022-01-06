@@ -71,7 +71,7 @@ class _GraphViewState extends State<GraphView> {
         controller: _controller,
         isDraggable: false,
         maxHeight: height * 0.67,
-        minHeight: height * 0.06,
+        minHeight: height * 0.1,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),

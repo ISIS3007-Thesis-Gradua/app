@@ -11,8 +11,8 @@ extension EndPoint on TtsSource {
   String get url {
     switch (this) {
       case TtsSource.mozilla:
-        return "http://172.24.96.1:5002/api/tts?text=";
-      // return "http://ec2-3-230-3-167.compute-1.amazonaws.com/api/tts?text=";
+        // return "http://172.24.96.1:5002/api/tts?text=";
+        return "http://ec2-3-239-210-77.compute-1.amazonaws.com/api/tts?text=";
       case TtsSource.native:
         return "not-implemented";
       case TtsSource.aws:
@@ -32,6 +32,9 @@ class PlayerViewModel extends ChangeNotifier {
 
   /// Backend seleccionado para el TTS
   TtsSource ttsSource;
+
+  //This is to ensure we don't call notifyListeners after the instance has been disposed.
+  bool _disposed = false;
 
   ///Maps a range of durations to an integer that represents the index of
   ///the track that corresponds to that given duration.
@@ -185,6 +188,11 @@ class PlayerViewModel extends ChangeNotifier {
           );
           audioSources.addAll(stepAudioSources);
         }
+        // audioSources = [
+        //   AudioSource.uri(Uri.parse(
+        //       "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"))
+        // ];
+        print("[AUDIO SOURCES]: $audioSources");
 
         await player.setAudioSource(
           ConcatenatingAudioSource(
@@ -254,17 +262,29 @@ class PlayerViewModel extends ChangeNotifier {
   //           StreamData<PlayerState>(player.playerStateStream),
   //     };
 
+  // @override
+  // Future<void> dispose() async {
+  //   print("Disposing player view model");
+  //   if (player.audioSource is ConcatenatingAudioSource) {
+  //     await (player.audioSource as ConcatenatingAudioSource).clear();
+  //   }
+  //   // player.set
+  //   await player.stop();
+  //   await player.dispose();
+  //   // AudioPlayer.clearAssetCache();
+  //   super.dispose();
+  // }
   @override
-  Future<void> dispose() async {
-    print("Disposing player view model");
-    if (player.audioSource is ConcatenatingAudioSource) {
-      await (player.audioSource as ConcatenatingAudioSource).clear();
-    }
-    // player.set
-    await player.stop();
-    await player.dispose();
-    // AudioPlayer.clearAssetCache();
+  void dispose() {
+    _disposed = true;
     super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
   }
 }
 

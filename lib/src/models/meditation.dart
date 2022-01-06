@@ -231,7 +231,6 @@ class StepChunk implements ChunkSource {
 class StepSilence implements ChunkSource {
   String id;
   Duration silenceDuration;
-  late String durationPath;
   late String filePath;
 
   StepSilence({required this.silenceDuration, required this.id}) {
